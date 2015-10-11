@@ -7,7 +7,6 @@ from flask import render_template
 
 app = Flask(__name__)
 
-#Hello
 @app.route('/')
 def home():
     now = datetime.datetime.now()

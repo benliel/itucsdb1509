@@ -1,6 +1,6 @@
 applications:
 - disk_quota: 1024M
-  host: sercan
+  host: itucsdb1509
   name: itucsdb1509
   path: .
   domain: mybluemix.net

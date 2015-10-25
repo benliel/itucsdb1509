@@ -6,7 +6,11 @@ from flask import render_template
 app = Flask(__name__)
 
 
+<<<<<<< HEAD
 @app.route('/') 
+=======
+@app.route('/')
+>>>>>>> upstream/master
 def home_page():
     now = datetime.datetime.now()
     return render_template('home.html', current_time=now.ctime())

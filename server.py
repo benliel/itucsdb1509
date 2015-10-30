@@ -9,7 +9,6 @@ from flask import redirect
 from flask import request
 from flask import render_template
 from flask.helpers import url_for
-from urllib3.util import current_time
 from match import Match
 from store import Store
 
@@ -106,10 +105,6 @@ def fixture_page():
 
 
 if __name__ == '__main__':
-    app.store = Store()
-    app.store.add(Match("Galatasaray", "Fenerbahçe", "10 Eylül", "20:00", "TT Arena"))
-    app.store.add(Match("Eskişehir Spor", "Trabzon Spor", "10 Eylül", "20:00", "Eskişehir"))
-
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
     if VCAP_APP_PORT is not None:
         port, debug = int(VCAP_APP_PORT), False

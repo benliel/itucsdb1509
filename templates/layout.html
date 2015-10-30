@@ -2,13 +2,15 @@
 <html>
   <head>
 <meta charset="utf-8" />
-<title>MovieDB - {% block title %}{% endblock %}</title> <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+<title>MovieDB - {% block title %}{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   </head>
   <body>
 <header>
       <nav>
      <li><a href="{{ url_for('home_page') }}">Home</a></li>
       <li><a href="{{ url_for('movies_page') }}">List movies</a></li>
+      <li><a href={{url_for('fixture_page')}}>Fixture</a></li>
       <li><a href="{{ url_for('counter_page') }}">Simple Counter</a></li>
       <li><a href="{{ url_for('initialize_database') }}">Initialize Database</a></li>
 	</nav>

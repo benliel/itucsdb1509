@@ -6,8 +6,12 @@ import psycopg2 as dbapi2
 
 from flask import Flask
 from flask import redirect
+from flask import request
 from flask import render_template
 from flask.helpers import url_for
+from urllib3.util import current_time
+from match import Match
+from store import Store
 
 
 
@@ -35,11 +39,22 @@ def initialize_database():
 
     query = """DROP TABLE IF EXISTS COUNTER"""
     cursor.execute(query)
-
     query = """CREATE TABLE COUNTER (N INTEGER)"""
     cursor.execute(query)
-
     query = """INSERT INTO COUNTER(N) VALUES(0)"""
+    cursor.execute(query)
+
+    #fixture table creation
+    query = """DROP TABLE IF EXISTS FIXTURE"""
+    cursor.execute(query)
+    query = """CREATE TABLE FIXTURE (
+TEAM1 varchar(80) NOT NULL,
+TEAM2 varchar(80) NOT NULL,
+DATE date NOT NULL,
+TIME time NOT NULL,
+LOCATION varchar(80),
+PRIMARY KEY (DATE, TIME, LOCATION)
+)"""
     cursor.execute(query)
 
     connection.commit()
@@ -57,16 +72,44 @@ def counter_page():
     query = "SELECT N FROM COUNTER"
     cursor.execute(query)
     count = cursor.fetchone()[0]
+
     return "This page was accesed %d times." % count
 
 
 @app.route('/movies')
 def movies_page():
-    return render_template('movies.html')
+    now = datetime.datetime.now()
+    return render_template('movies.html', current_time=now.ctime())
 
+@app.route('/fixture', methods=['GET', 'POST'])
+def fixture_page():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        query = "SELECT * FROM FIXTURE"
+        cursor.execute(query)
+
+        return render_template('fixture.html', matches = cursor, current_time=now.ctime())
+    else:
+        team1 = request.form['team1']
+        team2 = request.form['team2']
+        date = request.form['date']
+        time = request.form['time']
+        location = request.form['location']
+        query = """INSERT INTO FIXTURE (TEAM1, TEAM2, DATE, TIME, LOCATION)
+        VALUES ('"""+team1+"', '"+team2+"', to_date('"+date+"', 'DD Mon YYYY'), to_timestamp('"+time+"', 'HH24:MI'), '"+location+"')"
+        cursor.execute(query)
+        connection.commit()
+        return redirect(url_for('fixture_page'))
 
 
 if __name__ == '__main__':
+    app.store = Store()
+    app.store.add(Match("Galatasaray", "Fenerbahçe", "10 Eylül", "20:00", "TT Arena"))
+    app.store.add(Match("Eskişehir Spor", "Trabzon Spor", "10 Eylül", "20:00", "Eskişehir"))
+
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
     if VCAP_APP_PORT is not None:
         port, debug = int(VCAP_APP_PORT), False

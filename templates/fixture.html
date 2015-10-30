@@ -9,7 +9,7 @@
 	<form action="{{ url_for('fixture_page') }} " method = "post">
 	<table id=fixture>
 
-	{% for team1, team2, date, time, location in matches %}
+	{% for key, team1, team2, date, time, location in matches %}
 	<tr>
 		<td id=fixture>{{team1}}</td>
 		<td id=fixture>{{team2}}</td>

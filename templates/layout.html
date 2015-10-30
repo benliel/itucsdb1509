@@ -13,8 +13,11 @@
       <li><a href="{{ url_for('initialize_database') }}">Initialize Database</a></li>
 	</nav>
 </header>
+
     {% block content %}{% endblock %}
+
 <footer>
 <div id="datetime">{{ current_time }}</div> </footer>
+
   </body>
 </html>

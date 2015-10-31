@@ -98,7 +98,7 @@ def fixture_page():
         time = request.form['time']
         location = request.form['location']
         query = """INSERT INTO FIXTURE (TEAM1, TEAM2, DATE, TIME, LOCATION)
-        VALUES ('"""+team1+"', '"+team2+"', to_date('"+date+"', 'DD Mon YYYY'), to_timestamp('"+time+"', 'HH24:MI'), '"+location+"')"
+        VALUES ('"""+team1+"', '"+team2+"', to_date('"+date+"', 'DD.MM.YYYY'), to_timestamp('"+time+"', 'HH24:MI'), '"+location+"')"
         cursor.execute(query)
         connection.commit()
         return redirect(url_for('fixture_page'))

@@ -11,11 +11,6 @@ from flask import render_template
 from flask.helpers import url_for
 from match import Match
 from store import Store
-from sqlalchemy import create_engine
-from sqlalchemy import MetaData
-from sqlalchemy import Column, Table
-from sqlalchemy import String, Date, Time, Integer
-from sqlalchemy.orm import mapper
 
 app = Flask(__name__)
 
@@ -47,30 +42,20 @@ def initialize_database():
     cursor.execute(query)
 
     #fixture table creation
-#    query = """DROP TABLE IF EXISTS FIXTURE"""
-#    cursor.execute(query)
-    #query = """CREATE TABLE FIXTURE (
-#TEAM1 varchar(80) NOT NULL,
-#TEAM2 varchar(80) NOT NULL,
-#DATE date NOT NULL,
-#TIME time NOT NULL,
-#LOCATION varchar(80),
-#PRIMARY KEY (DATE, TIME, LOCATION)
-#)"""
-#    cursor.execute(query)
+    query = """DROP TABLE IF EXISTS FIXTURE"""
+    cursor.execute(query)
+    query = """CREATE TABLE FIXTURE (
+TEAM1 varchar(80) NOT NULL,
+TEAM2 varchar(80) NOT NULL,
+DATE date NOT NULL,
+TIME time NOT NULL,
+LOCATION varchar(80),
+PRIMARY KEY (DATE, TIME, LOCATION)
+)"""
+    cursor.execute(query)
 ###########
 
-    fixture_table = Table('fixture', metadata,
-                          Column('id', Integer, primary_key=True),
-                          Column('team1', String(80), nullable=False),
-                          Column('team2', String(80), nullable=False),
-                          Column('date', Date, nullable=False),
-                          Column('time', Time, nullable=False),
-                          Column('location', String(80), nullable = False),
-                          )
-    mapper(Match, fixture_table)
-
-    metadata.create_all(bind=engine)
+    
     connection.commit()
     return redirect(url_for('home_page'))
 
@@ -128,12 +113,8 @@ if __name__ == '__main__':
 
     VCAP_SERVICES = os.getenv('VCAP_SERVICES')
     if VCAP_SERVICES is not None:
-        app.config['uri'] = json.loads(VCAP_SERVICES)["elephantsql"][0]["credentials"]["uri"]
         app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
     else:
-        app.config['uri'] = "postgres://vagrant:vagrant@localhost:54321/itucsdb"
         app.config['dsn'] = """user='vagrant' password='vagrant'
                                host='localhost' port=54321 dbname='itucsdb'"""
-    engine = create_engine(app.config['uri'], echo=True)
-    metadata = MetaData()
     app.run(host='0.0.0.0', port=port, debug=debug)

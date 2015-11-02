@@ -55,7 +55,23 @@ PRIMARY KEY (DATE, TIME, LOCATION)
     cursor.execute(query)
 ###########
 
-    
+#championships table creation
+    query = """DROP TABLE IF EXISTS CHAMPIONSHIP"""
+    cursor.execute(query)
+    query = """CREATE TABLE CHAMPIONSHIP (
+ID SERIAL,
+NAME VARCHAR(80) NOT NULL,
+PLACE VARCHAR(80) NOT NULL,
+DATE DATE NOT NULL,
+TYPE VARCHAR(80) NOT NULL,
+NUMBER_OF_TEAMS INTEGER NOT NULL,
+REWARD VARCHAR(80),
+KEY(ID)
+)"""
+    cursor.execute(query)
+###########
+
+
     connection.commit()
     return redirect(url_for('home_page'))
 

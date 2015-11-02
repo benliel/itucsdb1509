@@ -110,7 +110,7 @@ if __name__ == '__main__':
         port, debug = int(VCAP_APP_PORT), False
     else:
         port, debug = 5000, True
-
+#This part is logins the infos
     VCAP_SERVICES = os.getenv('VCAP_SERVICES')
     if VCAP_SERVICES is not None:
         app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)

@@ -7,5 +7,29 @@
 </head>
 
 {% block content %}
+<table>
+{%for id, name, place, date, type, teamNumber, reward in championships%}
+<tr>
+<td>{{name}}</td>
+<td>{{place}}</td>
+<td>{{date}}</td>
+<td>{{type}}</td>
+<td>{{teamNumber}}</td>
+<td>{{reward}}</td>
+</tr>
+{%endfor%}
+<form action="{{ url_for('championships_page') }} " method = "post">
 
+<tr>
+				<td><input type="text" placeholder="Name" name="name" required="required"></td>
+				<td><input type="text" placeholder="Place" name="place" required="required"></td>
+				<td><input type="date" placeholder="DD.MM.YYYY" name="date" required="required"></td>
+				<td><input type="text" placeholder="Type" name="type" required="required"></td>
+				<td><input type="text" placeholder="Number of Teams" name="number_of_teams" required="required"></td>
+				<td><input type="text" placeholder="Reward" name="reward" required="required"></td>
+				<td><input type="submit" value="Send"></td>
+
+			</tr>
+			</form>
+</table>
 {% endblock %}

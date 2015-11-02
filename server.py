@@ -96,10 +96,36 @@ def movies_page():
     now = datetime.datetime.now()
     return render_template('movies.html', current_time=now.ctime())
 
-@app.route('/championships')
+@app.route('/championships', methods=['GET', 'POST'])
 def championships_page():
     now = datetime.datetime.now()
-    return render_template('championships.html', current_time = now.ctime())
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+
+    if request.method == 'GET':
+        query = """SELECT * FROM CHAMPIONSHIP"""
+        cursor.execute(query)
+
+        return render_template('championships.html', championships = cursor, current_time = now.ctime())
+    else:
+        name =request.form['name']
+        place =request.form['place']
+        date =request.form['date']
+        type =request.form['type']
+        teamNumber =request.form['number_of_teams']
+        reward =request.form['reward']
+
+        query = """INSERT INTO CHAMPIONSHIP(NAME, PLACE, DATE, TYPE, NUMBER_OF_TEAMS, REWARD) VALUES (
+        '"""+ name +"""',
+        '"""+ place +"""',
+        to_date('"""+date+"""', 'DD.MM.YYYY'),
+        '"""+ type +"""',
+        """+ teamNumber +""",
+        '"""+ reward+"')"
+        cursor.execute(query)
+
+        connection.commit()
+        return redirect(url_for('championships_page'))
 
 @app.route('/fixture', methods=['GET', 'POST'])
 def fixture_page():

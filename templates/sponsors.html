@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Sponsors{% endblock %}
+</head>
+	{% block content %}<h2>Sponsors</h2>
+	<form action="{{ url_for('sponsors_page') }} " method = "post">
+	<table id=sponsors>
+
+	{% for id, name, supportedteam, budget in sponsors %}
+	<tr>
+		<td id=sponsors>{{name}}</td>
+		<td id=sponsors>{{supportedteam}}</td>
+		<td id=sponsors>{{budget}}</td>
+	</tr>
+	{% endfor %}
+	<tr>
+				<td id="sponsors_form"><input id="sponsors" type="text" placeholder="Sponsor Name" name="name" required="required"></td>
+				<td id="sponsors_form"><input id="sponsors" type="text" placeholder="Supported Team" name="supportedteam" required="required"></td>
+				<td id="sponsors_form"><input id="sponsors" type="text" placeholder="Budget " name="budget" required="required"></td>
+			</tr>
+			<tr><td colspan="3" id=sponsors_form_add><input id="sponsors_form_add" value="Add Match" name="add" type="submit"></td></tr>
+	</table>
+
+
+	</form>
+	{% endblock %}
+</html>

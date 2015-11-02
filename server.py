@@ -55,6 +55,19 @@ PRIMARY KEY (DATE, TIME, LOCATION)
     cursor.execute(query)
 ###########
 
+#Sponsorship table creation
+    query = """DROP TABLE IF EXISTS SPONSORS"""
+    cursor.execute(query)
+    query = """CREATE TABLE SPONSORS (
+ID SERIAL,
+NAME VARCHAR(80) NOT NULL,
+SUPPORTEDTEAM VARCHAR(80) NOT NULL,
+BUDGET INTEGER NOT NULL,
+PRIMARY KEY (ID)
+)"""
+    cursor.execute(query)
+###########
+
 #championships table creation
     query = """DROP TABLE IF EXISTS CHAMPIONSHIP"""
     cursor.execute(query)
@@ -149,6 +162,29 @@ def fixture_page():
         cursor.execute(query)
         connection.commit()
         return redirect(url_for('fixture_page'))
+
+
+##Sponsorships arrangements by Muhammed Aziz Ulak
+@app.route('/sponsors', methods=['GET', 'POST'])
+def sponsors_page():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        query = "SELECT * FROM SPONSORS"
+        cursor.execute(query)
+
+        return render_template('sponsors.html', sponsors = cursor, current_time=now.ctime())
+    else:
+        name = request.form['name']
+        supportedteam = request.form['supportedteam']
+        budget = request.form['budget']
+        query = """INSERT INTO SPONSORS (name, supportedteam, budget)
+        VALUES ('"""+name+"', '"+supportedteam+"', '"+budget+"')"
+        cursor.execute(query)
+        connection.commit()
+        return redirect(url_for('sponsors_page'))
 
 
 if __name__ == '__main__':

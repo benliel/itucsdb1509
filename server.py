@@ -53,7 +53,7 @@ LOCATION varchar(80),
 PRIMARY KEY (DATE, TIME, LOCATION)
 )"""
     cursor.execute(query)
-###########
+############
 
 #Sponsorship table creation
     query = """DROP TABLE IF EXISTS SPONSORS"""

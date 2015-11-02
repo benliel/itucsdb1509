@@ -66,7 +66,7 @@ DATE DATE NOT NULL,
 TYPE VARCHAR(80) NOT NULL,
 NUMBER_OF_TEAMS INTEGER NOT NULL,
 REWARD VARCHAR(80),
-KEY(ID)
+PRIMARY KEY(ID)
 )"""
     cursor.execute(query)
 ###########
@@ -95,6 +95,11 @@ def counter_page():
 def movies_page():
     now = datetime.datetime.now()
     return render_template('movies.html', current_time=now.ctime())
+
+@app.route('/championships')
+def championships_page():
+    now = datetime.datetime.now()
+    return render_template('championships.html', current_time = now.ctime())
 
 @app.route('/fixture', methods=['GET', 'POST'])
 def fixture_page():

@@ -84,6 +84,22 @@ PRIMARY KEY(ID)
     cursor.execute(query)
 ###########
 
+#officialcurlingclubs table creation
+    query = """DROP TABLE IF EXISTS OFFICIALCURLINGCLUBS"""
+    cursor.execute(query)
+    query = """CREATE TABLE OFFICIALCURLINGCLUBS (
+ID SERIAL,
+NAME VARCHAR(80) NOT NULL,
+PLACE VARCHAR(80) NOT NULL,
+YEAR NUMERIC(4) NOT NULL,
+CHAIR VARCHAR(80) NOT NULL,
+NUMBER_OF_MEMBERS INTEGER NOT NULL,
+REWARDNUMBER INTEGER,
+PRIMARY KEY(ID)
+)"""
+    cursor.execute(query)
+###########
+
 
     connection.commit()
     return redirect(url_for('home_page'))
@@ -162,6 +178,31 @@ def fixture_page():
         cursor.execute(query)
         connection.commit()
         return redirect(url_for('fixture_page'))
+
+##Sema's Part - Curling Clubs
+@app.route('/clubs', methods=['GET', 'POST'])
+def clubs_page():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        query = "SELECT * FROM OFFICIALCURLINGCLUBS"
+        cursor.execute(query)
+
+        return render_template('clubs.html', clubs = cursor, current_time=now.ctime())
+    else:
+        name = request.form['name']
+        place = request.form['place']
+        year = request.form['year']
+        chair = request.form['chair']
+        number_of_members = request.form['number_of_members']
+        reward_number = request.form['reward_number']
+        query = """INSERT INTO OFFICIALCURLINGCLUBS (NAME, PLACE, YEAR, CHAIR, NUMBER_OF_MEMBERS,REWARDNUMBER)
+        VALUES ('"""+name+"', '"+place+"', '"+year+"' , '"+chair+"', '"+number_of_members+"', '"+reward_number+"')"
+        cursor.execute(query)
+        connection.commit()
+        return redirect(url_for('clubs_page'))
 
 
 ##Sponsorships arrangements by Muhammed Aziz Ulak

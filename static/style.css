@@ -43,6 +43,34 @@ input#fixture_form {
 input#fixture_form_add {
 	width: 30%;
 }
+table#clubs{
+	width: 80%;
+	background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.7));
+	border-style: ridge;
+	border-width: 4px;
+	border-color: yellow;
+}
+td#clubs{
+	border-style: inset;
+	border-width: 1px;
+	border-color: white;
+}
+td#clubs_form{
+	border-style: inset;
+	border-width: 2px;
+	border-color: white;
+	text-align: center;
+}
+td#clubs_form_add{
+	text-align: center;
+}
+input#clubs_form{
+	width: 95%;
+	layout-gravity: center;
+}
+input#clubs_form_add{
+	width: 40%;
+}
 table#chform{
 	width: 100%;
 	background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.7));

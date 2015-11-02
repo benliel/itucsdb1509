@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Clubs{% endblock %}
+</head>
+	{% block content %}<h2>Clubs</h2>
+	<form action="{{ url_for('clubs_page') }} " method = "post">
+	<table id=clubs>
+
+	{% for id, name, place, year, chair, number_of_members, reward_number in clubs %}
+	<tr>
+		<td id=clubs>{{name}}</td>
+		<td id=clubs>{{place}}</td>
+		<td id=clubs>{{year}}</td>
+		<td id=clubs>{{chair}}</td>
+		<td id=clubs>{{number_of_members}}</td>
+		<td id=clubs>{{reward_number}}</td>
+
+	</tr>
+	{% endfor %}
+	<tr>
+				<td id="clubs_form"><input id="clubs" type="text" placeholder="Name" name="name" required="required"></td>
+				<td id="clubs_form"><input id="clubs" type="text" placeholder="Place" name="place" required="required"></td>
+				<td id="clubs_form"><input id="clubs" type="date" name="year" required="required"></td>
+				<td id="clubs_form"><input id="clubs" type="text" placeholder="Chair Name" name="chair" required="required"></td>
+				<td id="clubs_form"><input id="clubs" type="text" placeholder="Number of Members" name="number_of_members" required="required"></td>
+				<td id="clubs_form"><input id="clubs" type="text" placeholder="Number of Rewards" name="reward_number" onfocus="this.value=''" required="required"></td>
+
+			</tr>
+			<tr><td colspan="6" id=clubs_form_add><input id="clubs_form_add" value="Add Club" name="add" type="submit"></td></tr>
+	</table>
+
+
+	</form>
+	{% endblock %}
+</html>

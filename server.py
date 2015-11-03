@@ -14,6 +14,7 @@ from flask.helpers import url_for
 from store import Store
 from fixture import *
 from sponsors import *
+from curlers import *
 
 app = Flask(__name__)
 
@@ -46,7 +47,7 @@ def initialize_database():
 
     init_fixture_db(cursor)
     init_sponsors_db(cursor)
-
+    init_curlers_db(cursor)
 #Sponsorship table creation
     query = """DROP TABLE IF EXISTS SPONSORS"""
     cursor.execute(query)
@@ -179,6 +180,36 @@ def fixture_page():
 
         return redirect(url_for('fixture_page'))
 
+@app.route('/curlers', methods=['GET', 'POST'])
+def curlers_page():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        query = "SELECT * FROM curlers"
+        cursor.execute(query)
+
+        return render_template('curlers.html', curlers = cursor, current_time=now.ctime())
+    elif "add" in request.form:
+        curler = Curler(request.form['name'],
+                     request.form['surname'],
+                     request.form['age'],
+                     request.form['team'],
+                     request.form['country'])
+
+        add_curler(cursor, request, curler)
+
+        connection.commit()
+        return redirect(url_for('curlers_page'))
+
+    elif "delete" in request.form:
+        for line in request.form:
+            if "checkbox" in line:
+                delete_curler(cursor, int(line[9:]))
+                connection.commit()
+
+        return redirect(url_for('curlers_page'))
 
 
 ##Sema's Part - Curling Clubs

@@ -23,10 +23,10 @@
 	<tr>
 				<td id="clubs_form"><input id="clubs" type="text" placeholder="Name" name="name" required="required"></td>
 				<td id="clubs_form"><input id="clubs" type="text" placeholder="Place" name="place" required="required"></td>
-				<td id="clubs_form"><input id="clubs" type="date" name="year" required="required"></td>
+				<td id="clubs_form"><input id="clubs" type="number" min="1000" max="2100" name="year" required="required"></td>
 				<td id="clubs_form"><input id="clubs" type="text" placeholder="Chair Name" name="chair" required="required"></td>
-				<td id="clubs_form"><input id="clubs" type="text" placeholder="Number of Members" name="number_of_members" required="required"></td>
-				<td id="clubs_form"><input id="clubs" type="text" placeholder="Number of Rewards" name="reward_number" onfocus="this.value=''" required="required"></td>
+				<td id="clubs_form"><input id="clubs" type="number" min="0" placeholder="Number of Members" name="number_of_members" required="required"></td>
+				<td id="clubs_form"><input id="clubs" type="number" min="0" placeholder="Number of Rewards" name="reward_number" onfocus="this.value=''" required="required"></td>
 
 			</tr>
 			<tr><td colspan="6" id=clubs_form_add><input id="clubs_form_add" value="Add Club" name="add" type="submit"></td></tr>

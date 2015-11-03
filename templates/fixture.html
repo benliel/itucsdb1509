@@ -10,7 +10,7 @@
 	<table id=fixture>
 
 	{% for team1, team2, date, time, location in matches %}
-	<tr>
+	<tr id=fixture>
 		<td id=fixture>{{team1}}</td>
 		<td id=fixture>{{team2}}</td>
 		<td id=fixture>{{date}}</td>
@@ -18,7 +18,7 @@
 		<td id=fixture>{{location}}</td>
 	</tr>
 	{% endfor %}
-	<tr>
+	<tr id=fixture>
 				<td id="fixture_form"><input id="fixture" type="text" placeholder="Team" name="team1" required="required"></td>
 				<td id="fixture_form"><input id="fixture" type="text" placeholder="Team" name="team2" required="required"></td>
 				<td id="fixture_form"><input id="fixture" type="date" place holder = "DD.MM.YYYY"name="date" required="required"></td>
@@ -26,7 +26,7 @@
 				<td id="fixture_form"><input id="fixture" type="text" placeholder="Location" name="location" onfocus="this.value=''" required="required"></td>
 
 			</tr>
-			<tr><td colspan="5" id=fixture_form_add><input id="fixture_form_add" value="Add Match" name="add" type="submit"></td></tr>
+			<tr id=fixture><td colspan="5" id=fixture_form_add><input id="fixture_form_add" value="Add Match" name="add" type="submit"></td></tr>
 	</table>
 
 

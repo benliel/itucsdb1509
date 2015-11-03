@@ -15,7 +15,7 @@ color: white; text-decoration: underline;
 nav li {
 display: inline; margin-right: 1em; font-size: 80%;
 }
-table #fixture {
+table#fixture {
 	width: 100%;
 	background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.7));
 	border-style: ridge;
@@ -23,6 +23,7 @@ table #fixture {
 	border-color: white;
 }
 td#fixture {
+	width: 20%;
 	border-style: inset;
 	border-width: 1px;
 	border-color: white;
@@ -37,7 +38,7 @@ td#fixture_form_add {
 	text-align: center;
 }
 input#fixture_form {
-	width: 95%;
+	width: 100%;
 	layout-gravity: center;
 }
 input#fixture_form_add {

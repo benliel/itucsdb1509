@@ -4,13 +4,15 @@ import json
 import re
 import psycopg2 as dbapi2
 
+
+
 from flask import Flask
 from flask import redirect
 from flask import request
 from flask import render_template
 from flask.helpers import url_for
-from match import Match
 from store import Store
+from fixture import *
 
 app = Flask(__name__)
 
@@ -41,19 +43,7 @@ def initialize_database():
     query = """INSERT INTO COUNTER(N) VALUES(0)"""
     cursor.execute(query)
 
-    #fixture table creation
-    query = """DROP TABLE IF EXISTS FIXTURE"""
-    cursor.execute(query)
-    query = """CREATE TABLE FIXTURE (
-TEAM1 varchar(80) NOT NULL,
-TEAM2 varchar(80) NOT NULL,
-DATE date NOT NULL,
-TIME time NOT NULL,
-LOCATION varchar(80),
-PRIMARY KEY (DATE, TIME, LOCATION)
-)"""
-    cursor.execute(query)
-###########
+    init_fixture_db(cursor)
 
 #Sponsorship table creation
     query = """DROP TABLE IF EXISTS SPONSORS"""
@@ -168,14 +158,14 @@ def fixture_page():
 
         return render_template('fixture.html', matches = cursor, current_time=now.ctime())
     else:
-        team1 = request.form['team1']
-        team2 = request.form['team2']
-        date = request.form['date']
-        time = request.form['time']
-        location = request.form['location']
-        query = """INSERT INTO FIXTURE (TEAM1, TEAM2, DATE, TIME, LOCATION)
-        VALUES ('"""+team1+"', '"+team2+"', to_date('"+date+"', 'DD.MM.YYYY'), to_timestamp('"+time+"', 'HH24:MI'), '"+location+"')"
-        cursor.execute(query)
+        match = Match(request.form['team1'],
+                     request.form['team2'],
+                     request.form['date'],
+                     request.form['time'],
+                     request.form['location'])
+
+        add_match(cursor, request, match)
+
         connection.commit()
         return redirect(url_for('fixture_page'))
 

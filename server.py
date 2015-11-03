@@ -158,13 +158,13 @@ def fixture_page():
 
         return render_template('fixture.html', matches = cursor, current_time=now.ctime())
     else:
-        variables = (request.form['team1'],
+        match = Match(request.form['team1'],
                      request.form['team2'],
                      request.form['date'],
                      request.form['time'],
                      request.form['location'])
 
-        add_match(cursor, request, variables)
+        add_match(cursor, request, match)
 
         connection.commit()
         return redirect(url_for('fixture_page'))

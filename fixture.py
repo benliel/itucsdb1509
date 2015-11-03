@@ -1,9 +1,9 @@
 class Match:
-    def __init__(self, team1, team2, date, clock, location):
+    def __init__(self, team1, team2, date, time, location):
         self.team1 = team1
         self.team2 = team2
         self.date = date
-        self.clock = clock
+        self.time = time
         self.location = location
 
 def init_fixture_db(cursor):
@@ -19,7 +19,7 @@ PRIMARY KEY (DATE, TIME, LOCATION)
 )"""
     cursor.execute(query)
 
-def add_match(cursor, request, variables):
+def add_match(cursor, request, match):
         query = """INSERT INTO FIXTURE
         (TEAM1, TEAM2, DATE, TIME, LOCATION) VALUES (
         %s,
@@ -28,5 +28,6 @@ def add_match(cursor, request, variables):
         to_timestamp(%s, 'HH24:MI'),
         %s
         )"""
-        cursor.execute(query, variables)
+        cursor.execute(query, (match.team1, match.team2, match.date,
+                                match.time, match.location))
 

@@ -13,6 +13,7 @@ from flask import render_template
 from flask.helpers import url_for
 from store import Store
 from fixture import *
+from sponsors import *
 
 app = Flask(__name__)
 
@@ -44,6 +45,7 @@ def initialize_database():
     cursor.execute(query)
 
     init_fixture_db(cursor)
+    init_sponsors_db(cursor)
 
 #Sponsorship table creation
     query = """DROP TABLE IF EXISTS SPONSORS"""
@@ -217,14 +219,21 @@ def sponsors_page():
         cursor.execute(query)
 
         return render_template('sponsors.html', sponsors = cursor, current_time=now.ctime())
-    else:
-        name = request.form['name']
-        supportedteam = request.form['supportedteam']
-        budget = request.form['budget']
-        query = """INSERT INTO SPONSORS (name, supportedteam, budget)
-        VALUES ('"""+name+"', '"+supportedteam+"', '"+budget+"')"
-        cursor.execute(query)
+    elif "add" in request.form:
+        sponsor = Sponsors(request.form['name'],
+                     request.form['supportedteam'],
+                     request.form['budget'])
+
+        add_sponsor(cursor, request, sponsor)
+
         connection.commit()
+        return redirect(url_for('sponsors_page'))
+    elif "delete" in request.form:
+        for line in request.form:
+            if "checkbox" in line:
+                delete_sponsor(cursor, int(line[9:]))
+                connection.commit()
+
         return redirect(url_for('sponsors_page'))
 
 

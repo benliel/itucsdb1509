@@ -30,7 +30,7 @@ def add_curler(cursor, request, curler):
         %s
         )"""
         cursor.execute(query, (curler.name, curler.surname, curler.age,
-                                curler.team, curler.country))
+                               curler.team, curler.country))
 
 def delete_curler(cursor, id):
         query="""DELETE FROM CURLERS WHERE ID = %s"""

@@ -157,7 +157,7 @@ def fixture_page():
         cursor.execute(query)
 
         return render_template('fixture.html', matches = cursor, current_time=now.ctime())
-    else:
+    elif "add" in request.form:
         match = Match(request.form['team1'],
                      request.form['team2'],
                      request.form['date'],
@@ -168,6 +168,16 @@ def fixture_page():
 
         connection.commit()
         return redirect(url_for('fixture_page'))
+
+    elif "delete" in request.form:
+        for line in request.form:
+            if "checkbox" in line:
+                delete_match(cursor, int(line[9:]))
+                connection.commit()
+
+        return redirect(url_for('fixture_page'))
+
+
 
 ##Sema's Part - Curling Clubs
 @app.route('/clubs', methods=['GET', 'POST'])

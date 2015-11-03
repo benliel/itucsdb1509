@@ -27,6 +27,11 @@ td#fixture {
 	border-style: inset;
 	border-width: 1px;
 	border-color: white;
+}td#checkbox {
+	width: 1%;
+	border-style: inset;
+	border-width: 1px;
+	border-color: white;
 }
 td#fixture_form {
 	border-style: inset;

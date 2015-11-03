@@ -10,12 +10,13 @@ def init_fixture_db(cursor):
     query = """DROP TABLE IF EXISTS FIXTURE"""
     cursor.execute(query)
     query = """CREATE TABLE FIXTURE (
+ID SERIAL,
 TEAM1 varchar(80) NOT NULL,
 TEAM2 varchar(80) NOT NULL,
 DATE date NOT NULL,
 TIME time NOT NULL,
 LOCATION varchar(80),
-PRIMARY KEY (DATE, TIME, LOCATION)
+PRIMARY KEY (ID)
 )"""
     cursor.execute(query)
 
@@ -30,4 +31,8 @@ def add_match(cursor, request, match):
         )"""
         cursor.execute(query, (match.team1, match.team2, match.date,
                                 match.time, match.location))
+
+def delete_match(cursor, id):
+        query="""DELETE FROM FIXTURE WHERE ID = %s"""
+        cursor.execute(query, (int(id),))
 

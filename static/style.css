@@ -1,6 +1,6 @@
 body {
 color: white;
-background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("http://www.columbiacurlingclub.com/assets/images/stone.jpg");
+background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("/static/background.jpg");
 background-size: 120%;
 background-position: 20% 0;
 font-family: 'Droid Sans', 'Helvetica', 'sans'; font-size: 12pt;

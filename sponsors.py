@@ -8,12 +8,12 @@ def init_sponsors_db(cursor):
     query = """DROP TABLE IF EXISTS SPONSORS"""
     cursor.execute(query)
     query = """CREATE TABLE SPONSORS (
-ID SERIAL,
-NAME VARCHAR(80) NOT NULL,
-SUPPORTEDTEAM VARCHAR(80) NOT NULL,
-BUDGET INTEGER NOT NULL,
-PRIMARY KEY (ID)
-)"""
+    ID SERIAL,
+    NAME VARCHAR(80) NOT NULL,
+    SUPPORTEDTEAM VARCHAR(80) NOT NULL,
+    BUDGET INTEGER NOT NULL,
+    PRIMARY KEY (ID)
+    )"""
     cursor.execute(query)
 
 def add_sponsor(cursor, request, sponsor):

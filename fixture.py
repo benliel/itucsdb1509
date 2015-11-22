@@ -10,14 +10,14 @@ def init_fixture_db(cursor):
     query = """DROP TABLE IF EXISTS FIXTURE"""
     cursor.execute(query)
     query = """CREATE TABLE FIXTURE (
-ID SERIAL,
-TEAM1 varchar(80) NOT NULL,
-TEAM2 varchar(80) NOT NULL,
-DATE date NOT NULL,
-TIME time NOT NULL,
-LOCATION varchar(80),
-PRIMARY KEY (ID)
-)"""
+            ID SERIAL,
+            TEAM1 varchar(80) NOT NULL,
+            TEAM2 varchar(80) NOT NULL,
+            DATE date NOT NULL,
+            TIME time NOT NULL,
+            LOCATION varchar(80),
+            PRIMARY KEY (ID)
+            )"""
     cursor.execute(query)
 
 def add_match(cursor, request, match):

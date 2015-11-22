@@ -10,14 +10,14 @@ def init_curlers_db(cursor):
     query = """DROP TABLE IF EXISTS CURLERS"""
     cursor.execute(query)
     query = """CREATE TABLE CURLERS (
-ID SERIAL,
-NAME varchar(80) NOT NULL,
-SURNAME varchar(80) NOT NULL,
-AGE integer NOT NULL,
-TEAM varchar(20) NOT NULL,
-COUNTRY varchar(80),
-PRIMARY KEY (ID)
-)"""
+            ID SERIAL,
+            NAME varchar(80) NOT NULL,
+            SURNAME varchar(80) NOT NULL,
+            AGE integer NOT NULL,
+            TEAM varchar(20) NOT NULL,
+            COUNTRY varchar(80),
+            PRIMARY KEY (ID)
+            )"""
     cursor.execute(query)
 
 def add_curler(cursor, request, curler):

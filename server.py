@@ -107,34 +107,7 @@ def championships_page():
 
 @app.route('/fixture', methods=['GET', 'POST'])
 def fixture_page():
-    connection = dbapi2.connect(app.config['dsn'])
-    cursor = connection.cursor()
-
-    if request.method == 'GET':
-        now = datetime.datetime.now()
-        query = "SELECT * FROM FIXTURE"
-        cursor.execute(query)
-
-        return render_template('fixture.html', matches = cursor, current_time=now.ctime())
-    elif "add" in request.form:
-        match = Match(request.form['team1'],
-                     request.form['team2'],
-                     request.form['date'],
-                     request.form['time'],
-                     request.form['location'])
-
-        add_match(cursor, request, match)
-
-        connection.commit()
-        return redirect(url_for('fixture_page'))
-
-    elif "delete" in request.form:
-        for line in request.form:
-            if "checkbox" in line:
-                delete_match(cursor, int(line[9:]))
-                connection.commit()
-
-        return redirect(url_for('fixture_page'))
+    return get_fixture_page(app)
 
 @app.route('/curlers', methods=['GET', 'POST'])
 def curlers_page():

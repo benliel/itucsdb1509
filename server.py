@@ -38,7 +38,7 @@ def initialize_database():
     connection = dbapi2.connect(app.config['dsn'])
     cursor =connection.cursor()
 
-    init_fixture_db(cursor)
+    init_fixture_db(app)
     init_sponsors_db(cursor)
     init_championships_db(cursor)
     init_curlers_db(cursor)

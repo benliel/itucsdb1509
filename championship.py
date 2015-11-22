@@ -23,7 +23,6 @@ def init_championships_db(cursor):
     cursor.execute(query)
 
 def add_championship(cursor, request, championship1):
-        print("Try")
         query = """INSERT INTO CHAMPIONSHIP
         (NAME, PLACE, DATE, TYPE, NUMBER_OF_TEAMS,REWARD) VALUES (
         %s,

@@ -10,19 +10,11 @@
 	<table id=sponsors>
 	<form id="delete_form" action="{{ url_for('sponsors_page') }} " method = "post">
 
-	{% for id, name, supportedteam, budget in sponsors %}
-	<tr id=fixture>
-		<td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
-		<td id=sponsors>{{name}}</td>
-		<td id=sponsors>{{supportedteam}}</td>
-		<td id=sponsors>{{budget}}</td>
-	</tr>
-	{% endfor %}
 
 
 
 		<tr id=sponsors>
-				<td><input Value="Delete" name="delete" type="submit" form="delete_form"></form>
+				<td><input form="add" id="sponsors_form_add" value="Add Sponsor" name="add" type="submit"></form>
 		</td>
 				<form id="add" action="{{ url_for('sponsors_page') }} " method = "post">
 				<td id="sponsors_form"><input form ="add" id="sponsors" type="text" placeholder="Name of Sponsor" name="name" required="required"></td>
@@ -32,12 +24,26 @@
 			</tr>
 			<tr id=sponsors>
 				<td colspan="6" id=sponsors_form_add>
-					<input form="add" id="sponsors_form_add" value="Add Sponsor" name="add" type="submit"></form>
+				<input Value="Delete" name="delete" type="submit" form="delete_form">
+					</form>
 					</td>
 			</tr>
 
 
 	</table>
+
+	<table border="1" style="width:60%">
+	{% for id, name, supportedteam, budget in sponsors %}
+	<tr id=fixture>
+		<td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
+		<td id=sponsors>{{name}}</td>
+		<td id=sponsors>{{supportedteam}}</td>
+		<td id=sponsors>{{budget}}</td>
+	</tr>
+	{% endfor %}
+
+	</table>
+
 
 
 

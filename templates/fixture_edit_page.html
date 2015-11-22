@@ -9,7 +9,7 @@
 	{% block content %}
 	<h2>Edit Match</h2>
 	<table id="fixtureUpdate"><tr>
-		<form action="POST">
+		<form action="{{url_for('fixture_edit_page', match_id=match[0])}}" method="POST">
 			<input type="hidden" value="{{match[0]}}" name="id" readonly="readonly"/>
 			<td><input id="fixtureUpdate" type="text" value="{{match[1]}}" name="team1" required="required"></td>
 			<td><input id="fixtureUpdate" type="text" value="{{match[2]}}" name="team2" required="required"></td>

@@ -44,9 +44,21 @@ def add_match(cursor, request, match):
         cursor.execute(query, (match.team1, match.team2, match.date,
                                 match.time, match.location))
 
+def update_match(cursor, id, match):
+    cursor.execute("""
+    UPDATE FIXTURE
+    SET TEAM1=%s,
+        TEAM2=%s,
+        DATE=to_date(%s, 'YYYY-MM-DD'),
+        TIME=to_timestamp(%s, 'HH24:MI'),
+        LOCATION=%s
+    WHERE ID=%s
+    """, (match.team1, match.team2, match.date, match.time, match.location, id))
+
+
 def delete_match(cursor, id):
-        query="""DELETE FROM FIXTURE WHERE ID = %s"""
-        cursor.execute(query, (int(id),))
+    query="""DELETE FROM FIXTURE WHERE ID = %s"""
+    cursor.execute(query, (int(id),))
 
 def get_fixture_page(app):
     connection = dbapi2.connect(app.config['dsn'])
@@ -80,6 +92,7 @@ def get_fixture_page(app):
 
 def get_fixture_edit_page(app, match_id):
     if request.method == 'GET':
+        match = Match
         now = datetime.datetime.now()
         try:
             connection = dbapi2.connect(app.config['dsn'])
@@ -99,6 +112,26 @@ def get_fixture_edit_page(app, match_id):
         finally:
             connection.close()
         return render_template('fixture_edit_page.html', current_time=now.ctime(), match=match)
+
     if request.method == 'POST':
+        match = Match(request.form['team1'],
+                      request.form['team2'],
+                      request.form['date'],
+                      request.form['time'],
+                      request.form['location'])
+
+        connection = dbapi2.connect(app.config['dsn'])
+
+        cursor = connection.cursor()
+        print("%s"%request.form['id'])
+        update_match(cursor, request.form['id'], match)
+
+
+
+        cursor.close()
+
+
+        connection.commit()
+        connection.close()
         return redirect(url_for('fixture_page'))
 

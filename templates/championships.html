@@ -8,17 +8,7 @@
 
 {% block content %}
 <table id=chform>
-{%for id, name, place, date, type, teamNo, reward in championships%}
-<tr>
-	<td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
-	<td id=chform>{{name}}</td>
-	<td id=chform>{{place}}</td>
-	<td id=chform>{{date}}</td>
-	<td id=chform>{{type}}</td>
-	<td id=chform>{{teamNo}}</td>
-	<td id=chform>{{reward}}</td>
-</tr>
-{%endfor%}
+
 <form action="{{ url_for('championships_page') }} " method = "post">
 
 <tr>
@@ -34,4 +24,31 @@
 			</tr>
 			</form>
 </table>
+
+<table>
+<tr style="color:#2ECCFA;font-weight: bold;">
+
+	<td></td>
+	<td>Championship</td>
+	<td>Place</td>
+	<td>Date</td>
+	<td>Type</td>
+	<td>Team Number</td>
+	<td>Reward</td>
+	</font>
+</tr>
+{%for id, name, place, date, type, teamNo, reward in championships%}
+<tr>
+	<td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
+	<td id=chform>{{name}}</td>
+	<td id=chform>{{place}}</td>
+	<td id=chform>{{date}}</td>
+	<td id=chform>{{type}}</td>
+	<td id=chform>{{teamNo}}</td>
+	<td id=chform>{{reward}}</td>
+</tr>
+
+{%endfor%}
+</table>
+
 {% endblock %}

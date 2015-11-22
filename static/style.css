@@ -80,9 +80,7 @@ input#clubs_form_add{
 table#chform{
 }
 td#chform{
-	border-style: inset;
-	border-width: 1px;
-	border-color: white;
+
 }
 td#championship_form{
 	text-align: center;

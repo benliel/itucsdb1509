@@ -130,11 +130,11 @@ def curlers_page():
     elif "add" in request.form:
         curler = Curler(request.form['name'],
                      request.form['surname'],
-                     request.form['age'],
+                     request.form['birthday'],
                      request.form['team'],
-                     request.form['country'])
+                     request.form['nationality'])
 
-        add_curler(cursor, request, )
+        add_curler(cursor, curler)
 
         connection.commit()
         return redirect(url_for('s_page'))
@@ -144,10 +144,28 @@ def curlers_page():
             if "checkbox" in line:
                 delete_(cursor, int(line[9:]))
                 connection.commit()
+        return redirect(url_for('curlers_page'))
 
-        return redirect(url_for('s_page'))
-
-
+@app.route('/curlers/<curler_id>', methods=['GET', 'POST'])
+def curlers_update_page(curler_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        query = "SELECT * FROM CURLERS WHERE (ID = %s)"
+        cursor.execute(query, curler_id)
+        now = datetime.datetime.now()
+        return render_template('curlers_update.html', curler = cursor, current_time=now.ctime())
+    elif request.method == 'POST':
+        if "update" in request.form:
+            curler = Curler(request.form['name'],
+                            request.form['surname'],
+                            request.form['birthday'],
+                            request.form['team'],
+                            request.form['nationality'])
+            
+            update_curler(cursor, curler, request.form['curler_id'])
+            connection.commit()
+            return redirect(url_for('curlers_page'))
 ##Sema's Part - Curling Clubs
 @app.route('/clubs', methods=['GET', 'POST'])
 def clubs_page():

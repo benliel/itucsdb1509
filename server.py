@@ -4,8 +4,6 @@ import json
 import re
 import psycopg2 as dbapi2
 
-
-
 from flask import Flask
 from flask import redirect
 from flask import request
@@ -38,85 +36,43 @@ def initialize_database():
     connection = dbapi2.connect(app.config['dsn'])
     cursor =connection.cursor()
 
-    query = """DROP TABLE IF EXISTS COUNTER"""
-    cursor.execute(query)
-    query = """CREATE TABLE COUNTER (N INTEGER)"""
-    cursor.execute(query)
-    query = """INSERT INTO COUNTER(N) VALUES(0)"""
-    cursor.execute(query)
-
     init_fixture_db(cursor)
     init_sponsors_db(cursor)
     init_curlers_db(cursor)
-#Sponsorship table creation
-    query = """DROP TABLE IF EXISTS SPONSORS"""
-    cursor.execute(query)
-    query = """CREATE TABLE SPONSORS (
-ID SERIAL,
-NAME VARCHAR(80) NOT NULL,
-SUPPORTEDTEAM VARCHAR(80) NOT NULL,
-BUDGET INTEGER NOT NULL,
-PRIMARY KEY (ID)
-)"""
-    cursor.execute(query)
-###########
 
-#championships table creation
+    #championships table creation
     query = """DROP TABLE IF EXISTS CHAMPIONSHIP"""
     cursor.execute(query)
     query = """CREATE TABLE CHAMPIONSHIP (
-ID SERIAL,
-NAME VARCHAR(80) NOT NULL,
-PLACE VARCHAR(80) NOT NULL,
-DATE DATE NOT NULL,
-TYPE VARCHAR(80) NOT NULL,
-NUMBER_OF_TEAMS INTEGER NOT NULL,
-REWARD VARCHAR(80),
-PRIMARY KEY(ID)
-)"""
+    ID SERIAL,
+    NAME VARCHAR(80) NOT NULL,
+    PLACE VARCHAR(80) NOT NULL,
+    DATE DATE NOT NULL,
+    TYPE VARCHAR(80) NOT NULL,
+    NUMBER_OF_TEAMS INTEGER NOT NULL,
+    REWARD VARCHAR(80),
+    PRIMARY KEY(ID)
+    )"""
     cursor.execute(query)
-###########
+    ###########
 
-#officialcurlingclubs table creation
-    query = """DROP TABLE IF EXISTS OFFICIALCURLINGCLUBS"""
+    #officialcurlingclubs table creation
+    query = """DROP TABLE IF EXISTS CLUBS"""
     cursor.execute(query)
-    query = """CREATE TABLE OFFICIALCURLINGCLUBS (
-ID SERIAL,
-NAME VARCHAR(80) NOT NULL,
-PLACE VARCHAR(80) NOT NULL,
-YEAR NUMERIC(4) NOT NULL,
-CHAIR VARCHAR(80) NOT NULL,
-NUMBER_OF_MEMBERS INTEGER NOT NULL,
-REWARDNUMBER INTEGER,
-PRIMARY KEY(ID)
-)"""
+    query = """CREATE TABLE CLUBS (
+    ID SERIAL,
+    NAME VARCHAR(80) NOT NULL,
+    PLACE VARCHAR(80) NOT NULL,
+    YEAR NUMERIC(4) NOT NULL,
+    CHAIR VARCHAR(80) NOT NULL,
+    NUMBER_OF_MEMBERS INTEGER NOT NULL,
+    REWARDNUMBER INTEGER,
+    PRIMARY KEY(ID)
+    )"""
     cursor.execute(query)
-###########
-
-
+    ###########
     connection.commit()
     return redirect(url_for('home_page'))
-
-@app.route('/count')
-def counter_page():
-    connection = dbapi2.connect(app.config['dsn'])
-    cursor = connection.cursor()
-
-    query = "UPDATE COUNTER SET N = N + 1"
-    cursor.execute(query)
-    connection.commit()
-
-    query = "SELECT N FROM COUNTER"
-    cursor.execute(query)
-    count = cursor.fetchone()[0]
-
-    return "This page was accesed %d times." % count
-
-
-@app.route('/movies')
-def movies_page():
-    now = datetime.datetime.now()
-    return render_template('movies.html', current_time=now.ctime())
 
 @app.route('/championships', methods=['GET', 'POST'])
 def championships_page():
@@ -151,34 +107,7 @@ def championships_page():
 
 @app.route('/fixture', methods=['GET', 'POST'])
 def fixture_page():
-    connection = dbapi2.connect(app.config['dsn'])
-    cursor = connection.cursor()
-
-    if request.method == 'GET':
-        now = datetime.datetime.now()
-        query = "SELECT * FROM FIXTURE"
-        cursor.execute(query)
-
-        return render_template('fixture.html', matches = cursor, current_time=now.ctime())
-    elif "add" in request.form:
-        match = Match(request.form['team1'],
-                     request.form['team2'],
-                     request.form['date'],
-                     request.form['time'],
-                     request.form['location'])
-
-        add_match(cursor, request, match)
-
-        connection.commit()
-        return redirect(url_for('fixture_page'))
-
-    elif "delete" in request.form:
-        for line in request.form:
-            if "checkbox" in line:
-                delete_match(cursor, int(line[9:]))
-                connection.commit()
-
-        return redirect(url_for('fixture_page'))
+    return get_fixture_page(app)
 
 @app.route('/curlers', methods=['GET', 'POST'])
 def curlers_page():
@@ -220,7 +149,7 @@ def clubs_page():
 
     if request.method == 'GET':
         now = datetime.datetime.now()
-        query = "SELECT * FROM OFFICIALCURLINGCLUBS"
+        query = "SELECT * FROM CLUBS"
         cursor.execute(query)
 
         return render_template('clubs.html', clubs = cursor, current_time=now.ctime())
@@ -231,7 +160,7 @@ def clubs_page():
         chair = request.form['chair']
         number_of_members = request.form['number_of_members']
         reward_number = request.form['reward_number']
-        query = """INSERT INTO OFFICIALCURLINGCLUBS (NAME, PLACE, YEAR, CHAIR, NUMBER_OF_MEMBERS,REWARDNUMBER)
+        query = """INSERT INTO CLUBS (NAME, PLACE, YEAR, CHAIR, NUMBER_OF_MEMBERS,REWARDNUMBER)
         VALUES ('"""+name+"', '"+place+"', '"+year+"' , '"+chair+"', '"+number_of_members+"', '"+reward_number+"')"
         cursor.execute(query)
         connection.commit()

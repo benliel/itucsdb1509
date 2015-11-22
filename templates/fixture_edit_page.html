@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="{{ url_for('static', filename='fixture.css') }}" />
+	{% extends "layout.html"%}
+	<meta charset="utf-8" />
+	{% block title %}Edit Match{% endblock %}
+</head>
+	{% block content %}
+	<h2>Edit Match</h2>
+	<table id="fixtureUpdate"><tr>
+		<form action="{{url_for('fixture_edit_page', match_id=match[0])}}" method="POST">
+			<input type="hidden" value="{{match[0]}}" name="id" readonly="readonly"/>
+			<td><input id="fixtureUpdate" type="text" value="{{match[1]}}" name="team1" required="required"></td>
+			<td><input id="fixtureUpdate" type="text" value="{{match[2]}}" name="team2" required="required"></td>
+			<td><input id="fixtureUpdate" type="date" value="{{match[3]}}" name="date" required="required"></td>
+			<td><input id="fixtureUpdate" type="time" value="{{match[4]}}" name="time" required="required"></td>
+			<td><input id="fixtureUpdate" type="text" value="{{match[5]}}" name="location" required="required"></td>
+			<td><input id="fixtureUpdate" type="submit" value="Update Match" name="update"></td>
+		</tr></form>
+	</table>
+
+
+
+
+
+	{% endblock %}
+</html>

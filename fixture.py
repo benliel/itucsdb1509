@@ -61,34 +61,39 @@ def delete_match(cursor, id):
     cursor.execute(query, (int(id),))
 
 def get_fixture_page(app):
-    connection = dbapi2.connect(app.config['dsn'])
-    cursor = connection.cursor()
+    try:
+        connection = dbapi2.connect(app.config['dsn'])
+        cursor = connection.cursor()
 
-    if request.method == 'GET':
+        if request.method == 'GET':
+            now = datetime.datetime.now()
+            query = "SELECT * FROM FIXTURE"
+            cursor.execute(query)
+
+            return render_template('fixture.html', matches = cursor, current_time=now.ctime())
+        elif "add" in request.form:
+            match = Match(request.form['team1'],
+                         request.form['team2'],
+                         request.form['date'],
+                         request.form['time'],
+                         request.form['location'])
+
+            add_match(cursor, request, match)
+
+            connection.commit()
+            return redirect(url_for('fixture_page'))
+
+        elif "delete" in request.form:
+            for line in request.form:
+                if "checkbox" in line:
+                    delete_match(cursor, int(line[9:]))
+                    connection.commit()
+
+            return redirect(url_for('fixture_page'))
+    except:
+        connection.rollback()
         now = datetime.datetime.now()
-        query = "SELECT * FROM FIXTURE"
-        cursor.execute(query)
-
-        return render_template('fixture.html', matches = cursor, current_time=now.ctime())
-    elif "add" in request.form:
-        match = Match(request.form['team1'],
-                     request.form['team2'],
-                     request.form['date'],
-                     request.form['time'],
-                     request.form['location'])
-
-        add_match(cursor, request, match)
-
-        connection.commit()
-        return redirect(url_for('fixture_page'))
-
-    elif "delete" in request.form:
-        for line in request.form:
-            if "checkbox" in line:
-                delete_match(cursor, int(line[9:]))
-                connection.commit()
-
-        return redirect(url_for('fixture_page'))
+        return render_template('home_page', current_time=now.ctime())
 
 def get_fixture_edit_page(app, match_id):
     if request.method == 'GET':
@@ -119,19 +124,19 @@ def get_fixture_edit_page(app, match_id):
                       request.form['date'],
                       request.form['time'],
                       request.form['location'])
-
-        connection = dbapi2.connect(app.config['dsn'])
-
-        cursor = connection.cursor()
-        print("%s"%request.form['id'])
-        update_match(cursor, request.form['id'], match)
-
-
-
-        cursor.close()
-
-
-        connection.commit()
-        connection.close()
+        try:
+            connection = dbapi2.connect(app.config['dsn'])
+            try:
+                cursor = connection.cursor()
+                update_match(cursor, request.form['id'], match)
+            except:
+                cursor.rollback()
+            finally:
+                cursor.close()
+        except:
+            connection.rollback()
+        finally:
+            connection.commit()
+            connection.close()
         return redirect(url_for('fixture_page'))
 

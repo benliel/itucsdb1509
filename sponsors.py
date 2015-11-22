@@ -15,6 +15,7 @@ from store import Store
 from fixture import *
 from sponsors import *
 from curlers import *
+from urllib3.util import current_time
 
 class Sponsors:
     def __init__(self, name, supportedteam, budget):
@@ -47,11 +48,25 @@ def delete_sponsor(cursor, id):
         query="""DELETE FROM SPONSORS WHERE ID = %s"""
         cursor.execute(query, (int(id),))
 
-def update_sponsor(curser, id, name, supportedteam, budget):
+def update_sponsor_name(curser, id, name, supportedteam, budget):
         query="""UPDATE SPONSORS
-        SET NAME = '%s' , SUPPORTEDTEAM = '%s', BUDGET = %s
+        SET NAME = '%s'
         WHERE ID = %s;"""
-        cursor.execute(query, (name,supportedteam,int(budget),int(id)))
+        cursor.execute(query, (name,int(id)))
+
+def update_sponsor_supportedteam(curser, id,supportedteam):
+        query="""UPDATE SPONSORS
+        SET SUPPORTEDTEAM = '%s'
+        WHERE ID = %s;"""
+        cursor.execute(query, (supportedteam,int(id)))
+
+def update_sponsor_budget(curser, id,budget):
+        query="""UPDATE SPONSORS
+        SET BUDGET = '%s'
+        WHERE ID = %s;"""
+        cursor.execute(query, (budget,int(id)))
+
+
 def search_sponsor(curser,name):
         query="""SELECT * FROM SPONSORS WHERE NAME = '%s%';"""
         curser.execute(query,name)
@@ -81,5 +96,32 @@ def get_sponsors_page(app):
                 connection.commit()
 
         return redirect(url_for('sponsors_page'))
+    elif "update" in request.form:
+        for line in request.form:
+            if "update" in line:
+                update_sponsor_name(curser, int(line[7:]), request.form['sponsorname'])
+                connection.commit()
+        return redirect(url_for('sponsors_page'))
 
-
+def get_sponsors_edit_page(app,sponsor_id):
+    if request.method == 'GET':
+        now = datetime.datetime.now();
+        try:
+            connection = dbapi2.connect(app.config['dsn'])
+            try:
+                cursor = connection.cursor()
+                cursor.execute("""
+                SELECT * FROM SPONSORS WHERE (ID=%s)
+                """,sponsor_id)
+                sponsor = cursor.fetchone()
+            except:
+                cursor.rollback()
+            finally:
+                cursor.close()
+        except:
+            connection.rollback()
+        finally:
+            connection.close()
+        return render_template('sponsors_edit_page.html',current_time=now.ctime(),sponsor=sponsor)
+    if request.method == 'POST':
+        return redirect(url_for('sponsors_page'));

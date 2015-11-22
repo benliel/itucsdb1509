@@ -172,6 +172,10 @@ def clubs_page():
 def sponsors_page():
     return get_sponsors_page(app)
 
+@app.route('/sponsors/edit/<sponsor_id>',methods=['GET','POST'])
+def sponsors_edit_page(sponsor_id=0):
+    return get_sponsors_edit_page(app,sponsor_id);
+
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')

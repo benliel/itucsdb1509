@@ -78,3 +78,27 @@ def get_fixture_page(app):
 
         return redirect(url_for('fixture_page'))
 
+def get_fixture_edit_page(app, match_id):
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        try:
+            connection = dbapi2.connect(app.config['dsn'])
+            try:
+                cursor = connection.cursor()
+                cursor.execute("""
+                SELECT * FROM FIXTURE WHERE (ID=%s)
+                """, match_id);
+                match = cursor.fetchone()
+
+            except:
+                cursor.rollback()
+            finally:
+                cursor.close()
+        except:
+            connection.rollback()
+        finally:
+            connection.close()
+        return render_template('fixture_edit_page.html', current_time=now.ctime(), match=match)
+    if request.method == 'POST':
+        return redirect(url_for('fixture_page'))
+

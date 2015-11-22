@@ -12,7 +12,10 @@
 
 	{% for id, team1, team2, date, time, location in matches %}
 	<tr id=fixture>
-		<td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
+		<td id=checkbox>
+		<input form ="delete_form" type="checkbox" name="checkbox_{{id}}">
+		<a href="{{url_for('fixture_edit_page', match_id=id)}}"><img alt="edit{{id}}" src="/static/edit.png" height="20px"></a>
+		</td>
 		<td id=fixture>{{team1}}</td>
 		<td id=fixture>{{team2}}</td>
 		<td id=fixture>{{date}}</td>

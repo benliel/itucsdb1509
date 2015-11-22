@@ -108,6 +108,9 @@ def championships_page():
 @app.route('/fixture', methods=['GET', 'POST'])
 def fixture_page():
     return get_fixture_page(app)
+@app.route('/fixture/edit/<match_id>', methods=['GET', 'POST'])
+def fixture_edit_page(match_id=0):
+    return get_fixture_edit_page(app, match_id);
 
 @app.route('/curlers', methods=['GET', 'POST'])
 def curlers_page():

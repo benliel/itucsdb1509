@@ -6,26 +6,9 @@
 	{% block title %}Championships{% endblock %}
 </head>
 
-{% block content %}
+{% block content %} <h2>Championship</h2>
 <table id=chform>
-
-<form action="{{ url_for('championships_page') }} " method = "post">
-
-<tr>
-				<td id="championship_form"><input id="chform" type="text" placeholder="Name" name="name" required="required" size="10"></td>
-				<td id="championship_form"><input id="chform" type="text" placeholder="Place" name="place" required="required" size="10"></td>
-				<td id="championship_form"><input id="chform" type="date" placeholder="DD.MM.YYYY" name="date" required="required" size="10"></td>
-				<td id="championship_form"><input id="chform" type="text" placeholder="Type" name="type" required="required" size="10"></td>
-				<td id="championship_form"><input id="chform" type="number" min="0" placeholder="Number of Teams" name="number_of_teams" size="10" required="required"></td>
-				<td id="championship_form"><input id="chform" type="text" placeholder="Reward" name="reward" required="required" size="10"></td>
-
-				<tr><td colspan="4" style="text-align: left" id="championship_form_button"><input class="btn" id="championship_form_button"type="submit" value="Add Championship"></td></tr>
-
-			</tr>
-			</form>
-</table>
-
-<table>
+<form id="delete_form" action="{{ url_for('championships_page') }} " method = "post">
 
 <tr style="color:#2ECCFA;font-weight: bold;">
 
@@ -39,9 +22,9 @@
 	<td>Reward</td>
 	</font>
 </tr>
-{%for id, name, place, date, type, teamNo, reward in championships%}
-<tr>
-	<td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
+{%for id, name, place, date, type, teamNo, reward in championship%}
+<tr id=chform>
+	<td id=checkbox ><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
 	<td id=chform>{{name}}</td>
 	<td id=chform>{{place}}</td>
 	<td id=chform>{{date}}</td>
@@ -49,8 +32,31 @@
 	<td id=chform>{{teamNo}}</td>
 	<td id=chform>{{reward}}</td>
 </tr>
-
 {%endfor%}
+
+
+<tr id=chform>
+				<td><input class="add" Value="Delete" name="delete" type="submit" form="delete_form"></td></form>
+</tr>
+
+<tr>
+				<form id="addC" action="{{ url_for('championships_page') }} " method = "post">
+				<td id="championship_form"><input form="addC" id="chform" type="text" placeholder="Name" name="name" required="required" size="7"></td>
+				<td id="championship_form"><input form="addC" id="chform" type="text" placeholder="Place" name="place" required="required" size="7"></td>
+				<td id="championship_form"><input form="addC" id="chform" type="date" placeholder="DD.MM.YYYY" name="date" required="required" size="7"></td>
+				<td id="championship_form"><input form="addC" id="chform" type="text" placeholder="Type" name="type" required="required" size="7"></td>
+				<td id="championship_form"><input form="addC" id="chform" type="number" min="0" placeholder="Number of Teams" name="number_of_teams" size="7" required="required"></td>
+				<td id="championship_form"><input form="addC" id="chform" type="text" placeholder="Reward" name="reward" required="required" size="7"></td>
+				</tr>
+
+				<tr id=chform>
+					<td colspan="4" style="text-align: left" id="championship_form_button">
+					<input form="addC" class="add" id="championship_form_button" value="Add Championship" name="add" type="submit" >
+					</form>
+					</td>
+				</tr>
+
 </table>
 
 {% endblock %}
+</html>

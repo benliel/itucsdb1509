@@ -7,30 +7,34 @@
 </head>
 
 {% block content %} <h2>Championship</h2>
-<table id=chform>
+<font color="#B5F7DF ">
+<table widht="100" id=chform>
 <form id="delete_form" action="{{ url_for('championships_page') }} " method = "post">
 
 <tr style="color:#2ECCFA;font-weight: bold;">
 
 
-	<td></td>
-	<td>Championship</td>
-	<td>Place</td>
-	<td>Date</td>
-	<td>Type</td>
-	<td>Team Number</td>
-	<td>Reward</td>
-	</font>
+	<td ></td>
+	<td width="4%">Championship</td>
+	<td width="10%">Place</td>
+	<td width="4%">Date</td>
+	<td width="5%">Type</td>
+	<td width="1%">Team Number</td>
+	<td width="10%">Reward</td>
+	<td width="62%"></td>
+
 </tr>
+</font>
 {%for id, name, place, date, type, teamNo, reward in championship%}
 <tr id=chform>
-	<td id=checkbox ><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
-	<td id=chform>{{name}}</td>
-	<td id=chform>{{place}}</td>
-	<td id=chform>{{date}}</td>
-	<td id=chform>{{type}}</td>
-	<td id=chform>{{teamNo}}</td>
-	<td id=chform>{{reward}}</td>
+	<td width="3%" style="background:transparent;border:0"id=checkbox ><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
+	<td width="3%"id=chform>{{name}}</td>
+	<td width="3%"id=chform>{{place}}</td>
+	<td width="3%"id=chform>{{date}}</td>
+	<td width="3%"id=chform>{{type}}</td>
+	<td width="3%"id=chform>{{teamNo}}</td>
+	<td width="5%"id=chform>{{reward}}</td>
+
 </tr>
 {%endfor%}
 
@@ -44,7 +48,7 @@
 				<form id="addC" action="{{ url_for('championships_page') }} " method = "post">
 				<td id="championship_form"><input form="addC" id="chform" type="text" placeholder="Name" name="name" required="required" size="7"></td>
 				<td id="championship_form"><input form="addC" id="chform" type="text" placeholder="Place" name="place" required="required" size="7"></td>
-				<td id="championship_form"><input form="addC" id="chform" type="date" placeholder="DD.MM.YYYY" name="date" required="required" size="7"></td>
+				<td id="championship_form"><input form="addC" id="chform" type="date" placeholder="YYYY.MM.DD" name="date" required="required" size="7"></td>
 				<td id="championship_form"><input form="addC" id="chform" type="text" placeholder="Type" name="type" required="required" size="7"></td>
 				<td id="championship_form"><input form="addC" id="chform" type="number" min="0" placeholder="Number of Teams" name="number_of_teams" size="7" required="required"></td>
 				<td id="championship_form"><input form="addC" id="chform" type="text" placeholder="Reward" name="reward" required="required" size="7"></td>

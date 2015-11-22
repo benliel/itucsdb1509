@@ -60,6 +60,29 @@ def delete_match(cursor, id):
     query="""DELETE FROM FIXTURE WHERE ID = %s"""
     cursor.execute(query, (int(id),))
 
+def search_match(app, name):
+    print("search")
+    try:
+        connection = dbapi2.connect(app.config['dsn'])
+        try:
+            cursor = connection.cursor()
+            cursor.execute("""
+            SELECT * FROM FIXTURE
+            WHERE (TEAM1=%s OR TEAM2=%s)""", (name, name))
+            matches = cursor.fetchall()
+        except:
+            print("cursor")
+            cursor.rollback()
+        finally:
+            cursor.close()
+    except:
+        print("connection")
+        connection.rollback()
+    finally:
+        connection.close()
+        return matches
+
+
 def get_fixture_page(app):
     try:
         connection = dbapi2.connect(app.config['dsn'])
@@ -90,10 +113,13 @@ def get_fixture_page(app):
                     connection.commit()
 
             return redirect(url_for('fixture_page'))
+        elif "search" in request.form:
+            matches = search_match(app, request.form['team_to_search'])
+            return render_template('fixture_search_page.html', matches = matches)
     except:
         connection.rollback()
         now = datetime.datetime.now()
-        return render_template('home_page', current_time=now.ctime())
+        return render_template('home_page.html', current_time=now.ctime())
 
 def get_fixture_edit_page(app, match_id):
     if request.method == 'GET':

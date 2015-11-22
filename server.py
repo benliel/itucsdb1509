@@ -43,7 +43,7 @@ def initialize_database():
     init_championships_db(cursor)
     init_curlers_db(cursor)
     init_clubs_db(cursor)
-    
+
     #championships table creation
     query = """DROP TABLE IF EXISTS CHAMPIONSHIP"""
     cursor.execute(query)

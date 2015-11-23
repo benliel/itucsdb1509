@@ -14,6 +14,7 @@ from fixture import *
 from sponsors import *
 from championship import *
 from clubs import *
+from curlers import *
 
 app = Flask(__name__)
 
@@ -43,20 +44,7 @@ def initialize_database():
     init_curlers_db(cursor)
     init_clubs_db(cursor)
 
-    #officialcurlingclubs table creation
-    query = """DROP TABLE IF EXISTS CLUBS"""
-    cursor.execute(query)
-    query = """CREATE TABLE CLUBS (
-    ID SERIAL,
-    NAME VARCHAR(80) NOT NULL,
-    PLACE VARCHAR(80) NOT NULL,
-    YEAR NUMERIC(4) NOT NULL,
-    CHAIR VARCHAR(80) NOT NULL,
-    NUMBER_OF_MEMBERS INTEGER NOT NULL,
-    REWARDNUMBER INTEGER,
-    PRIMARY KEY(ID)
-    )"""
-    cursor.execute(query)
+    
     ###########
     connection.commit()
     return redirect(url_for('home_page'))
@@ -190,17 +178,24 @@ def clubs_page():
         cursor.execute(query)
 
         return render_template('clubs.html', clubs = cursor, current_time=now.ctime())
-    else:
-        name = request.form['name']
-        place = request.form['place']
-        year = request.form['year']
-        chair = request.form['chair']
-        number_of_members = request.form['number_of_members']
-        reward_number = request.form['reward_number']
-        query = """INSERT INTO CLUBS (NAME, PLACE, YEAR, CHAIR, NUMBER_OF_MEMBERS,REWARDNUMBER)
-        VALUES ('"""+name+"', '"+place+"', '"+year+"' , '"+chair+"', '"+number_of_members+"', '"+reward_number+"')"
-        cursor.execute(query)
+    elif "add" in request.form:
+        club = Clubs(request.form['name'],
+                     request.form['place'],
+                     request.form['year'],
+                     request.form['chair'],
+                     request.form['number_of_members'],
+                     request.form['rewardnumber'])
+
+        add_club(cursor, request, club)
+
         connection.commit()
+        return redirect(url_for('clubs_page'))
+    elif "delete" in request.form:
+        for line in request.form:
+            if "checkbox" in line:
+                delete_club(cursor, int(line[9:]))
+                connection.commit()
+
         return redirect(url_for('clubs_page'))
 
 

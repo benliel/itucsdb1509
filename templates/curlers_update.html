@@ -9,16 +9,22 @@
 {% block content %}
     <h2>Curler</h2>
     <table id=curlers_update>
-        {% for id, name, surname, birthday, team, country in curler %}
+        {% for curlerid, curler_name, curler_surname, birthday, teamid, country in curler %}
             <form id=update action="{{ url_for('curlers_update_page',curler_id='0') }}" method = "post">
                 <tr id=update>
-                    <td id=update><input value="{{name}}" form ="update" id="curlers" type="text" placeholder="Name" name="name" required="required"></td>
-                    <td id=update><input value="{{surname}}" form ="update" id="curlers" type="text" placeholder="Surname" name="surname" required="required"></td>
-                    <td id=update><input value="{{birthday}}" form ="update" id="curlers" type="date" placeholder="Birthday (dd/MM/yyyy)" name="birthday"></td>
-                    <td id=update><input value="{{team}}" form ="update" id="curlers" type="text" placeholder = "Team" name="team"></td>
+                    <td id=update><input value="{{curler_name}}" form ="update" id="curlers" type="text" placeholder="Name" name="name" required="required"></td>
+                    <td id=update><input value="{{curler_surname}}" form ="update" id="curlers" type="text" placeholder="Surname" name="surname" required="required"></td>
+                    <td id=update><input value="{{birthday}}" form ="update" id="curlers" type="date" placeholder="Birthday (dd/MM/yyyy)" name="birthdate"></td>
+                    <td id="update">
+                        <select form="update" id=curlers name="teamid">
+                            {% for id, name in clubs %}
+                                <option id=curlers type="text" placeholder = "Team" value="{{id}}">{{name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
                     <td id=update><input value="{{country}}" form ="update" id="curlers" type="text" placeholder="Nationality" name="nationality"></td>
                 </tr>
-                <input type="hidden" name="curler_id" value="{{id}}">
+                <input type="hidden" name="curler_id" value="{{curlerid}}">
                 <tr id=update>
                     <td colspan="7" id=curler_form_add>
                         <input form="update" id="curler_form_add" value="Update Curler" name="update" type="submit">

@@ -137,7 +137,7 @@ def curlers_page():
         add_curler(cursor, curler)
 
         connection.commit()
-        return redirect(url_for('s_page'))
+        return redirect(url_for('curlers_page'))
 
     elif "delete" in request.form:
         for line in request.form:

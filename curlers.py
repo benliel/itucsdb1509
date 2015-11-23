@@ -29,7 +29,7 @@ def add_curler(cursor, curler):
     %s,
     %s
     )"""
-    cursor.execute(query, (curler.name, curler.surname, curler.birthday,
+    cursor.execute(query, (curler.name, curler.surname, curler.birthdate,
                            curler.team, curler.country))
 
 def delete_curler(cursor, id):

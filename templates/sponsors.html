@@ -12,9 +12,14 @@
 
 
 
-
 		<tr id=sponsors>
-				<td></form>
+				<td colspan="6" id=sponsors_form_add>
+				<input Value="Delete" name="delete" type="submit" form="delete_form">
+					</form>
+					</td>
+			</tr>
+		<tr id=sponsors>
+				<td>
 		</td>{% if(clubs|length>0)%}
 				<form id="add" action="{{ url_for('sponsors_page') }} " method = "post">
 				<td id="sponsors_form"><input form ="add" id="sponsors" type="text" placeholder="Name of Sponsor" name="name" required="required"></td>
@@ -29,12 +34,7 @@
 				<td id="sponsors_form"><input form ="add" id="sponsors" type="text" placeholder="Budget" name="budget" required="required"></td>
 
 			</tr>
-			<tr id=sponsors>
-				<td colspan="6" id=sponsors_form_add>
-				<input Value="Delete" name="delete" type="submit" form="delete_form">
-					</form>
-					</td>
-			</tr>
+
 
 						<tr id=sponsors>
 				<td colspan="6" id=sponsors_form_add>

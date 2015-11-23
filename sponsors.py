@@ -15,7 +15,6 @@ from store import Store
 from fixture import *
 from sponsors import *
 from curlers import *
-from urllib3.util import current_time
 
 class Sponsors:
     def __init__(self, name, supportedteam, budget):
@@ -23,30 +22,69 @@ class Sponsors:
         self.supportedteam = supportedteam
         self.budget = budget
 
-def init_sponsors_db(cursor):
-    query = """DROP TABLE IF EXISTS SPONSORS"""
-    cursor.execute(query)
-    query = """CREATE TABLE SPONSORS (
-    ID SERIAL,
-    NAME VARCHAR(80) NOT NULL,
-    SUPPORTEDTEAM INT NOT NULL REFERENCES CLUBS(ID),
-    BUDGET INTEGER NOT NULL,
-    PRIMARY KEY (ID)
-    )"""
-    cursor.execute(query)
+def init_sponsors_db(app):
+    connection = dbapi2.connect(app.config['dsn'])
+    try:
+        cursor = connection.cursor()
+        try:
+            cursor.execute('DROP TABLE IF EXISTS SPONSORS CASCADE;')
+            cursor.execute("""CREATE TABLE SPONSORS (
+            ID SERIAL,
+            NAME VARCHAR(80) NOT NULL,
+            SUPPORTEDTEAM INTEGER NOT NULL REFERENCES CLUBS(ID),
+            BUDGET INTEGER NOT NULL,
+            PRIMARY KEY (ID)
+            )""")
+        except:
+            cursor.rollback()
+        finally:
+            cursor.close()
+    except:
+        connection.rollback()
+    finally:
+        connection.commit()
+        connection.close()
 
-def add_sponsor(cursor, request, sponsor):
-        query = """INSERT INTO SPONSORS
-        (NAME, SUPPORTEDTEAM, BUDGET) VALUES (
-        %s,
-        %s,
-        %s
-        )"""
-        cursor.execute(query, (sponsor.name, sponsor.supportedteam, sponsor.budget))
+def add_sponsor(app, request, sponsor):
+    connection = dbapi2.connect(app.config['dsn'])
+    try:
+        cursor = connection.cursor()
+        try:
+            cursor = connection.cursor()
+            cursor.execute("""
+            INSERT INTO SPONSORS
+            (NAME, SUPPORTEDTEAM, BUDGET) VALUES (
+            %s,
+            %s,
+            %s
+            )""", (sponsor.name, sponsor.supportedteam,
+                   sponsor.budget))
 
-def delete_sponsor(cursor, id):
-        query="""DELETE FROM SPONSORS WHERE ID = %s"""
-        cursor.execute(query, (int(id),))
+        except:
+            cursor.rollback()
+        finally:
+            cursor.close()
+    except:
+        connection.rollback()
+    finally:
+        connection.commit()
+        connection.close()
+
+def delete_sponsor(app, id):
+    connection = dbapi2.connect(app.config['dsn'])
+    try:
+        cursor = connection.cursor()
+        try:
+            cursor.execute('DELETE FROM SPONSORS WHERE ID = %s', (id,))
+        except:
+            cursor.rollback()
+        finally:
+            cursor.close()
+    except:
+        connection.rollback()
+    finally:
+        connection.commit()
+        connection.close()
 
 def search_sponsor(curser,name):
         query="""SELECT * FROM SPONSORS WHERE NAME = '%s%';"""
@@ -61,19 +99,17 @@ def get_sponsors_page(app):
         return render_template('sponsors.html', sponsors = sponsors,
                                clubs=clubs, current_time=now.ctime())
     elif "add" in request.form:
+
         sponsor = Sponsors(request.form['name'],
                      request.form['supportedteam'],
                      request.form['budget'])
 
-        add_sponsor(cursor, request, sponsor)
-
-        connection.commit()
+        add_sponsor(app, request, sponsor)
         return redirect(url_for('sponsors_page'))
     elif "delete" in request.form:
         for line in request.form:
             if "checkbox" in line:
-                delete_sponsor(cursor, int(line[9:]))
-                connection.commit()
+                delete_sponsor(app, int(line[9:]))
 
         return redirect(url_for('sponsors_page'))
 
@@ -169,7 +205,7 @@ def get_all_sponsors(app):
         try:
             cursor.execute('''
             SELECT S.ID, T.NAME, S.NAME, S.BUDGET
-            FROM SPONSORS AS F, CLUBS AS T
+            FROM SPONSORS AS S, CLUBS AS T
             WHERE(S.SUPPORTEDTEAM=T.ID)
             ORDER BY 1
             ''')

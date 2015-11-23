@@ -6,33 +6,42 @@
 	{% block title %}Clubs{% endblock %}
 </head>
 	{% block content %}<h2>Clubs</h2>
-	<form action="{{ url_for('clubs_page') }} " method = "post">
+	
 	<table id=clubs>
-
-	{% for id, name, place, year, chair, number_of_members, reward_number in clubs %}
-	<tr>
+	<form id="delete_form" action="{{ url_for('clubs_page') }} " method = "post">
+	
+	{% for id, name, place, year, chair, number_of_members, rewardnumber in clubs %}
+	<tr id=clubs>
+		<td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
 		<td id=clubs>{{name}}</td>
 		<td id=clubs>{{place}}</td>
 		<td id=clubs>{{year}}</td>
 		<td id=clubs>{{chair}}</td>
 		<td id=clubs>{{number_of_members}}</td>
-		<td id=clubs>{{reward_number}}</td>
-
+		<td id=clubs>{{rewardnumber}}</td>
 	</tr>
 	{% endfor %}
-	<tr>
-				<td id="clubs_form"><input id="clubs" type="text" placeholder="Name" name="name" required="required"></td>
-				<td id="clubs_form"><input id="clubs" type="text" placeholder="Place" name="place" required="required"></td>
-				<td id="clubs_form"><input id="clubs" type="number" min="1000" max="2100" name="year" required="required"></td>
-				<td id="clubs_form"><input id="clubs" type="text" placeholder="Chair Name" name="chair" required="required"></td>
-				<td id="clubs_form"><input id="clubs" type="number" min="0" placeholder="Number of Members" name="number_of_members" required="required"></td>
-				<td id="clubs_form"><input id="clubs" type="number" min="0" placeholder="Number of Rewards" name="reward_number" onfocus="this.value=''" required="required"></td>
+	
+	
+	<tr id=clubs>
+				<td><input Value="Delete" name="delete" type="submit" form="delete_form"></form></td>
+				<form id="add" action="{{ url_for('clubs_page') }} " method = "post">
+				<td id="clubs_form"><input form="add" id="clubs" type="text" placeholder="Name" name="name" required="required"></td>
+				<td id="clubs_form"><input form="add" id="clubs" type="text" placeholder="Place" name="place" required="required"></td>
+				<td id="clubs_form"><input form="add" id="clubs" type="number" min="1000" max="2100" name="year" required="required"></td>
+				<td id="clubs_form"><input form="add" id="clubs" type="text" placeholder="Chair Name" name="chair" required="required"></td>
+				<td id="clubs_form"><input form="add" id="clubs" type="number" min="0" placeholder="Number of Members" name="number_of_members" required="required"></td>
+				<td id="clubs_form"><input form="add" id="clubs" type="number" min="0" placeholder="Number of Rewards" name="rewardnumber" onfocus="this.value=''" required="required"></td>
 
 			</tr>
-			<tr><td colspan="6" id=clubs_form_add><input id="clubs_form_add" value="Add Club" name="add" type="submit"></td></tr>
+			
+			<tr id=clubs>
+				<td colspan="6" id=clubs_form_add>
+					<input form="add" id="clubs_form_add" value="Add Club" name="add" type="submit"></form>
+					</td>
+			</tr>
+					
 	</table>
 
-
-	</form>
 	{% endblock %}
 </html>

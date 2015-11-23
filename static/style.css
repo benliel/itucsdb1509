@@ -15,40 +15,7 @@ color: white; text-decoration: underline;
 nav li {
 display: inline; margin-right: 1em; font-size: 80%;
 }
-table#fixture {
-	width: 100%;
-	background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.7));
-	border-style: ridge;
-	border-width: 2px;
-	border-color: white;
-}
-td#fixture {
-	width: 20%;
-	border-style: inset;
-	border-width: 1px;
-	border-color: white;
-}td#checkbox {
-	width: 1%;
-	border-style: inset;
-	border-width: 1px;
-	border-color: white;
-}
-td#fixture_form {
-	border-style: inset;
-	border-width: 1px;
-	border-color: white;
-	text-align: center;
-}
-td#fixture_form_add {
-	text-align: center;
-}
-input#fixture_form {
-	width: 100%;
-	layout-gravity: center;
-}
-input#fixture_form_add {
-	width: 30%;
-}
+
 table#clubs{
 	width: 80%;
 	background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.7));
@@ -89,13 +56,13 @@ td#championship_form_button{
 	text-align: center;
 }
 input#championship_form{
-	width: 95%;
+	width: 75%;
 	layout-gravity: center;
 }
 input#championship_form_button{
 	width: 30%;
 }
-.btn {
+.add {
   background: #23a2f7;
   background-image: -webkit-linear-gradient(top, #23a2f7, #0fa3ff);
   background-image: -moz-linear-gradient(top, #23a2f7, #0fa3ff);
@@ -113,7 +80,7 @@ input#championship_form_button{
   text-decoration: none;
 }
 
-.btn:hover {
+.add:hover {
   background: #3cb0fd;
   background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
   background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);

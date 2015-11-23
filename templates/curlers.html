@@ -6,44 +6,48 @@
 	{% extends "layout.html"%}
 	{% block title %}Curlers{% endblock %}
 </head>
-	{% block content %}<h2>Curlers</h2>
-	<table id=curlers>
-	<form id="delete_form" action="{{ url_for('curlers_page') }} " method = "post">
-
-	{% for id, name, surname, age, team, country in curlers %}
-	<tr id=fixture>
-		<td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
-		<td id=curlers>{{name}}</td>
-		<td id=curlers>{{surname}}</td>
-		<td id=curlers>{{age}}</td>
-		<td id=curlers>{{team}}</td>
-		<td id=curlers>{{country}}</td>
+{% block content %}
+<h2>Curlers</h2>
+<table id=curlers>
+    <form id="delete_form" action="{{ url_for('curlers_page') }} " method = "post">
+	<tr id=curlers>
+		<td id=checkbox><input form ="delete_form" type="checkbox" name="select_all"></td>
+		<td id=curlers>Name</td>
+		<td id=curlers>Surname</td>
+		<td id=curlers>Birth Date</td>
+		<td id=curlers>Team</td>
+		<td id=curlers>Nationality</td>
+	</tr>
+	{% for id, name, surname, birth_date, team, country in curlers %}
+	<tr id=curlers>
+            <td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
+            <td id=curlers>{{name}}</td>
+            <td id=curlers>{{surname}}</td>
+            <td id=curlers>{{birth_date}}</td>
+            <td id=curlers>{{team}}</td>
+            <td id=curlers>{{country}}</td>
+            <td>
+                <a href="{{ url_for('curlers_update_page',curler_id = id) }}">Update</a> 
+            </td>
 	</tr>
 	{% endfor %}
 
+        <tr id=curlers>
+            <td><input Value="Delete" name="delete" type="submit" form="delete_form"></td></form>
+            <form id=add action="{{ url_for('curlers_page') }} " method = "post">
+            <td id=fixture_form><input form ="add" id="fixture" type="text" placeholder="Name" name="name" required="required"></td>
+            <td id=fixture_form><input form ="add" id="fixture" type="text" placeholder="Surname" name="surname" required="required"></td>
+            <td id=fixture_form><input form ="add" id="fixture" type="date" placeholder="Birthday (dd/MM/yyyy)" name="birthday"></td>
+            <td id=fixture_form><input form ="add" id="fixture" type="text" placeholder = "Team" name="team"></td>
+            <td id=fixture_form><input form ="add" id="fixture" type="text" placeholder="Nationality" name="nationality"></td>
+        </tr>
+        <tr id=curlers>
+            <td colspan="7" id=curler_form_add>
+                <input form="add" id="curler_form_add" value="Add curler" name="add" type="submit"></form>
+            </td>
+        </tr>
 
 
-		<tr id=fixture>
-				<td><input Value="Delete" name="delete" type="submit" form="delete_form"></form>
-		</td>
-				<form id="add" action="{{ url_for('curlers_page') }} " method = "post">
-				<td id="fixture_form"><input form ="add" id="fixture" type="text" placeholder="Name" name="name" required="required"></td>
-				<td id="fixture_form"><input form ="add" id="fixture" type="text" placeholder="Surname" name="surname" required="required"></td>
-				<td id="fixture_form"><input form ="add" id="fixture" type="integer" placeholder="Age" name="age" required="required"></td>
-				<td id="fixture_form"><input form ="add" id="fixture" type="text" placeholder = "Team" name="team" required="required"></td>
-				<td id="fixture_form"><input form ="add" id="fixture" type="text" placeholder="Country" name="country" onfocus="this.value=''" required="required"></td>
-
-			</tr>
-			<tr id=fixture>
-				<td colspan="6" id=curler_form_add>
-					<input form="add" id="curler_form_add" value="Add curler" name="add" type="submit"></form>
-					</td>
-			</tr>
-
-
-	</table>
-
-
-
-	{% endblock %}
+    </table>
+    {% endblock %}
 </html>

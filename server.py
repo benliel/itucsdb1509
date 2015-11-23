@@ -139,15 +139,17 @@ def curlers_page():
 
     if request.method == 'GET':
         now = datetime.datetime.now()
-        query = "SELECT * FROM curlers"
+        query = "SELECT CURLERID, CURLER_NAME, CURLER_SURNAME, BIRTH_DATE, TEAMID, COUNTRY, NAME FROM CURLERS, CLUBS WHERE (TEAMID = CLUBS.ID)"
         cursor.execute(query)
-
-        return render_template('curlers.html', curlers = cursor, current_time=now.ctime())
+        curler = cursor.fetchall()
+        query2 = "SELECT ID, NAME FROM clubs"
+        cursor.execute(query2)
+        return render_template('curlers.html', curlers = curler, clubs = cursor, current_time=now.ctime())
     elif "add" in request.form:
         curler = Curler(request.form['name'],
                      request.form['surname'],
-                     request.form['birthday'],
-                     request.form['team'],
+                     request.form['birthdate'],
+                     request.form['teamid'],
                      request.form['nationality'])
 
         add_curler(cursor, request, curler)
@@ -161,22 +163,33 @@ def curlers_page():
                 delete_curler(cursor, int(line[9:]))
                 connection.commit()
         return redirect(url_for('curlers_page'))
-
+    elif "search" in request.form:
+        now = datetime.datetime.now()
+        query = "SELECT CURLERID, CURLER_NAME, CURLER_SURNAME, BIRTH_DATE, TEAMID, COUNTRY, NAME FROM curlers, clubs WHERE ((TEAMID = CLUBS.ID) AND (NAME LIKE '%s' OR SURNAME = '%s'))"
+        cursor.execute(query,(request.form['search_name'], request.form['search_name']));
+        curler = cursor.fetchall()
+        query2 = "SELECT ID,NAME FROM clubs"
+        cursor.execute(query2)
+        return render_template('curlers.html', curlers = curler, clubs = cursor, current_time=now.ctime())
+    
 @app.route('/curlers/<curler_id>', methods=['GET', 'POST'])
 def curlers_update_page(curler_id):
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
     if request.method == 'GET':
-        query = "SELECT * FROM CURLERS WHERE (ID = %s)"
+        query = "SELECT * FROM CURLERS WHERE (CURLERID = %s)"
         cursor.execute(query, curler_id)
+        curl = cursor.fetchall()
+        query2 = "SELECT ID, NAME FROM CLUBS"
+        cursor.execute(query2)
         now = datetime.datetime.now()
-        return render_template('curlers_update.html', curler = cursor, current_time=now.ctime())
+        return render_template('curlers_update.html', curler = curl, clubs = cursor, current_time=now.ctime())
     elif request.method == 'POST':
         if "update" in request.form:
             curler = Curler(request.form['name'],
                             request.form['surname'],
-                            request.form['birthday'],
-                            request.form['team'],
+                            request.form['birthdate'],
+                            request.form['teamid'],
                             request.form['nationality'])
 
             update_curler(cursor, curler, request.form['curler_id'])

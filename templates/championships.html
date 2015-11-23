@@ -6,7 +6,7 @@
 	{% block title %}Championships{% endblock %}
 </head>
 
-{% block content %} <h2>Championship</h2>
+{% block content %} <h1 align="">Championships</h1>
 <font color="#B5F7DF ">
 <table widht="100" id=chform>
 <form id="delete_form" action="{{ url_for('championships_page') }} " method = "post">
@@ -41,6 +41,7 @@
 
 <tr id=chform>
 				<td><input class="add" Value="Delete" name="delete" type="submit" form="delete_form"></td></form>
+<td><input class="add" Value="Update" name="update" type="submit" form="delete_form"></td>
 </tr>
 
 

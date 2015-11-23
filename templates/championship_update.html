@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Championship Update{% endblock %}
+</head>
+{% block content %}
+    <h2>Curler</h2>
+    <table id=championship_update>
+{%for id, name, place, date, type, teamNo, reward in championship%}
+            <form id=update action="{{ url_for('championship_update',championship_id='0') }}" method = "post">
+                <tr id=update>
+                    <td id=update><input value="{{name}}" form ="update" id="curlers" type="text" placeholder="Name" name="name" required="required"></td>
+                    <td id=update><input value="{{place}}" form ="update" id="curlers" type="text" placeholder="Place" name="date" required="required"></td>
+                    <td id=update><input value="{{date}}" form ="update" id="curlers" type="date" placeholder="(dd/MM/yyyy)" name="date"></td>
+                    <td id=update><input value="{{type}}" form ="update" id="curlers" type="text" placeholder = "Type" name="type"></td>
+                    <td id=update><input value="{{teamNo}}" form ="update" id="curlers" type="text" placeholder="Team Size" name="teamNo"></td>
+                    <td id=update><input value="{{reward}}" form ="update" id="curlers" type="text" placeholder="Reward" name="reward"></td>
+
+                </tr>
+                <input type="hidden" name="curler_id" value="{{id}}">
+                <tr id=update>
+                    <td colspan="7" id=curler_form_add>
+                        <input form="update" id="curler_form_add" value="Update Curler" name="update" type="submit">
+                    </td>
+                </tr>
+            </form>
+        {% endfor %}
+    </table>
+{% endblock %}
+</html>
+
+
+
+
+	{% endblock %}
+</html>

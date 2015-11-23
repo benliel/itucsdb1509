@@ -13,6 +13,7 @@ from store import Store
 from fixture import *
 from sponsors import *
 from championship import *
+from clubs import *
 
 app = Flask(__name__)
 
@@ -42,7 +43,7 @@ def initialize_database():
     init_sponsors_db(app)
     init_championships_db(cursor)
     init_curlers_db(cursor)
-
+    init_countries_db(cursor)
     ###########
     connection.commit()
     return redirect(url_for('home_page'))
@@ -100,7 +101,6 @@ def championship_update_page(championship_id):
         return render_template('championship_update.html', championship = cursor, current_time=now.ctime())
     elif request.method == 'POST':
         if "update" in request.form:
-            print("DDD")
             championship1 = Championships(request.form['name'],
                          request.form['place'],
                          request.form['date'],

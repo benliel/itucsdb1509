@@ -1,4 +1,4 @@
-class Championships:
+class Countries:
     def __init__(self, name):
         self.name = name
 

@@ -9,7 +9,6 @@ from flask import redirect
 from flask import request
 from flask import render_template
 from flask.helpers import url_for
-from gi.overrides.Gdk import Cursor
 
 class Match:
     def __init__(self, team1, team2, date, time, location):

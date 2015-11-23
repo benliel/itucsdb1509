@@ -34,14 +34,15 @@
 	<td width="3%"id=chform>{{type}}</td>
 	<td width="3%"id=chform>{{teamNo}}</td>
 	<td width="5%"id=chform>{{reward}}</td>
-
+	<td>
+       <a href="{{ url_for('championship_update_page',championship_id = id) }}">Update</a>
+    </td>
 </tr>
 {%endfor%}
 
 
 <tr id=chform>
 				<td><input class="add" Value="Delete" name="delete" type="submit" form="delete_form"></td></form>
-<td><input class="add" Value="Update" name="update" type="submit" form="delete_form"></td>
 </tr>
 
 

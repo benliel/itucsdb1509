@@ -44,13 +44,15 @@ def delete_championship(cursor, id):
 def update_championship(cursor, id, championship1):
             query="""
             UPDATE CHAMPIONSHIP
-            SET TEAM1=INITCAP(%s),
-            TEAM2=INITCAP(%s),
+            SET NAME=INITCAP(%s),
+            PLACE=INITCAP(%s),
             DATE=to_date(%s, 'YYYY-MM-DD'),
-            TIME=to_timestamp(%s, 'HH24:MI'),
-            LOCATION=INITCAP(%s)
+            TYPE=INITCAP(%s),
+            NUMBER_OF_TEAMS=%s,
+            REWARD=INITCAP(%s)
             WHERE ID=%s
-            """, (championship1.name, championship1.place, championship1.date,
+            """
+            cursor.execute(query,(championship1.name, championship1.place, championship1.date,
                 championship1.type, championship1.teamNo,
-                championship1.reward, id)
-
+                championship1.reward, id))
+            print("done update")

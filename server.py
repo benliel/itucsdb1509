@@ -105,13 +105,6 @@ def championships_page():
                     connection.commit()
 
             return redirect(url_for('championships_page'))
-        elif "update" in request.form:
-            for line in request.form:
-                if "checkbox" in line:
-                   ## delete_championship(cursor, int(line[9:]))
-                    connection.commit()
-
-            return redirect(url_for('championships_page'))
 
     except:
             cursor.rollback()
@@ -119,6 +112,27 @@ def championships_page():
             connection.close()
     finally:
             cursor.close()
+@app.route('/championships/<championship_id>', methods=['GET', 'POST'])
+def championship_update_page(championship_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        query = "SELECT * FROM CHAMPIONSHIP WHERE (ID = %s)"
+        cursor.execute(query, championship_id)
+        now = datetime.datetime.now()
+        return render_template('championship_update.html', championship = cursor, current_time=now.ctime())
+    elif request.method == 'POST':
+        if "update" in request.form:
+         championship1 = Championships(request.form['name'],
+                         request.form['place'],
+                         request.form['date'],
+                         request.form['type'],
+                         request.form['number_of_teams'],
+                         request.form['reward'])
+
+        update_championship(cursor, championship1, request.form['championship_id'])
+        connection.commit()
+        return redirect(url_for('championships_page'))
 @app.route('/fixture', methods=['GET', 'POST'])
 def fixture_page():
     return get_fixture_page(app)

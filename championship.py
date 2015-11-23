@@ -8,7 +8,7 @@ class Championships:
         self.reward = reward
 
 def init_championships_db(cursor):
-    query = """DROP TABLE IF EXISTS CHAMPIONSHIP"""
+    query = """DROP TABLE IF EXISTS CHAMPIONSHIP CASCADE"""
     cursor.execute(query)
     query = """CREATE TABLE CHAMPIONSHIP (
     ID SERIAL,

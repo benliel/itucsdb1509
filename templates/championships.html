@@ -32,10 +32,10 @@
 	<td width="3%"id=chform>{{place}}</td>
 	<td width="3%"id=chform>{{date}}</td>
 	<td width="3%"id=chform>{{type}}</td>
-	<td width="3%"id=chform>{{teamNo}}</td>
+	<td align="center" width="3%"id=chform>{{teamNo}}</td>
 	<td width="5%"id=chform>{{reward}}</td>
 	<td>
-       <a href="{{ url_for('championship_update_page',championship_id = id) }}">Update</a>
+       <a href="{{ url_for('championship_update_page',championship_id = id) }}" style="text-decoration: none"><font color="#2ECCFA">Update</font></a>
     </td>
 </tr>
 {%endfor%}

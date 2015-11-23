@@ -14,11 +14,18 @@
 
 
 		<tr id=sponsors>
-				<td><input form="add" id="sponsors_form_add" value="Add Sponsor" name="add" type="submit"></form>
-		</td>
+				<td></form>
+		</td>{% if(clubs|length>0)%}
 				<form id="add" action="{{ url_for('sponsors_page') }} " method = "post">
 				<td id="sponsors_form"><input form ="add" id="sponsors" type="text" placeholder="Name of Sponsor" name="name" required="required"></td>
-				<td id="sponsors_form"><input form ="add" id="sponsors" type="text" placeholder="Supported Team" name="supportedteam" required="required"></td>
+				<td id="sponsors_form">
+				<select id="sponsors_form" form="add" name="supportedteam" required="required">
+					<option disabled="disabled" selected="selected" hidden="hidden">Select a club</option>
+				{% for club in clubs%}
+					<option value="{{club[0]}}">{{club[1]}}</option>
+				{% endfor %}
+				</select>
+				<td id="sponsors_form">
 				<td id="sponsors_form"><input form ="add" id="sponsors" type="text" placeholder="Budget" name="budget" required="required"></td>
 
 			</tr>
@@ -28,6 +35,18 @@
 					</form>
 					</td>
 			</tr>
+
+						<tr id=sponsors>
+				<td colspan="6" id=sponsors_form_add>
+					<input form="add" id="sponsors_form_add" value="Add Sponsor" name="add" type="submit"></form>
+					</td>
+					</tr>
+					{%else%}
+					</tr>
+					<tr id="sponsors_form">
+					<td id="sponsors_form" colspan="6">You cannot add sponsor, since there are no clubs added in the database!
+					</tr>
+					{%endif%}
 
 
 	</table>

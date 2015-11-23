@@ -53,6 +53,5 @@ def update_championship(cursor, id, championship1):
             WHERE ID=%s
             """
             cursor.execute(query,(championship1.name, championship1.place, championship1.date,
-                championship1.type, championship1.teamNo,
-                championship1.reward, id))
+                                championship1.type, championship1.teamNo,championship1.reward, id))
             print("done update")

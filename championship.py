@@ -25,12 +25,12 @@ def init_championships_db(cursor):
 def add_championship(cursor, request, championship1):
         query = """INSERT INTO CHAMPIONSHIP
         (NAME, PLACE, DATE, TYPE, NUMBER_OF_TEAMS,REWARD) VALUES (
-        %s,
-        %s,
+        INITCAP(%s),
+        INITCAP(%s),
         to_date(%s, 'YYYY-MM-DD'),
+        INITCAP(%s),
         %s,
-        %s,
-        %s
+        INITCAP(%s)
         )"""
         cursor.execute(query, (championship1.name, championship1.place, championship1.date,
                                 championship1.type, championship1.teamNo,championship1.reward))
@@ -41,3 +41,17 @@ def delete_championship(cursor, id):
         query="""DELETE FROM CHAMPIONSHIP WHERE ID = %s"""
         cursor.execute(query, (int(id),))
 
+def update_championship(cursor, id, championship1):
+            query="""
+            UPDATE CHAMPIONSHIP
+            SET NAME=INITCAP(%s),
+            PLACE=INITCAP(%s),
+            DATE=to_date(%s, 'YYYY-MM-DD'),
+            TYPE=INITCAP(%s),
+            NUMBER_OF_TEAMS=%s,
+            REWARD=INITCAP(%s)
+            WHERE ID=%s
+            """
+            cursor.execute(query,(championship1.name, championship1.place, championship1.date,
+                                championship1.type, championship1.teamNo,championship1.reward, id))
+            print("done update")

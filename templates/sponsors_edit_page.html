@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<link rel="stylesheet" href="{{ url_for('static', filename='fixture.css') }}" />
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Edit Sponsor{% endblock %}
+</head>
+	{% block content %}
+	<h2>Edit Sponsor</h2>
+
+	<table id="sponsorUpdate"><tr>
+		<form id ="update" action="{{url_for('sponsors_edit_page', sponsor_id=sponsor[0])}}" method="POST">
+			<input type="hidden" value="{{sponsor[0]}}" name="id" readonly="readonly"/>
+			<td>
+			<select id="sponsoreUpdate" form="update" name="supportedteam" required="required">
+				{% for club in clubs%}
+					<option value="{{club[0]}}" {% if sponsor[1]==club[1] %}selected{%endif%}>{{club[1]}}</option>
+				{% endfor %}
+			</select>
+			</td>
+			<td><input id="fixtureUpdate" form="update" type="text" value="{{sponsor[1]}}" name="name" required="required"></td>
+			<td><input id="fixtureUpdate" form="update" type="text" value="{{sponsor[3]}}" name="budget" required="required"></td>
+			<td><input id="fixtureUpdate" form="update" type="submit" value="Update Sponsor" name="update"></td>
+		</tr></form>
+	</table>
+
+
+	{% endblock %}
+</html>

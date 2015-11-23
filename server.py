@@ -13,8 +13,8 @@ from store import Store
 from fixture import *
 from sponsors import *
 from championship import *
-from curlers import *
 from clubs import *
+from curlers import *
 
 app = Flask(__name__)
 
@@ -38,42 +38,13 @@ def initialize_database():
     connection = dbapi2.connect(app.config['dsn'])
     cursor =connection.cursor()
 
+    init_clubs_db(cursor)
     init_fixture_db(app)
-    init_sponsors_db(cursor)
+    init_sponsors_db(app)
     init_championships_db(cursor)
     init_curlers_db(cursor)
-    init_clubs_db(cursor)
 
-    #championships table creation
-    query = """DROP TABLE IF EXISTS CHAMPIONSHIP"""
-    cursor.execute(query)
-    query = """CREATE TABLE CHAMPIONSHIP (
-    ID SERIAL,
-    NAME VARCHAR(80) NOT NULL,
-    PLACE VARCHAR(80) NOT NULL,
-    DATE DATE NOT NULL,
-    TYPE VARCHAR(80) NOT NULL,
-    NUMBER_OF_TEAMS INTEGER NOT NULL,
-    REWARD VARCHAR(80),
-    PRIMARY KEY(ID)
-    )"""
-    cursor.execute(query)
-    ###########
 
-    #officialcurlingclubs table creation
-    query = """DROP TABLE IF EXISTS CLUBS"""
-    cursor.execute(query)
-    query = """CREATE TABLE CLUBS (
-    ID SERIAL,
-    NAME VARCHAR(80) NOT NULL,
-    PLACE VARCHAR(80) NOT NULL,
-    YEAR NUMERIC(4) NOT NULL,
-    CHAIR VARCHAR(80) NOT NULL,
-    NUMBER_OF_MEMBERS INTEGER NOT NULL,
-    REWARDNUMBER INTEGER,
-    PRIMARY KEY(ID)
-    )"""
-    cursor.execute(query)
     ###########
     connection.commit()
     return redirect(url_for('home_page'))
@@ -81,34 +52,63 @@ def initialize_database():
 @app.route('/championships', methods=['GET', 'POST'])
 def championships_page():
     connection = dbapi2.connect(app.config['dsn'])
+    try:
+        cursor = connection.cursor()
+        if request.method == 'GET':
+            now = datetime.datetime.now()
+            query = "SELECT * FROM CHAMPIONSHIP"
+            cursor.execute(query)
+
+            return render_template('championships.html', championship = cursor, current_time = now.ctime())
+        elif "add" in request.form:
+            championship1 = Championships(request.form['name'],
+                         request.form['place'],
+                         request.form['date'],
+                         request.form['type'],
+                         request.form['number_of_teams'],
+                         request.form['reward'])
+
+            add_championship(cursor, request, championship1)
+
+            connection.commit()
+            return redirect(url_for('championships_page'))
+
+        elif "delete" in request.form:
+            for line in request.form:
+                if "checkbox" in line:
+                    delete_championship(cursor, int(line[9:]))
+                    connection.commit()
+
+            return redirect(url_for('championships_page'))
+
+    except:
+            cursor.rollback()
+            connection.rollback()
+            connection.close()
+    finally:
+            cursor.close()
+@app.route('/championships/<championship_id>', methods=['GET', 'POST'])
+def championship_update_page(championship_id):
+    connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
     if request.method == 'GET':
+        query = """SELECT * FROM CHAMPIONSHIP WHERE (ID = %s)"""
+        cursor.execute(query,championship_id)
         now = datetime.datetime.now()
-        query = "SELECT * FROM CHAMPIONSHIP"
-        cursor.execute(query)
+        return render_template('championship_update.html', championship = cursor, current_time=now.ctime())
+    elif request.method == 'POST':
+        if "update" in request.form:
+            print("DDD")
+            championship1 = Championships(request.form['name'],
+                         request.form['place'],
+                         request.form['date'],
+                         request.form['type'],
+                         request.form['number_of_teams'],
+                         request.form['reward'])
 
-        return render_template('championships.html', championship = cursor, current_time = now.ctime())
-    elif "add" in request.form:
-        championship1 = Championships(request.form['name'],
-                     request.form['place'],
-                     request.form['date'],
-                     request.form['type'],
-                     request.form['number_of_teams'],
-                     request.form['reward'])
-
-        add_championship(cursor, request, championship1)
-
+        update_championship(cursor, request.form['championship_id'], championship1)
         connection.commit()
-        return redirect(url_for('championships_page'))
-
-    elif "delete" in request.form:
-        for line in request.form:
-            if "checkbox" in line:
-                delete_championship(cursor, int(line[9:]))
-                connection.commit()
-
-        return redirect(url_for('championships_page'))
-
+    return redirect(url_for('championships_page'))
 @app.route('/fixture', methods=['GET', 'POST'])
 def fixture_page():
     return get_fixture_page(app)
@@ -175,7 +175,7 @@ def curlers_update_page(curler_id):
                             request.form['birthdate'],
                             request.form['teamid'],
                             request.form['nationality'])
-            
+
             update_curler(cursor, curler, request.form['curler_id'])
             connection.commit()
             return redirect(url_for('curlers_page'))
@@ -211,10 +211,15 @@ def clubs_page():
 
         return redirect(url_for('clubs_page'))
 
+
 ##Sponsorships arrangements by Muhammed Aziz Ulak
 @app.route('/sponsors', methods=['GET', 'POST'])
 def sponsors_page():
     return get_sponsors_page(app)
+
+@app.route('/sponsors/edit/<sponsor_id>',methods=['GET','POST'])
+def sponsors_edit_page(sponsor_id=0):
+    return get_sponsors_edit_page(app,sponsor_id);
 
 
 if __name__ == '__main__':

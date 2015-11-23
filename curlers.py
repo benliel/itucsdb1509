@@ -20,7 +20,7 @@ def init_curlers_db(cursor):
             )"""
     cursor.execute(query)
 
-def add_curler(cursor, curler):
+def add_curler(cursor, request, curler):
     query = """INSERT INTO CURLERS
     (NAME, SURNAME, BIRTH_DATE, TEAM, COUNTRY) VALUES (
     %s,

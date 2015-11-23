@@ -134,7 +134,7 @@ def curlers_page():
                      request.form['team'],
                      request.form['nationality'])
 
-        add_curler(cursor, curler)
+        add_curler(cursor, request, curler)
 
         connection.commit()
         return redirect(url_for('curlers_page'))

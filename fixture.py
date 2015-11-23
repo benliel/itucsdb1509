@@ -23,8 +23,8 @@ def init_fixture_db(app):
     try:
         cursor = connection.cursor()
         try:
+            cursor.execute('DROP TABLE FIXTURE IF EXISTS CASCADE;')
             cursor.execute("""
-            DROP TABLE FIXTURE IF EXISTS CASCADE;
             CREATE TABLE FIXTURE (
             ID SERIAL,
             TEAM1 INT NOT NULL REFERENCES CLUBS(ID),

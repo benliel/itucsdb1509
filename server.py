@@ -36,41 +36,13 @@ def initialize_database():
     connection = dbapi2.connect(app.config['dsn'])
     cursor =connection.cursor()
 
-    init_fixture_db(cursor)
-    init_sponsors_db(cursor)
+
+    init_clubs_db(cursor)
+    init_fixture_db(app)
+    init_sponsors_db(app)
     init_championships_db(cursor)
+    init_curlers_db(cursor)
 
-
-    #championships table creation
-    query = """DROP TABLE IF EXISTS CHAMPIONSHIP"""
-    cursor.execute(query)
-    query = """CREATE TABLE CHAMPIONSHIP (
-    ID SERIAL,
-    NAME VARCHAR(80) NOT NULL,
-    PLACE VARCHAR(80) NOT NULL,
-    DATE DATE NOT NULL,
-    TYPE VARCHAR(80) NOT NULL,
-    NUMBER_OF_TEAMS INTEGER NOT NULL,
-    REWARD VARCHAR(80),
-    PRIMARY KEY(ID)
-    )"""
-    cursor.execute(query)
-    ###########
-
-    #officialcurlingclubs table creation
-    query = """DROP TABLE IF EXISTS CLUBS"""
-    cursor.execute(query)
-    query = """CREATE TABLE CLUBS (
-    ID SERIAL,
-    NAME VARCHAR(80) NOT NULL,
-    PLACE VARCHAR(80) NOT NULL,
-    YEAR NUMERIC(4) NOT NULL,
-    CHAIR VARCHAR(80) NOT NULL,
-    NUMBER_OF_MEMBERS INTEGER NOT NULL,
-    REWARDNUMBER INTEGER,
-    PRIMARY KEY(ID)
-    )"""
-    cursor.execute(query)
     ###########
     connection.commit()
     return redirect(url_for('home_page'))
@@ -204,31 +176,11 @@ def clubs_page():
 ##Sponsorships arrangements by Muhammed Aziz Ulak
 @app.route('/sponsors', methods=['GET', 'POST'])
 def sponsors_page():
-    connection = dbapi2.connect(app.config['dsn'])
-    cursor = connection.cursor()
+    return get_sponsors_page(app)
 
-    if request.method == 'GET':
-        now = datetime.datetime.now()
-        query = "SELECT * FROM SPONSORS"
-        cursor.execute(query)
-
-        return render_template('sponsors.html', sponsors = cursor, current_time=now.ctime())
-    elif "add" in request.form:
-        sponsor = Sponsors(request.form['name'],
-                     request.form['supportedteam'],
-                     request.form['budget'])
-
-        add_sponsor(cursor, request, sponsor)
-
-        connection.commit()
-        return redirect(url_for('sponsors_page'))
-    elif "delete" in request.form:
-        for line in request.form:
-            if "checkbox" in line:
-                delete_sponsor(cursor, int(line[9:]))
-                connection.commit()
-
-        return redirect(url_for('sponsors_page'))
+@app.route('/sponsors/edit/<sponsor_id>',methods=['GET','POST'])
+def sponsors_edit_page(sponsor_id=0):
+    return get_sponsors_edit_page(app,sponsor_id);
 
 
 if __name__ == '__main__':

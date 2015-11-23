@@ -36,17 +36,33 @@ def home_page():
 @app.route('/initdb')
 def initialize_database():
     connection = dbapi2.connect(app.config['dsn'])
-    cursor =connection.cursor()
-
-    init_clubs_db(cursor)
-    init_fixture_db(app)
-    init_sponsors_db(app)
-    init_championships_db(cursor)
-    init_curlers_db(cursor)
-
-
-    ###########
-    connection.commit()
+    try:
+        cursor =connection.cursor()
+        try:
+            cursor.execute('''
+            DROP TABLE IF EXISTS CLUBS CASCADE;
+            DROP TABLE IF EXISTS FIXTURE CASCADE;
+            DROP TABLE IF EXISTS SPONSORS CASCADE;
+            DROP TABLE IF EXISTS CHAMPIONSHIP CASCADE;
+            DROP TABLE IF EXISTS CURLERS CASCADE;
+            ''')
+            init_clubs_db(cursor)
+            init_fixture_db(cursor)
+            init_sponsors_db(cursor)
+            init_championships_db(cursor)
+            init_curlers_db(cursor)
+        except dbapi2.Error as e:
+            print(e.pgerror)
+            cursor.rollback()
+        finally:
+            cursor.close()
+        ###########
+    except dbapi2.Error as e:
+        print(e.pgerror)
+        cursor.rollback()
+    finally:
+        connection.commit()
+        connection.close()
     return redirect(url_for('home_page'))
 
 @app.route('/championships', methods=['GET', 'POST'])
@@ -142,7 +158,7 @@ def curlers_page():
     elif "delete" in request.form:
         for line in request.form:
             if "checkbox" in line:
-                delete_(cursor, int(line[9:]))
+                delete_curler(cursor, int(line[9:]))
                 connection.commit()
         return redirect(url_for('curlers_page'))
 

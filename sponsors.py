@@ -22,28 +22,14 @@ class Sponsors:
         self.supportedteam = supportedteam
         self.budget = budget
 
-def init_sponsors_db(app):
-    connection = dbapi2.connect(app.config['dsn'])
-    try:
-        cursor = connection.cursor()
-        try:
-            cursor.execute('DROP TABLE IF EXISTS SPONSORS CASCADE;')
-            cursor.execute("""CREATE TABLE SPONSORS (
-            ID SERIAL,
-            NAME VARCHAR(80) NOT NULL,
-            SUPPORTEDTEAM INTEGER NOT NULL REFERENCES CLUBS(ID),
-            BUDGET INTEGER NOT NULL,
-            PRIMARY KEY (ID)
-            )""")
-        except:
-            cursor.rollback()
-        finally:
-            cursor.close()
-    except:
-        connection.rollback()
-    finally:
-        connection.commit()
-        connection.close()
+def init_sponsors_db(cursor):
+        cursor.execute("""CREATE TABLE IF NOT EXISTS SPONSORS (
+        ID SERIAL,
+        NAME VARCHAR(80) NOT NULL,
+        SUPPORTEDTEAM INTEGER NOT NULL REFERENCES CLUBS(ID),
+        BUDGET INTEGER NOT NULL,
+        PRIMARY KEY (ID)
+        )""")
 
 def add_sponsor(app, request, sponsor):
     connection = dbapi2.connect(app.config['dsn'])

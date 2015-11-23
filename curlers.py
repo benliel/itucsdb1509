@@ -7,9 +7,7 @@ class Curler:
         self.country = country
 
 def init_curlers_db(cursor):
-    query = """DROP TABLE IF EXISTS CURLERS"""
-    cursor.execute(query)
-    query = """CREATE TABLE CURLERS (
+    query = """CREATE TABLE IF NOT EXISTS CURLERS (
             ID SERIAL,
             NAME varchar(80) NOT NULL,
             SURNAME varchar(80) NOT NULL,
@@ -38,5 +36,5 @@ def delete_curler(cursor, id):
 
 def update_curler(cursor,curler,id):
     query="""UPDATE CURLERS SET NAME=%s,SURNAME=%s,BIRTH_DATE=%s,TEAM=%s,COUNTRY=%s WHERE(ID=%s)"""
-    cursor.execute(query, (curler.name,curler.surname,curler.birthdate, 
+    cursor.execute(query, (curler.name,curler.surname,curler.birthdate,
                    curler.team,curler.country,id))

@@ -2,17 +2,29 @@
 <html>
 <head>
 	<meta charset="utf-8" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='fixture.css') }}" />
 	{% extends "layout.html"%}
 	{% block title %}Fixtures{% endblock %}
 </head>
 	{% block content %}<h2>Fixture</h2>
 
 	<table id=fixture>
+	<tr>
+	<td id="fixture" colspan="6" align="right">
+	<form id="search" action="{{url_for('fixture_page')}}" method="POST">
+		<input form="search" type="text" placeholder="Team name to search" name="team_to_search" required="required">
+		<input form="search" type="submit" value="Search" name="search">
+	</form>
+	</td>
+	</tr>
 	<form id="delete_form" action="{{ url_for('fixture_page') }} " method = "post">
 
 	{% for id, team1, team2, date, time, location in matches %}
 	<tr id=fixture>
-		<td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
+		<td id=checkbox>
+		<input form ="delete_form" type="checkbox" name="checkbox_{{id}}">
+		<a href="{{url_for('fixture_edit_page', match_id=id)}}"><img alt="edit{{id}}" src="/static/edit.png" height="20px"></a>
+		</td>
 		<td id=fixture>{{team1}}</td>
 		<td id=fixture>{{team2}}</td>
 		<td id=fixture>{{date}}</td>
@@ -24,11 +36,24 @@
 
 
 		<tr id=fixture>
-				<td><input Value="Delete" name="delete" type="submit" form="delete_form"></form>
-		</td>
+				<td><input Value="Delete" name="delete" type="submit" form="delete_form"></form></td>
+				{% if(clubs|length>0)%}
 				<form id="add" action="{{ url_for('fixture_page') }} " method = "post">
-				<td id="fixture_form"><input form ="add" id="fixture" type="text" placeholder="Team" name="team1" required="required"></td>
-				<td id="fixture_form"><input form ="add" id="fixture" type="text" placeholder="Team" name="team2" required="required"></td>
+				<td id="fixture_form">
+				<select id="fixture_form" form="add" name="team1" required="required">
+					<option disabled="disabled" selected="selected" hidden="hidden">Select a club</option>
+				{% for club in clubs%}
+					<option value="{{club[0]}}">{{club[1]}}</option>
+				{% endfor %}
+				</select>
+				<td id="fixture_form">
+				<select id="fixture_form" form="add" name="team2" required="required">
+					<option disabled="disabled" selected="selected" hidden="hidden">Select a club</option>
+				{% for club in clubs%}
+					<option value="{{club[0]}}">{{club[1]}}</option>
+				{% endfor %}
+				</select>
+				</td>
 				<td id="fixture_form"><input form ="add" id="fixture" type="date" placeholder="mm/dd/yyyy" name="date" required="required"></td>
 				<td id="fixture_form"><input form ="add" id="fixture" type="time" placeholder = "hh:mm" name="time" required="required"></td>
 				<td id="fixture_form"><input form ="add" id="fixture" type="text" placeholder="Location" name="location" onfocus="this.value=''" required="required"></td>
@@ -38,7 +63,14 @@
 				<td colspan="6" id=fixture_form_add>
 					<input form="add" id="fixture_form_add" value="Add Match" name="add" type="submit"></form>
 					</td>
-			</tr>
+					</tr>
+					{%else%}
+					</tr>
+					<tr id="fixture_form">
+					<td id="fixture_form" colspan="6">You cannot add match, since there are no clubs added in the database!
+					</tr>
+					{%endif%}
+
 
 	</table>
 

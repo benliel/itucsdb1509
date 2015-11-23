@@ -13,6 +13,7 @@ from store import Store
 from fixture import *
 from sponsors import *
 from championship import *
+from clubs import *
 
 app = Flask(__name__)
 
@@ -36,25 +37,11 @@ def initialize_database():
     connection = dbapi2.connect(app.config['dsn'])
     cursor =connection.cursor()
 
-    init_fixture_db(cursor)
+    init_fixture_db(app)
     init_sponsors_db(cursor)
     init_championships_db(cursor)
-
-    #championships table creation
-    query = """DROP TABLE IF EXISTS CHAMPIONSHIP"""
-    cursor.execute(query)
-    query = """CREATE TABLE CHAMPIONSHIP (
-    ID SERIAL,
-    NAME VARCHAR(80) NOT NULL,
-    PLACE VARCHAR(80) NOT NULL,
-    DATE DATE NOT NULL,
-    TYPE VARCHAR(80) NOT NULL,
-    NUMBER_OF_TEAMS INTEGER NOT NULL,
-    REWARD VARCHAR(80),
-    PRIMARY KEY(ID)
-    )"""
-    cursor.execute(query)
-    ###########
+    init_curlers_db(cursor)
+    init_clubs_db(cursor)
 
     #officialcurlingclubs table creation
     query = """DROP TABLE IF EXISTS CLUBS"""
@@ -137,6 +124,9 @@ def championship_update_page(championship_id):
 @app.route('/fixture', methods=['GET', 'POST'])
 def fixture_page():
     return get_fixture_page(app)
+@app.route('/fixture/edit/<match_id>', methods=['GET', 'POST'])
+def fixture_edit_page(match_id=0):
+    return get_fixture_edit_page(app, match_id);
 
 @app.route('/curlers', methods=['GET', 'POST'])
 def curlers_page():
@@ -152,24 +142,42 @@ def curlers_page():
     elif "add" in request.form:
         curler = Curler(request.form['name'],
                      request.form['surname'],
-                     request.form['age'],
+                     request.form['birthday'],
                      request.form['team'],
-                     request.form['country'])
+                     request.form['nationality'])
 
-        add_curler(cursor, request, )
+        add_curler(cursor, request, curler)
 
         connection.commit()
-        return redirect(url_for('s_page'))
+        return redirect(url_for('curlers_page'))
 
     elif "delete" in request.form:
         for line in request.form:
             if "checkbox" in line:
                 delete_(cursor, int(line[9:]))
                 connection.commit()
+        return redirect(url_for('curlers_page'))
 
-        return redirect(url_for('s_page'))
+@app.route('/curlers/<curler_id>', methods=['GET', 'POST'])
+def curlers_update_page(curler_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        query = "SELECT * FROM CURLERS WHERE (ID = %s)"
+        cursor.execute(query, curler_id)
+        now = datetime.datetime.now()
+        return render_template('curlers_update.html', curler = cursor, current_time=now.ctime())
+    elif request.method == 'POST':
+        if "update" in request.form:
+            curler = Curler(request.form['name'],
+                            request.form['surname'],
+                            request.form['birthday'],
+                            request.form['team'],
+                            request.form['nationality'])
 
-
+            update_curler(cursor, curler, request.form['curler_id'])
+            connection.commit()
+            return redirect(url_for('curlers_page'))
 ##Sema's Part - Curling Clubs
 @app.route('/clubs', methods=['GET', 'POST'])
 def clubs_page():

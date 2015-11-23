@@ -24,15 +24,17 @@ def init_fixture_db(app):
     try:
         cursor = connection.cursor()
         try:
-            cursor.execute("""CREATE TABLE IF NOT EXISTS FIXTURE (
+            cursor.execute("""
+            DROP TABLE FIXTURE IF EXISTS CASCADE;
+            CREATE TABLE FIXTURE (
             ID SERIAL,
-            TEAM1 varchar(80) NOT NULL,
-            TEAM2 varchar(80) NOT NULL,
+            TEAM1 INT NOT NULL REFERENCES CLUBS(ID),
+            TEAM2 INT NOT NULL REFERENCES CLUBS(ID),
             DATE date NOT NULL,
             TIME time NOT NULL,
             LOCATION varchar(80),
             PRIMARY KEY (ID)
-            )""")
+            );""")
         except:
             cursor.rollback()
         finally:
@@ -53,8 +55,8 @@ def add_match(app, request, match):
             cursor.execute("""
             INSERT INTO FIXTURE
             (TEAM1, TEAM2, DATE, TIME, LOCATION) VALUES (
-            INITCAP(%s),
-            INITCAP(%s),
+            %s,
+            %s,
             to_date(%s, 'YYYY-MM-DD'),
             to_timestamp(%s, 'HH24:MI'),
             INITCAP(%s)
@@ -80,8 +82,8 @@ def update_match(app, id, match):
         try:
             cursor.execute("""
             UPDATE FIXTURE
-            SET TEAM1=INITCAP(%s),
-            TEAM2=INITCAP(%s),
+            SET TEAM1=%s,
+            TEAM2=%s,
             DATE=to_date(%s, 'YYYY-MM-DD'),
             TIME=to_timestamp(%s, 'HH24:MI'),
             LOCATION=INITCAP(%s)
@@ -89,6 +91,7 @@ def update_match(app, id, match):
             """, (match.team1, match.team2,
                   match.date, match.time,
                   match.location, id))
+            print("done")
         except:
             cursor.rollback()
         finally:
@@ -118,18 +121,26 @@ def delete_match(app, id):
         connection.close()
 
 def get_match(app, match_id):
-    match = None
+    match=None
     connection = dbapi2.connect(app.config['dsn'])
     try:
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT * FROM FIXTURE WHERE (ID=%s)', match_id);
+            cursor.execute('''
+            SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, F.LOCATION
+            FROM FIXTURE AS F,CLUBS AS T1, CLUBS AS T2
+            WHERE (
+                F.ID=%s AND T1.ID=F.TEAM1 AND T2.ID=F.TEAM2
+                )
+            ''', match_id);
             match = cursor.fetchone()
-        except:
+        except dbapi2.Error as e:
+            print(e.pgerror)
             cursor.rollback()
         finally:
             cursor.close()
-    except:
+    except dbapi2.Error as e:
+        print(e.pgerror)
         connection.rollback()
     finally:
         connection.close()
@@ -143,8 +154,11 @@ def search_match(app, name):
         cursor = connection.cursor()
         try:
             cursor.execute("""
-            SELECT * FROM FIXTURE
-            WHERE (UPPER(TEAM1)=UPPER(%s) OR UPPER(TEAM2)=UPPER(%s))
+            SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, F.LOCATION
+            FROM FIXTURE AS F,CLUBS AS T1, CLUBS AS T2
+            WHERE (
+                T1.ID=F.TEAM1 AND T2.ID=F.TEAM2 AND
+                (UPPER(T1.NAME)=UPPER(%s) OR UPPER(T2.NAME)=UPPER(%s)))
             ORDER BY DATE DESC, TIME """, (name, name))
             matches = cursor.fetchall()
         except:
@@ -163,7 +177,9 @@ def get_all_matches(app):
         cursor=connection.cursor()
         try:
             cursor.execute('''
-            SELECT * FROM FIXTURE
+            SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, F.LOCATION
+            FROM FIXTURE AS F, CLUBS AS T1, CLUBS AS T2
+            WHERE(F.TEAM1=T1.ID AND F.TEAM2=T2.ID)
             ORDER BY DATE DESC, TIME
             ''')
             matches = cursor.fetchall()
@@ -177,13 +193,31 @@ def get_all_matches(app):
         connection.close()
         return matches
 
+def get_club_names(app):
+    connection=dbapi2.connect(app.config['dsn'])
+    try:
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT ID,NAME FROM CLUBS')
+            clubs = cursor.fetchall()
+        except:
+            cursor.rollback()
+        finally:
+            cursor.close()
+    except:
+        connection.rollback()
+    finally:
+        connection.close()
+        return clubs
 
 def get_fixture_page(app):
     if request.method == 'GET':
         now = datetime.datetime.now()
         matches = get_all_matches(app)
+        clubs = get_club_names(app)
 
-        return render_template('fixture.html', matches = matches, current_time=now.ctime())
+        return render_template('fixture.html', matches = matches,
+                               clubs=clubs, current_time=now.ctime())
     elif 'add' in request.form:
         match = Match(request.form['team1'],
                      request.form['team2'],
@@ -205,10 +239,10 @@ def get_fixture_page(app):
 
 def get_fixture_edit_page(app, match_id):
     if request.method == 'GET':
-        match = Match
         now = datetime.datetime.now()
         match = get_match(app, match_id)
-        return render_template('fixture_edit_page.html', current_time=now.ctime(), match=match)
+        clubs = get_club_names(app)
+        return render_template('fixture_edit_page.html', current_time=now.ctime(), match=match, clubs=clubs)
 
     if request.method == 'POST':
         match = Match(request.form['team1'],

@@ -47,6 +47,9 @@ input#fixtureUpdate {
 	layout-gravity: center;
 	text-align: center;
 }
+select#fixtureUpdate {
+	width: 100%;
+}
 td#checkbox {
 	width: 7%;
 	border-style: inset;
@@ -59,12 +62,16 @@ td#fixture_form {
 	border-color: white;
 	text-align: center;
 }
-td#fixture_form_add {
-	text-align: center;
-}
 input#fixture_form {
 	width: 100%;
 	layout-gravity: center;
+}
+select#fixture_form{
+	width: 100%;
+}
+
+td#fixture_form_add {
+	text-align: center;
 }
 input#fixture_form_add {
 	width: 30%;

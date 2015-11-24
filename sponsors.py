@@ -27,7 +27,7 @@ def init_sponsors_db(cursor):
         cursor.execute("""CREATE TABLE IF NOT EXISTS SPONSORS (
         ID SERIAL,
         NAME VARCHAR(80) NOT NULL,
-        SUPPORTEDTEAM INTEGER NOT NULL REFERENCES CLUBS(ID),
+        SUPPORTEDTEAM INTEGER NOT NULL REFERENCES CLUBS(ID) ON DELETE CASCADE ON UPDATE CASCADE,
         BUDGET INTEGER NOT NULL,
         PRIMARY KEY (ID)
         )""")
@@ -213,12 +213,12 @@ def search_sponsor(app, name):
         cursor = connection.cursor()
         try:
             cursor.execute("""
-            SELECT S.ID, S.NAME , T.NAME , S.BUDGET
-            FROM SPONSORS AS S,CLUBS AS T
-            WHERE (
-                T.ID=S.SUPPORTEDTEAM  AND
-                (UPPER(S.NAME)=UPPER(%s)))
-            ORDER BY 1 """, (name))
+            SELECT S.ID, S.NAME, T.NAME, S.BUDGET
+            FROM SPONSORS AS S, CLUBS AS T
+            WHERE(
+                UPPER(S.NAME)=UPPER(%s) AND
+                S.SUPPORTEDTEAM=T.ID
+            )""", (name,))
             sponsors = cursor.fetchall()
         except dbapi2.Error as e:
             print(e.pgerror)

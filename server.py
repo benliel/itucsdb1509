@@ -36,7 +36,6 @@ def home_page():
 @app.route('/initdb')
 def initialize_database():
     connection = dbapi2.connect(app.config['dsn'])
-<<<<<<< HEAD
     try:
         cursor =connection.cursor()
         try:
@@ -64,18 +63,7 @@ def initialize_database():
     finally:
         connection.commit()
         connection.close()
-=======
-    cursor =connection.cursor()
 
-
-    init_fixture_db(app)
-    init_sponsors_db(app)
-    init_championships_db(cursor)
-    init_curlers_db(cursor)
-    init_clubs_db(cursor)
-
-    connection.commit()
->>>>>>> refs/remotes/origin/master
     return redirect(url_for('home_page'))
 
 @app.route('/championships', methods=['GET', 'POST'])
@@ -184,7 +172,7 @@ def curlers_page():
         query2 = "SELECT ID,NAME FROM clubs"
         cursor.execute(query2)
         return render_template('curlers.html', curlers = curler, clubs = cursor, current_time=now.ctime())
-    
+
 @app.route('/curlers/<curler_id>', methods=['GET', 'POST'])
 def curlers_update_page(curler_id):
     connection = dbapi2.connect(app.config['dsn'])

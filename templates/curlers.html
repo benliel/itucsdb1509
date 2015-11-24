@@ -9,7 +9,7 @@
 {% block content %}
 <h2>Curlers</h2>
 <table id=curlers>
-    <form id="search" avtion="{{ url_for('curlers_page')}}" method ="post">
+    <form id="search" action="{{ url_for('curlers_page')}}" method ="post">
         <tr id="search">
             <td colspan="7" align="right" id="search" ><input form ="search" id="search" type="text" name="search_name" placeholder="Name or Surname to Search" required="required"></td>
             <td align="right" id="search"><input Value="Search" name="search" id="search" type="submit" form="search"></td>
@@ -33,7 +33,7 @@
             <td id=curlers>{{name}}</td>
             <td id=curlers>{{country}}</td>
             <td>
-                <a href="{{ url_for('curlers_update_page',curler_id = id) }}">Update</a> 
+                <a href="{{ url_for('curlers_update_page',curler_id = id) }}">Update</a>
             </td>
 	</tr>
 	{% endfor %}

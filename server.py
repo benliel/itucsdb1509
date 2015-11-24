@@ -166,7 +166,7 @@ def curlers_page():
         return redirect(url_for('curlers_page'))
     elif "search" in request.form:
         now = datetime.datetime.now()
-        query = "SELECT CURLERID, CURLER_NAME, CURLER_SURNAME, BIRTH_DATE, TEAMID, COUNTRY, NAME FROM curlers, clubs WHERE ((TEAMID = CLUBS.ID) AND (NAME LIKE '%s' OR SURNAME = '%s'))"
+        query = "SELECT CURLERID, CURLER_NAME, CURLER_SURNAME, BIRTH_DATE, TEAMID, COUNTRY, NAME FROM curlers, clubs WHERE ((TEAMID = CLUBS.ID) AND (CURLER_NAME LIKE %s OR CURLER_SURNAME = %s))"
         cursor.execute(query,(request.form['search_name'], request.form['search_name']));
         curler = cursor.fetchall()
         query2 = "SELECT ID,NAME FROM clubs"

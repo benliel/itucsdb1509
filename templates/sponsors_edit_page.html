@@ -13,14 +13,14 @@
 	<table id="sponsorUpdate"><tr>
 		<form id ="update" action="{{url_for('sponsors_edit_page', sponsor_id=sponsor[0])}}" method="POST">
 			<input type="hidden" value="{{sponsor[0]}}" name="id" readonly="readonly"/>
+			<td><input id="fixtureUpdate" form="update" type="text" value="{{sponsor[1]}}" name="name" required="required"></td>
 			<td>
 			<select id="sponsoreUpdate" form="update" name="supportedteam" required="required">
 				{% for club in clubs%}
-					<option value="{{club[0]}}" {% if sponsor[1]==club[1] %}selected{%endif%}>{{club[1]}}</option>
+					<option value="{{club[0]}}" {% if sponsor[2]==club[1] %}selected{%endif%}>{{club[1]}}</option>
 				{% endfor %}
 			</select>
 			</td>
-			<td><input id="fixtureUpdate" form="update" type="text" value="{{sponsor[1]}}" name="name" required="required"></td>
 			<td><input id="fixtureUpdate" form="update" type="text" value="{{sponsor[3]}}" name="budget" required="required"></td>
 			<td><input id="fixtureUpdate" form="update" type="submit" value="Update Sponsor" name="update"></td>
 		</tr></form>

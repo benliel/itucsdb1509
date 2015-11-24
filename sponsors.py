@@ -140,7 +140,7 @@ def get_sponsor(app, sponsor_id):
         cursor = connection.cursor()
         try:
             cursor.execute('''
-            SELECT S.ID, T.NAME, S.NAME, S.BUDGET
+            SELECT S.ID, S.NAME, T.NAME, S.BUDGET
             FROM SPONSORS AS S,CLUBS AS T
             WHERE (
                 S.ID=%s AND T.ID=S.SUPPORTEDTEAM
@@ -190,7 +190,7 @@ def get_all_sponsors(app):
         cursor=connection.cursor()
         try:
             cursor.execute('''
-            SELECT S.ID, T.NAME, S.NAME, S.BUDGET
+            SELECT S.ID, S.NAME, T.NAME, S.BUDGET
             FROM SPONSORS AS S, CLUBS AS T
             WHERE(S.SUPPORTEDTEAM=T.ID)
             ORDER BY 1

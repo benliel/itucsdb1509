@@ -3,7 +3,7 @@ class Curler:
         self.curler_name = name
         self.curler_surname = surname
         self.birthdate = birthdate
-        self.team = team
+        self.teamid = teamid
         self.country = country
 
 def init_curlers_db(cursor):
@@ -36,5 +36,5 @@ def delete_curler(cursor, id):
 
 def update_curler(cursor,curler,id):
     query="""UPDATE CURLERS SET CURLER_NAME=%s,CURLER_SURNAME=%s,BIRTH_DATE=%s,TEAMID=%s,COUNTRY=%s WHERE(CURLERID=%s)"""
-    cursor.execute(query, (curler.curler_name,curler.curler_surname,curler.birthdate, 
+    cursor.execute(query, (curler.curler_name,curler.curler_surname,curler.birthdate,
                    curler.teamid,curler.country,id))

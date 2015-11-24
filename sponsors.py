@@ -15,6 +15,7 @@ from store import Store
 from fixture import *
 from sponsors import *
 from curlers import *
+from psycopg2.tests import dbapi20
 
 class Sponsors:
     def __init__(self, name, supportedteam, budget):
@@ -86,9 +87,6 @@ def delete_sponsor(app, id):
         connection.commit()
         connection.close()
 
-def search_sponsor(curser,name):
-        query="""SELECT * FROM SPONSORS WHERE NAME = '%s%';"""
-        curser.execute(query,name)
 
 def get_sponsors_page(app):
     if request.method == 'GET':
@@ -112,6 +110,10 @@ def get_sponsors_page(app):
                 delete_sponsor(app, int(line[9:]))
 
         return redirect(url_for('sponsors_page'))
+    elif 'search' in request.form:
+        sponsors = search_sponsor(app, request.form['sponsor_to_search'])
+        return render_template('sponsors_search_page.html', sponsors = sponsors)
+
 
 def get_sponsors_edit_page(app,sponsor_id):
     if request.method == 'GET':
@@ -186,7 +188,6 @@ def update_sponsor(app, id, sponsor):
             WHERE ID= %s
             """, (sponsor.name, sponsor.supportedteam,
                   sponsor.budget, id))
-            print("done")
         except:
             cursor.rollback()
         finally:
@@ -215,6 +216,31 @@ def get_all_sponsors(app):
         finally:
             cursor.close()
     except:
+        connection.rollback()
+    finally:
+        connection.close()
+        return sponsors
+
+def search_sponsor(app, name):
+    connection = dbapi2.connect(app.config['dsn'])
+    try:
+        cursor = connection.cursor()
+        try:
+            cursor.execute("""
+            SELECT S.ID, S.NAME , T.NAME , S.BUDGET
+            FROM SPONSORS AS S,CLUBS AS T
+            WHERE (
+                T.ID=S.SUPPORTEDTEAM  AND
+                (UPPER(S.NAME)=UPPER(%s)))
+            ORDER BY 1 """, (name))
+            sponsors = cursor.fetchall()
+        except dbapi2.Error as e:
+            print(e.pgerror)
+            cursor.rollback()
+        finally:
+            cursor.close()
+    except bapi2.Error as e:
+        print(e.pgerror)
         connection.rollback()
     finally:
         connection.close()

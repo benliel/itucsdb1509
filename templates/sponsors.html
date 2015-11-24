@@ -8,6 +8,14 @@
 	{% block content %}<h2>Sponsors</h2>
 
 	<table id=sponsors>
+	<tr>
+	<td id="sponsor" colspan="6" align="right">
+	<form id="search" action="{{url_for('sponsors_page')}}" method="POST">
+		<input form="search" type="text" placeholder="Sponsor Name To Search" name="sponsor_to_search" required="required">
+		<input form="search" type="submit" value="Search" name="search">
+	</form>
+	</td>
+	</tr>
 	<form id="delete_form" action="{{ url_for('sponsors_page') }} " method = "post">
 
 

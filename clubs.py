@@ -8,9 +8,7 @@ class Clubs:
         self.rewardnumber = rewardnumber
 
 def init_clubs_db(cursor):
-    query = """DROP TABLE IF EXISTS CLUBS CASCADE"""
-    cursor.execute(query)
-    query = """CREATE TABLE CLUBS (
+    query = """CREATE TABLE IF NOT EXISTS CLUBS (
             ID SERIAL,
             NAME VARCHAR(80) NOT NULL,
             PLACE VARCHAR(80) NOT NULL,

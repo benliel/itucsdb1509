@@ -116,7 +116,7 @@ def countries_page():
 
     if request.method == 'GET':
         now = datetime.datetime.now()
-        query = "SELECT * FROM COUNTRIES"
+        query = "SELECT DISTINCT ON(NAME)ID,NAME FROM COUNTRIES"
         cursor.execute(query)
 
         return render_template('countries.html', countries = cursor, current_time=now.ctime())

@@ -13,6 +13,12 @@
 
 <tr style="color:#2ECCFA;font-weight: bold;">
 
+  <form id="search" action="{{ url_for('countries_page')}}" method ="post">
+        <tr id="search">
+            <td colspan="7" align="right" id="search" ><input form ="search" id="search" type="text" name="search_name" placeholder="Championship or Country to Search" required="required"></td>
+            <td align="right" id="search"><input Value="Search" name="search" id="search" type="submit" form="search"></td>
+        </tr>
+    </form>
 
 	<td ></td>
 	<td width="4%">Championship</td>

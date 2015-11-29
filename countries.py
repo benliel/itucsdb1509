@@ -13,10 +13,11 @@ def init_countries_db(cursor):
     cursor.execute(query)
 
 def add_country(cursor, request, country):
+
         query = """INSERT INTO COUNTRIES
         (NAME) VALUES (
         INITCAP(%s))"""
-        cursor.execute(query, (country.name,))
+        cursor.execute(query, (country.name))
 
 def delete_country(cursor, id):
         query="""DELETE FROM COUNTRIES WHERE ID = %s"""

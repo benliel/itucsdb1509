@@ -34,7 +34,10 @@ def add_championship(cursor, request, championship1):
         )"""
         cursor.execute(query, (championship1.name, championship1.place, championship1.date,
                                 championship1.type, championship1.teamNo,championship1.reward))
-
+        query = """INSERT INTO COUNTRIES
+        (NAME) VALUES (
+        INITCAP(%s))"""
+        cursor.execute(query, (championship1.place,))
 
 
 def delete_championship(cursor, id):
@@ -54,4 +57,4 @@ def update_championship(cursor, id, championship1):
             """
             cursor.execute(query,(championship1.name, championship1.place, championship1.date,
                                 championship1.type, championship1.teamNo,championship1.reward, id))
-            print("done update")
+

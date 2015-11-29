@@ -154,7 +154,6 @@ def countries_page():
             if "checkbox" in line:
                 delete_country(cursor, int(line[9:]))
                 connection.commit()
-
         return redirect(url_for('countries_page'))
 
 

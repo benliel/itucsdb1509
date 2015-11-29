@@ -20,7 +20,7 @@ def add_country(cursor, request, country):
         cursor.execute(query, (country.name,))
 
 def delete_country(cursor, id):
-        query="""DELETE FROM COUNTRIES WHERE ID = %s"""
+        query="""DELETE FROM COUNTRIES WHERE COUNTRY_ID = %s"""
         cursor.execute(query, (int(id),))
 
 

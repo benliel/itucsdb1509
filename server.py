@@ -14,6 +14,7 @@ from fixture import *
 from sponsors import *
 from championship import *
 from clubs import *
+from countries import *
 
 app = Flask(__name__)
 
@@ -39,8 +40,8 @@ def initialize_database():
 
 
     init_clubs_db(cursor)
-    init_fixture_db(app)
-    init_sponsors_db(app)
+    ##init_fixture_db(app)
+    ##init_sponsors_db(app)
     init_championships_db(cursor)
     init_curlers_db(cursor)
     init_countries_db(cursor)
@@ -81,15 +82,12 @@ def championships_page():
             return redirect(url_for('championships_page'))
 
     except:
-            cursor.rollback()
+           ## cursor.rollback()
             connection.rollback()
             connection.close()
     finally:
             cursor.close()
-@app.route('/countries')
-def countries_page():
-    now = datetime.datetime.now()
-    return render_template('countries.html', current_time=now.ctime())
+
 @app.route('/championships/<championship_id>', methods=['GET', 'POST'])
 def championship_update_page(championship_id):
     connection = dbapi2.connect(app.config['dsn'])
@@ -111,6 +109,32 @@ def championship_update_page(championship_id):
         update_championship(cursor, request.form['championship_id'], championship1)
         connection.commit()
     return redirect(url_for('championships_page'))
+@app.route('/countries',methods=['GET', 'POST'])
+def countries_page():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        query = "SELECT * FROM COUNTRIES"
+        cursor.execute(query)
+
+        return render_template('countries.html', countries = cursor, current_time=now.ctime())
+    elif "add" in request.form:
+        country1 = Countries(request.form['country'])
+        add_country(cursor, request,country1)
+        connection.commit()
+        return redirect(url_for('countries_page'))
+
+    elif "delete" in request.form:
+        for line in request.form:
+            if "checkbox" in line:
+                delete_country(cursor, int(line[9:]))
+                connection.commit()
+
+        return redirect(url_for('countries_page'))
+
+
 @app.route('/fixture', methods=['GET', 'POST'])
 def fixture_page():
     return get_fixture_page(app)

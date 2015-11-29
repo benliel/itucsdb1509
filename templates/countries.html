@@ -1,11 +1,53 @@
+
 <!DOCTYPE html>
 <html>
   <head>
 	<meta charset="utf-8" />
 	{% extends "layout.html" %}
-	{% block title %}Home{% endblock %}
+	{% block title %}Championships{% endblock %}
 </head>
 
-{% block content %}
+{% block content %} <h1 align="">Countries</h1>
+<font color="#B5F7DF ">
+<table widht="100" id=chform>
+<form id="delete_form" action="{{ url_for('countries_page') }} " method = "post">
+
+<tr style="color:#2ECCFA;font-weight: bold;">
+
+
+	<td ></td>
+	<td width="8%">Country</td>
+	<td width="92%"></td>
+
+
+</tr>
+</font>
+{%for id, name in countries%}
+<tr id=chform>
+	<td width="3%" style="background:transparent;border:0"id=checkbox ><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
+	<td width="3%"id=chform>{{name}}</td>
+</tr>
+{%endfor%}
+
+
+<tr id=chform>
+				<td><input class="add" Value="Delete" name="delete" type="submit" form="delete_form"></td></form>
+</tr>
+
+
+<tr>
+				<form id="addco" action="{{ url_for('countries_page') }} " method = "post">
+				<td id="championship_form"><input form="addco" id="chform" type="text" placeholder="country" name="country" required="required" size="7"></td>
+				</tr>
+
+				<tr id=chform>
+					<td colspan="4" style="text-align: left" id="co_form_button">
+					<input form="addco" class="add" id="co_form_button" value="Add Country" name="add" type="submit" >
+					</form>
+					</td>
+				</tr>
+
+</table>
 
 {% endblock %}
+</html>

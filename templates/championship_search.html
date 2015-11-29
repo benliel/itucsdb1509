@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Championship Search{% endblock %}
+</head>
+{% block content %}
+    <h2>Championships</h2>
+    <font color="#B5F7DF ">
+    <table id=championship_search>
+
+    <tr style="color:#2ECCFA;font-weight: bold;">
+	<td ></td>
+	<td width="4%">Championship</td>
+	<td width="10%">Place</td>
+	<td width="4%">Date</td>
+	<td width="5%">Type</td>
+	<td width="4%">Team Number</td>
+	<td width="10%">Reward</td>
+	<td width="62%"></td>
+
+</tr>
+</font>
+	{%for id, name, place, date, type, teamNo, reward in championship%}
+<tr id=chform>
+	<td></td>
+	<td width="3%"id=chform>{{name}}</td>
+	<td width="3%"id=chform>{{place}}</td>
+	<td width="3%"id=chform>{{date}}</td>
+	<td width="3%"id=chform>{{type}}</td>
+	<td align="center" width="3%"id=chform>{{teamNo}}</td>
+	<td width="5%"id=chform>{{reward}}</td>
+	<td>
+       <a href="{{ url_for('championship_update_page',championship_id = id) }}" style="text-decoration: none"><font color="#2ECCFA">Update</font></a>
+    </td>
+</tr>
+    {% endfor %}
+    </table>
+</html>
+
+
+	{% endblock %}
+</html>

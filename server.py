@@ -51,11 +51,13 @@ def initialize_database():
 
 @app.route('/championships', methods=['GET', 'POST'])
 def championships_page():
-    connection = dbapi2.connect(app.config['dsn'])
-    try:
+        connection = dbapi2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        now = datetime.datetime.now()
+
+    ##try:
         cursor = connection.cursor()
         if request.method == 'GET':
-            now = datetime.datetime.now()
             query = "SELECT * FROM CHAMPIONSHIP"
             cursor.execute(query)
 
@@ -78,16 +80,37 @@ def championships_page():
                 if "checkbox" in line:
                     delete_championship(cursor, int(line[9:]))
                     connection.commit()
-
             return redirect(url_for('championships_page'))
 
-    except:
-           ## cursor.rollback()
-            connection.rollback()
-            connection.close()
-    finally:
-            cursor.close()
+        elif "search" in request.form:
+                result=search_championship(cursor, request.form['search_name'])
+                return render_template('championship_search.html', championship = result, current_time=now.ctime())
 
+    ##except:
+        print("exception")
+           ## cursor.rollback()
+        connection.rollback()
+        connection.close()
+    ##finally:
+        cursor.close()
+
+def search_championship(cursor,championship1):
+    res = None
+    connection = dbapi2.connect(app.config['dsn'])
+    try:
+        cursor = connection.cursor()
+        try:
+            cursor.execute("""SELECT* FROM CHAMPIONSHIP WHERE ((NAME LIKE %s) OR (PLACE LIKE %s))""",('%'+championship1+'%','%'+championship1+'%',))
+            res = cursor.fetchall()
+        except:
+            cursor.rollback()
+        finally:
+            cursor.close()
+    except:
+        connection.rollback()
+    finally:
+        connection.close()
+        return res
 @app.route('/championships/<championship_id>', methods=['GET', 'POST'])
 def championship_update_page(championship_id):
     connection = dbapi2.connect(app.config['dsn'])
@@ -116,7 +139,7 @@ def countries_page():
 
     if request.method == 'GET':
         now = datetime.datetime.now()
-        query = "SELECT DISTINCT ON(NAME)ID,NAME FROM COUNTRIES"
+        query = "SELECT DISTINCT ON(COUNTRY_NAME)COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES"
         cursor.execute(query)
 
         return render_template('countries.html', countries = cursor, current_time=now.ctime())

@@ -3,9 +3,7 @@ class Countries:
         self.name = name
 
 def init_countries_db(cursor):
-    query = """DROP TABLE IF EXISTS COUNTRIES"""
-    cursor.execute(query)
-    query = """CREATE TABLE COUNTRIES (
+    query = """CREATE TABLE IF NOT EXISTS COUNTRIES (
     COUNTRY_ID SERIAL,
     COUNTRY_NAME VARCHAR(80) NOT NULL,
     PRIMARY KEY(COUNTRY_ID)

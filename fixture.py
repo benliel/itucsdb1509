@@ -18,32 +18,17 @@ class Match:
         self.time = time
         self.location = location
 
-def init_fixture_db(app):
-    connection = dbapi2.connect(app.config['dsn'])
-    try:
-        cursor = connection.cursor()
-        try:
-            cursor.execute('DROP TABLE IF EXISTS FIXTURE CASCADE;')
-            cursor.execute("""
-            CREATE TABLE FIXTURE (
-            ID SERIAL,
-            TEAM1 INT NOT NULL REFERENCES CLUBS(ID),
-            TEAM2 INT NOT NULL REFERENCES CLUBS(ID),
-            DATE date NOT NULL,
-            TIME time NOT NULL,
-            LOCATION varchar(80),
-            PRIMARY KEY (ID)
-            );""")
-        except:
-            cursor.rollback()
-        finally:
-            cursor.close()
-    except:
-        connection.rollback()
-    finally:
-        connection.commit()
-        connection.close()
-
+def init_fixture_db(cursor):
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS FIXTURE (
+        ID SERIAL,
+        TEAM1 INTEGER NOT NULL REFERENCES CLUBS(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+        TEAM2 INTEGER NOT NULL REFERENCES CLUBS(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+        DATE DATE NOT NULL,
+        TIME TIME NOT NULL,
+        LOCATION VARCHAR(80),
+        PRIMARY KEY (ID)
+        )""")
 
 def add_match(app, request, match):
     connection = dbapi2.connect(app.config['dsn'])

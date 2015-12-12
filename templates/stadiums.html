@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='fixture.css') }}" />
+	{% extends "layout.html"%}
+	{% block title %}Stadiums{% endblock %}
+</head>
+	{% block content %}<h2>Stadiums</h2>
+
+	<table id=fixture>
+	<tr>
+	<td id="fixture" colspan="4" align="center">Click on stadium name to see which matches are scheduled in the stadium</td>
+	<td id="fixture" colspan="1" align="right">
+	<form id="search" action="{{url_for('stadiums_page')}}" method="POST">
+		<input form="search" type="text" placeholder="Stadium name or country name to search" name="line_to_search" required="required">
+		<input form="search" type="submit" value="Search" name="search">
+	</form>
+	</td>
+	</tr>
+	<form id="delete_form" action="{{ url_for('stadiums_page') }} " method = "post">
+	<tr>
+	<td id=checkbox></td>
+	<td id=fixture align="center">STADIUM NAME</td>
+	<td id=fixture align="center">LOCATION</td>
+	<td id=fixture align="center">CAPACITY(people)</td>
+	<td id=fixture align="center">TICKET COST($)</td>
+
+	</tr>
+	{% for id, name, location, capacity, ticket_cost in stadiums %}
+	<tr id=fixture>
+		<td id=checkbox>
+		<input form ="delete_form" type="checkbox" name="checkbox_{{id}}">
+		<a href="{{url_for('stadiums_edit_page', stadium_id=id)}}"><img alt="edit{{id}}" src="/static/edit.png" height="20px"></a>
+		</td>
+		<td id=fixture><a href={{url_for('fixture_filter_page', stadium_id=id)}}>
+		{{name}}</a></td>
+		<td id=fixture>{{location}}</td>
+		<td id=fixture>{{capacity}}</td>
+		<td id=fixture>{{ticket_cost}}</td>
+	</tr>
+	{% endfor %}
+
+
+
+		<tr id=fixture>
+				<td><input Value="Delete" name="delete" type="submit" form="delete_form"></form></td>
+				{% if(countries|length>0)%}
+				<form id="add" action="{{ url_for('stadiums_page') }} " method = "post">
+
+				<td id="fixture_form"><input form ="add" id="fixture" type="text" placeholder="Stadium Name" name="name" required="required"></td>
+				<td id="fixture_form">
+				<select id="fixture_form" form="add" name="location" required="required">
+					<option disabled="disabled" selected="selected" hidden="hidden">Select a country</option>
+				{% for country in countries%}
+					<option value="{{country[0]}}">{{country[1]}}</option>
+				{% endfor %}
+				</select>
+				</td>
+				<td id="fixture_form"><input form ="add" id="fixture" type="number" placeholder="Capacity" name="capacity" required="required"></td>
+				<td id="fixture_form"><input form ="add" id="fixture" type="number" placeholder = "Ticket Cost" name="ticket_cost" required="required"></td>
+
+			</tr>
+			<tr id=fixture>
+				<td colspan="5" id=fixture_form_add>
+					<input form="add" id="fixture_form_add" value="Add Stadium" name="add" type="submit"></form>
+					</td>
+					</tr>
+					{%else%}
+					</tr>
+					<tr id="fixture_form">
+					<td id="fixture_form" colspan="6">You cannot add stadium, since there are no countries added in the database!
+					</tr>
+					{%endif%}
+
+
+	</table>
+
+
+
+	{% endblock %}
+</html>

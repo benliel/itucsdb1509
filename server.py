@@ -16,6 +16,7 @@ from championship import *
 from clubs import *
 from curlers import *
 from countries import *
+from stadiums import *
 from federations import *
 
 app = Flask(__name__)
@@ -48,9 +49,11 @@ def initialize_database():
             DROP TABLE IF EXISTS CHAMPIONSHIP CASCADE;
             DROP TABLE IF EXISTS CURLERS CASCADE;
             DROP TABLE IF EXISTS COUNTRIES CASCADE;
+            DROP TABLE IF EXISTS STADIUMS CASCADE;
             DROP TABLE IF EXISTS FEDERATIONS CASCADE;
             ''')
             init_countries_db(cursor)
+            init_stadiums_db(cursor)
             init_clubs_db(cursor)
             init_fixture_db(cursor)
             init_sponsors_db(cursor)
@@ -180,9 +183,18 @@ def countries_page():
 @app.route('/fixture', methods=['GET', 'POST'])
 def fixture_page():
     return get_fixture_page(app)
+@app.route('/fixture/<stadium_id>')
+def fixture_filter_page(stadium_id):
+    return get_fixture_filter_page(app, stadium_id)
 @app.route('/fixture/edit/<match_id>', methods=['GET', 'POST'])
 def fixture_edit_page(match_id=0):
     return get_fixture_edit_page(app, match_id);
+@app.route('/stadiums', methods=['GET', 'POST'])
+def stadiums_page():
+    return get_stadiums_page(app)
+@app.route('/stadiums/edit/<stadium_id>', methods=['GET', 'POST'])
+def stadiums_edit_page(stadium_id=0):
+    return get_stadiums_edit_page(app, stadium_id);
 
 @app.route('/curlers', methods=['GET', 'POST'])
 def curlers_page():

@@ -18,7 +18,14 @@
 	</td>
 	</tr>
 	<form id="delete_form" action="{{ url_for('fixture_page') }} " method = "post">
-
+	<tr>
+	<td id="checkbox"></td>
+	<td id="fixture" align="center">CLUB</td>
+	<td id="fixture" align="center">CLUB</td>
+	<td id="fixture" align="center">DATE</td>
+	<td id="fixture" align="center">TIME</td>
+	<td id="fixture" align="center">STADIUM</td>
+	</tr>
 	{% for id, team1, team2, date, time, location in matches %}
 	<tr id=fixture>
 		<td id=checkbox>
@@ -37,7 +44,7 @@
 
 		<tr id=fixture>
 				<td><input Value="Delete" name="delete" type="submit" form="delete_form"></form></td>
-				{% if(clubs|length>0 and countries|length>0)%}
+				{% if(clubs|length>0 and stadiums|length>0)%}
 				<form id="add" action="{{ url_for('fixture_page') }} " method = "post">
 				<td id="fixture_form">
 				<select id="fixture_form" form="add" name="team1" required="required">
@@ -58,9 +65,9 @@
 				<td id="fixture_form"><input form ="add" id="fixture" type="time" placeholder = "hh:mm" name="time" required="required"></td>
 				<td id="fixture_form">
 				<select id="fixture_form" form="add" name="location" required="required">
-					<option disabled="disabled" selected="selected" hidden="hidden">Select a country</option>
-				{% for country in countries%}
-					<option value="{{country[0]}}">{{country[1]}}</option>
+					<option disabled="disabled" selected="selected" hidden="hidden">Select a stadium</option>
+				{% for stadium in stadiums%}
+					<option value="{{stadium[0]}}">{{stadium[1]}}</option>
 				{% endfor %}
 				</select>
 				</td>
@@ -73,7 +80,7 @@
 					{%else%}
 					</tr>
 					<tr id="fixture_form">
-					<td id="fixture_form" colspan="6">You cannot add match, since there are no clubs/countries added in the database!
+					<td id="fixture_form" colspan="6">You cannot add match, since there are no clubs/stadiums added in the database!
 					</tr>
 					{%endif%}
 

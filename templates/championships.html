@@ -11,7 +11,7 @@
 <table width="100" id=chform>
 <form id="search" action="{{ url_for('championships_page')}}" method ="post">
         <tr id="search">
-            <td  colspan="7" align="right" id="search" ><input form ="search" id="search" type="text" name="search_name" placeholder="Name or Surname to Search" required="required"></td>
+            <td  colspan="7" align="right" id="search" ><input form ="search" id="search" type="text" name="search_name" placeholder="Enter Championship name/Place" required="required"></td>
             <td align="right" id="search"><input class="add" Value="Search" name="search" id="search" type="submit" form="search"></td>
         </tr>
     </form>
@@ -24,10 +24,11 @@
 	<td width="4%">Championship</td>
 	<td width="10%">Place</td>
 	<td width="4%">Date</td>
-	<td width="5%">Type</td>
+	<td width="5%">Format</td>
 	<td width="1%">Team Number</td>
 	<td width="10%">Reward</td>
 	<td width="62%"></td>
+
 
 </tr>
 </font>
@@ -303,9 +304,18 @@
       <option value="Zimbabwe">Zimbabwe</option>
     </select>
 				</td>
-				<td id="championship_form"><input form="addC" id="chform" type="date" placeholder="YYYY.MM.DD" name="date" required="required" size="7"></td>
-				<td id="championship_form"><input form="addC" id="chform" type="text" placeholder="Type" name="type" required="required" size="7"></td>
-				<td id="championship_form"><input form="addC" id="chform" type="number" min="0" placeholder="Number of Teams" name="number_of_teams" size="7" required="required"></td>
+				<td id="championship_form"><input form="addC" id="chform" type="date" placeholder="DD.MM.YYYY" name="date" required="required" size="7"></td>
+				<td id="championship_form">
+				<select data-placeholder="Choose a format..." tabindex="4" name="type" required="required">
+      				<option value="">Choose a Format</option>
+      				<option value="Single Elimination">Single Elimination</option>
+      				<option value="Double Elimination">Double Elimination</option>
+      				<option value="Multilevel">Multilevel</option>
+      				<option value="Round Robin">Round Robin</option>
+      				<option value="League">League</option>
+				</select>
+				</td>
+				<td id="championship_form"><input form="addC" id="chform" type="number" min="4" placeholder="Number of Teams" name="number_of_teams" size="7" required="required"></td>
 				<td id="championship_form"><input form="addC" id="chform" type="text" placeholder="Reward" name="reward" required="required" size="7"></td>
 				</tr>
 

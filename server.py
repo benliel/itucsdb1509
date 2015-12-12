@@ -75,42 +75,48 @@ def championships_page():
     now = datetime.datetime.now()
     try:
         cursor = connection.cursor()
-        if request.method == 'GET':
-            query = "SELECT * FROM CHAMPIONSHIP"
-            cursor.execute(query)
+        try:
+            cursor = connection.cursor()
+            if request.method == 'GET':
+                query = "SELECT * FROM CHAMPIONSHIP"
+                cursor.execute(query)
 
-            return render_template('championships.html', championship = cursor, current_time = now.ctime())
-        elif "add" in request.form:
-            championship1 = Championships(request.form['name'],
-                         request.form['place'],
-                         request.form['date'],
-                         request.form['type'],
-                         request.form['number_of_teams'],
-                         request.form['reward'])
+                return render_template('championships.html', championship = cursor, current_time = now.ctime())
+            elif "add" in request.form:
+                championship1 = Championships(request.form['name'],
+                             request.form['place'],
+                             request.form['date'],
+                             request.form['type'],
+                             request.form['number_of_teams'],
+                             request.form['reward'])
 
-            add_championship(cursor, request, championship1)
+                add_championship(cursor, request, championship1)
 
-            connection.commit()
-            return redirect(url_for('championships_page'))
+                connection.commit()
+                return redirect(url_for('championships_page'))
 
-        elif "delete" in request.form:
-            for line in request.form:
-                if "checkbox" in line:
-                    delete_championship(cursor, int(line[9:]))
-                    connection.commit()
-            return redirect(url_for('championships_page'))
+            elif "delete" in request.form:
+                for line in request.form:
+                    if "checkbox" in line:
+                        delete_championship(cursor, int(line[9:]))
+                        connection.commit()
+                return redirect(url_for('championships_page'))
 
-        elif "search" in request.form:
-                result=search_championship(cursor, request.form['search_name'])
-                return render_template('championship_search.html', championship = result, current_time=now.ctime())
-
+            elif "search" in request.form:
+                    result=search_championship(cursor, request.form['search_name'])
+                    return render_template('championship_search.html', championship = result, current_time=now.ctime())
+        except:
+            cursor.rollback()
+        finally:
+            cursor.close()
     except:
         print("exception")
            ## cursor.rollback()
         connection.rollback()
-        connection.close()
+       ## connection.close()
     finally:
-        cursor.close()
+        connection.commit()
+        connection.close()
 
 def search_championship(cursor,championship1):
     res = None

@@ -48,15 +48,14 @@ def initialize_database():
             DROP TABLE IF EXISTS CURLERS CASCADE;
             DROP TABLE IF EXISTS COUNTRIES CASCADE;
             ''')
+            init_countries_db(cursor)
             init_clubs_db(cursor)
             init_fixture_db(cursor)
             init_sponsors_db(cursor)
             init_championships_db(cursor)
             init_curlers_db(cursor)
-            init_countries_db(cursor)
         except dbapi2.Error as e:
             print(e.pgerror)
-            cursor.rollback()
         finally:
             cursor.close()
         ###########

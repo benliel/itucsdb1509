@@ -27,7 +27,13 @@
 			</td>
 			<td><input id="fixtureUpdate" form="update" type="date" value="{{match[3]}}" name="date" required="required"></td>
 			<td><input id="fixtureUpdate" form="update" type="time" value="{{match[4]}}" name="time" required="required"></td>
-			<td><input id="fixtureUpdate" form="update" type="text" value="{{match[5]}}" name="location" required="required"></td>
+			<td>
+			<select id="fixtureUpdate" form="update" name="location" required="required">
+				{% for country in countries%}
+					<option value="{{country[0]}}" {% if (match[5]==country[1]) %}selected="selected"{%endif%}>{{country[1]}}</option>
+				{% endfor %}
+			</select>
+			</td>
 			<td><input id="fixtureUpdate" form="update" type="submit" value="Update Match" name="update"></td>
 		</tr></form>
 	</table>

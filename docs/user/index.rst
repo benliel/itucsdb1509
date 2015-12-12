@@ -14,7 +14,7 @@ screenshots whereever appropriate**
 
 .. toctree::
 
-   Sercan_Bayındır
+   member1
    member2
    member3
    member4

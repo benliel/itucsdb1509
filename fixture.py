@@ -26,7 +26,7 @@ def init_fixture_db(cursor):
         TEAM2 INTEGER NOT NULL REFERENCES CLUBS(ID) ON DELETE CASCADE ON UPDATE CASCADE,
         DATE DATE NOT NULL,
         TIME TIME NOT NULL,
-        LOCATION INTEGER NOT NULL REFERENCES COUNTRIES(COUNTRY_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+        LOCATION INTEGER NOT NULL REFERENCES STADIUMS(ID) ON DELETE CASCADE ON UPDATE CASCADE,
         PRIMARY KEY (ID)
         )""")
 
@@ -122,6 +122,30 @@ def delete_match(app, id):
         connection.commit()
         connection.close()
 
+def search_match(app, name):
+    matches = ()
+    connection = dbapi2.connect(app.config['dsn'])
+    try:
+        cursor = connection.cursor()
+        try:
+            cursor.execute("""
+            SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, S.NAME
+            FROM FIXTURE AS F,CLUBS AS T1, CLUBS AS T2, STADIUMS AS S
+            WHERE (
+                T1.ID=F.TEAM1 AND T2.ID=F.TEAM2 AND F.LOCATION=S.ID AND
+                (UPPER(T1.NAME)=UPPER(%s) OR UPPER(T2.NAME)=UPPER(%s)))
+            ORDER BY DATE DESC, TIME """, (name, name))
+            matches = cursor.fetchall()
+        except dbapi2.Error as e:
+            print(e.pgerror)
+        finally:
+            cursor.close()
+    except:
+        connection.rollback()
+    finally:
+        connection.close()
+        return matches
+
 def get_match(app, match_id):
     match=None
     connection = dbapi2.connect(app.config['dsn'])
@@ -129,10 +153,10 @@ def get_match(app, match_id):
         cursor = connection.cursor()
         try:
             cursor.execute('''
-            SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, C.COUNTRY_NAME
-            FROM FIXTURE AS F,CLUBS AS T1, CLUBS AS T2, COUNTRIES AS C
+            SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, S.NAME
+            FROM FIXTURE AS F,CLUBS AS T1, CLUBS AS T2, STADIUMS AS S
             WHERE (
-                F.ID=%s AND T1.ID=F.TEAM1 AND T2.ID=F.TEAM2 AND F.LOCATION=C.COUNTRY_ID
+                F.ID=%s AND T1.ID=F.TEAM1 AND T2.ID=F.TEAM2 AND F.LOCATION=S.COUNTRY_ID
                 )
             ''', match_id);
             match = cursor.fetchone()
@@ -147,31 +171,6 @@ def get_match(app, match_id):
         connection.close()
         return match
 
-
-def search_match(app, name):
-    matches = ()
-    connection = dbapi2.connect(app.config['dsn'])
-    try:
-        cursor = connection.cursor()
-        try:
-            cursor.execute("""
-            SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, C.COUNTRY_NAME
-            FROM FIXTURE AS F,CLUBS AS T1, CLUBS AS T2, COUNTRIES AS C
-            WHERE (
-                T1.ID=F.TEAM1 AND T2.ID=F.TEAM2 AND F.LOCATION=C.COUNTRY_ID AND
-                (UPPER(T1.NAME)=UPPER(%s) OR UPPER(T2.NAME)=UPPER(%s)))
-            ORDER BY DATE DESC, TIME """, (name, name))
-            matches = cursor.fetchall()
-        except dbapi2.Error as e:
-            print(e.pgerror)
-        finally:
-            cursor.close()
-    except:
-        connection.rollback()
-    finally:
-        connection.close()
-        return matches
-
 def get_all_matches(app):
     matches = ()
     connection = dbapi2.connect(app.config['dsn'])
@@ -179,9 +178,9 @@ def get_all_matches(app):
         cursor=connection.cursor()
         try:
             cursor.execute('''
-            SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, C.COUNTRY_NAME
-            FROM FIXTURE AS F, CLUBS AS T1, CLUBS AS T2, COUNTRIES AS C
-            WHERE(F.TEAM1=T1.ID AND F.TEAM2=T2.ID AND F.LOCATION=C.COUNTRY_ID)
+            SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, S.NAME
+            FROM FIXTURE AS F, CLUBS AS T1, CLUBS AS T2, STADIUMS AS S
+            WHERE(F.TEAM1=T1.ID AND F.TEAM2=T2.ID AND F.LOCATION=S.ID)
             ORDER BY DATE DESC, TIME
             ''')
             matches = cursor.fetchall()
@@ -213,13 +212,13 @@ def get_club_names(app):
         connection.close()
         return clubs
 
-def get_country_names(app):
+def get_stadium_names(app):
     connection=dbapi2.connect(app.config['dsn'])
     try:
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES')
-            clubs = cursor.fetchall()
+            cursor.execute('SELECT ID,NAME FROM STADIUMS')
+            stadiums = cursor.fetchall()
         except dbapi2.Error as e:
             print(e.pgerror)
         finally:
@@ -228,17 +227,43 @@ def get_country_names(app):
         connection.rollback()
     finally:
         connection.close()
-        return clubs
+        return stadiums
+
+def get_filtered_matches(app, stadium_id):
+    connection=dbapi2.connect(app.config['dsn'])
+    try:
+        cursor=connection.cursor()
+        try:
+            cursor.execute("""
+            SELECT F.ID,T1.NAME,T2.NAME,F.DATE,F.TIME,S.NAME
+            FROM FIXTURE AS F,CLUBS AS T1, CLUBS AS T2, STADIUMS AS S
+            WHERE(
+                F.TEAM1=T1.ID AND F.TEAM2=T2.ID AND F.LOCATION=S.ID
+                AND F.LOCATION=%s
+            )
+            ORDER BY DATE DESC, TIME
+            """,stadium_id)
+            print(1)
+            matches=cursor.fetchall()
+        except dbapi2.Error as e:
+            print(e.pgerror)
+        finally:
+            cursor.close()
+    except:
+        connection.rollback()
+    finally:
+        connection.close()
+        return matches
 
 def get_fixture_page(app):
     if request.method == 'GET':
         now = datetime.datetime.now()
         matches = get_all_matches(app)
         clubs = get_club_names(app)
-        countries = get_country_names(app)
+        stadiums = get_stadium_names(app)
 
         return render_template('fixture.html', matches=matches,
-                               clubs=clubs, countries=countries,
+                               clubs=clubs, stadiums=stadiums,
                                current_time=now.ctime())
     elif 'add' in request.form:
         match = Match(request.form['team1'],
@@ -259,14 +284,25 @@ def get_fixture_page(app):
         matches = search_match(app, request.form['team_to_search'])
         return render_template('fixture_search_page.html', matches = matches)
 
+def get_fixture_filter_page(app, stadium_id):
+    now = datetime.datetime.now()
+    matches = get_filtered_matches(app, stadium_id)
+    print(matches)
+    clubs = get_club_names(app)
+    stadiums = get_stadium_names(app)
+
+    return render_template('fixture.html', matches=matches,
+                           clubs=clubs, stadiums=stadiums,
+                           current_time=now.ctime())
+
 def get_fixture_edit_page(app, match_id):
     if request.method == 'GET':
         now = datetime.datetime.now()
         match = get_match(app, match_id)
         clubs = get_club_names(app)
-        countries = get_country_names(app)
+        stadiums = get_stadium_names(app)
         return render_template('fixture_edit_page.html', current_time=now.ctime(),
-                               match=match, clubs=clubs, countries = countries)
+                               match=match, clubs=clubs, stadiums=stadiums)
 
     if request.method == 'POST':
         match = Match(request.form['team1'],

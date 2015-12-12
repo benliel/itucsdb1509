@@ -27,14 +27,36 @@ def init_fixture_db(cursor):
         DATE DATE NOT NULL,
         TIME TIME NOT NULL,
         LOCATION VARCHAR(80),
-        PRIMARY KEY (ID)
+        PRIMARY KEY (ID),
+        UNIQUE(DATE,TIME,LOCATION),
+        UNIQUE(TEAM1,DATE,TIME),
+        UNIQUE(TEAM2,DATE,TIME)
         )""")
 
 def add_match(app, request, match):
+    if(match.team1 == match.team2):
+        return
+    if(match.team1>match.team2):
+        temp = match.team1
+        match.team1=match.team2
+        match.team2=temp
     connection = dbapi2.connect(app.config['dsn'])
     try:
         cursor = connection.cursor()
         try:
+            cursor = connection.cursor()
+            cursor.execute("""
+            SELECT * FROM FIXTURE,CLUBS AS T1,CLUBS AS T2
+            WHERE(
+                (%s=TEAM1 OR %s=TEAM2 OR %s=TEAM1 OR %s=TEAM2) AND
+                to_date(%s, 'YYYY-MM-DD')=DATE AND
+                to_timestamp(%s, 'HH24:MI')=to_timestamp(to_char(TIME, 'HH24:MI'), 'HH24:MI')
+            );""", (match.team1, match.team1, match.team2, match.team2,
+                    match.date, match.time))
+            checkingMatch = cursor.fetchone()
+            if(checkingMatch!=None):
+                return
+            cursor.close()
             cursor = connection.cursor()
             cursor.execute("""
             INSERT INTO FIXTURE
@@ -48,7 +70,8 @@ def add_match(app, request, match):
                    match.date,match.time,
                    match.location))
 
-        except:
+        except dbapi2.Error as e:
+            print(e.pgerror)
             cursor.rollback()
         finally:
             cursor.close()
@@ -75,7 +98,6 @@ def update_match(app, id, match):
             """, (match.team1, match.team2,
                   match.date, match.time,
                   match.location, id))
-            print("done")
         except:
             cursor.rollback()
         finally:
@@ -167,11 +189,13 @@ def get_all_matches(app):
             ORDER BY DATE DESC, TIME
             ''')
             matches = cursor.fetchall()
-        except:
+        except dbapi2.Error as e:
+            print(e.pgerror)
             cursor.rollback()
         finally:
             cursor.close()
-    except:
+    except dbapi2.Error as e:
+        print(e.pgerror)
         connection.rollback()
     finally:
         connection.close()

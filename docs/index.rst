@@ -1,11 +1,11 @@
 Welcome to itucsdb's documentation!
 ===================================
 
-:Team: Team Name
+:Team: itucsdb1509
 
 :Members:
 
-   * Member 1
+   * Sercan Bayındır
    * Member 2
    * Member 3
    * Member 4

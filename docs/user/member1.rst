@@ -41,3 +41,13 @@ Users can easily
 Here users edit the properties of the stadium
 as they liked and save the changed data by clicking on the
 Update Stadium button.
+
+.. figure:: static/fixture_edit.png
+   :scale: 50%
+   :alt: edit section of fixture table screenshot
+
+   Here we see edit section of the fixture table
+
+Here users edit the properties of the match
+as they liked and save the changed data by clicking on the
+Update Match button.

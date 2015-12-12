@@ -62,9 +62,9 @@ Stadiums Table
          self.ticket_cost=ticket_cost
 
 
- I have worked in "fixture.py" and "stadiums.py" sources
+I have worked in "fixture.py" and "stadiums.py" sources
 
- fixture.py
+fixture.py
    Functions:
       add_match
          Used for adding matches in the fixture table

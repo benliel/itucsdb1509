@@ -16,7 +16,7 @@ def init_championships_db(cursor):
     query = """CREATE TABLE IF NOT EXISTS CHAMPIONSHIP (
     ID SERIAL,
     NAME VARCHAR(80) NOT NULL,
-    PLACE VARCHAR(80) NOT NULL,
+    PLACE INTEGER NOT NULL REFERENCES COUNTRIES(COUNTRY_ID) ON DELETE CASCADE ON UPDATE CASCADE,
     DATE DATE NOT NULL,
     TYPE VARCHAR(80) NOT NULL,
     NUMBER_OF_TEAMS INTEGER NOT NULL,
@@ -29,7 +29,7 @@ def add_championship(cursor, request, championship1):
         query = """INSERT INTO CHAMPIONSHIP
         (NAME, PLACE, DATE, TYPE, NUMBER_OF_TEAMS,REWARD) VALUES (
         INITCAP(%s),
-        INITCAP(%s),
+        %s,
         to_date(%s, 'DD-MM-YYYY'),
         INITCAP(%s),
         %s,
@@ -37,10 +37,7 @@ def add_championship(cursor, request, championship1):
         )"""
         cursor.execute(query, (championship1.name, championship1.place, championship1.date,
                                 championship1.type, championship1.teamNo,championship1.reward))
-        query = """INSERT INTO COUNTRIES
-        (COUNTRY_NAME) VALUES (
-        INITCAP(%s))"""
-        cursor.execute(query, (championship1.place,))
+
 
 
 def delete_championship(cursor, id):
@@ -51,7 +48,7 @@ def update_championship(cursor, id, championship1):
             query="""
             UPDATE CHAMPIONSHIP
             SET NAME=INITCAP(%s),
-            PLACE=INITCAP(%s),
+            PLACE=%s,
             DATE=to_date(%s, 'DD-MM-YYYY'),
             TYPE=INITCAP(%s),
             NUMBER_OF_TEAMS=%s,

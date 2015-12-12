@@ -80,10 +80,14 @@ def championships_page():
         try:
             cursor = connection.cursor()
             if request.method == 'GET':
-                query = "SELECT * FROM CHAMPIONSHIP"
+                query = "SELECT CH.ID,CH.NAME,C.COUNTRY_NAME,CH.DATE,CH.TYPE,CH.NUMBER_OF_TEAMS,CH.REWARD FROM CHAMPIONSHIP AS CH,COUNTRIES AS C WHERE(CH.PLACE=C.COUNTRY_ID)"
                 cursor.execute(query)
-
-                return render_template('championships.html', championship = cursor, current_time = now.ctime())
+                championship=cursor.fetchall()
+                cursor.close()
+                cursor = connection.cursor()
+                cursor.execute("SELECT COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES")
+                countries=cursor.fetchall()
+                return render_template('championships.html', championship = championship,countries=countries, current_time = now.ctime())
             elif "add" in request.form:
                 championship1 = Championships(request.form['name'],
                              request.form['place'],
@@ -107,12 +111,12 @@ def championships_page():
             elif "search" in request.form:
                     result=search_championship(cursor, request.form['search_name'])
                     return render_template('championship_search.html', championship = result, current_time=now.ctime())
-        except:
-            cursor.rollback()
+        except dbapi2.Error as e:
+            print(e.pgerror)
         finally:
             cursor.close()
-    except:
-        print("exception")
+    except dbapi2.Error as e:
+        print(e.pgerror)
            ## cursor.rollback()
         connection.rollback()
        ## connection.close()
@@ -143,9 +147,14 @@ def championship_update_page(championship_id):
     cursor = connection.cursor()
     if request.method == 'GET':
         query = """SELECT * FROM CHAMPIONSHIP WHERE (ID = %s)"""
-        cursor.execute(query,championship_id)
         now = datetime.datetime.now()
-        return render_template('championship_update.html', championship = cursor, current_time=now.ctime())
+        cursor.execute(query,championship_id)
+        championship=cursor.fetchall()
+        cursor.close()
+        cursor = connection.cursor()
+        cursor.execute("SELECT COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES")
+        countries=cursor.fetchall()
+        return render_template('championship_update.html', championship = championship,countries=countries, current_time=now.ctime())
     elif request.method == 'POST':
         if "update" in request.form:
             championship1 = Championships(request.form['name'],
@@ -165,12 +174,12 @@ def countries_page():
 
     if request.method == 'GET':
         now = datetime.datetime.now()
-        query = "SELECT DISTINCT ON(COUNTRY_NAME)COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES"
+        query = "SELECT DISTINCT ON(COUNTRY_NAME)COUNTRY_ID,COUNTRY_NAME,COUNTRY_CURLER,COUNTRY_CLUB,COUNTRY_TOURNAMENT FROM COUNTRIES"
         cursor.execute(query)
 
-        return render_template('countries.html', countries = cursor, current_time=now.ctime())
+        return render_template('countries.html', countries = cursor.fetchall(), current_time=now.ctime())
     elif "add" in request.form:
-        country1 = Countries(request.form['country'])
+        country1 = Countries(request.form['country'],0,0,0)
         add_country(cursor, request,country1)
         connection.commit()
         return redirect(url_for('countries_page'))

@@ -134,8 +134,8 @@ def search_match(app, name):
             FROM FIXTURE AS F,CLUBS AS T1, CLUBS AS T2, STADIUMS AS S
             WHERE (
                 T1.ID=F.TEAM1 AND T2.ID=F.TEAM2 AND F.LOCATION=S.ID AND
-                (UPPER(T1.NAME)=UPPER(%s) OR UPPER(T2.NAME)=UPPER(%s)))
-            ORDER BY DATE DESC, TIME """, (name, name))
+                (UPPER(T1.NAME) LIKE UPPER(%s) OR UPPER(T2.NAME) LIKE UPPER(%s)))
+            ORDER BY DATE DESC, TIME """, (name+"%", name+"%"))
             matches = cursor.fetchall()
         except dbapi2.Error as e:
             print(e.pgerror)

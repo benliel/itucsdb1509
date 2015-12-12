@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Federations - Update{% endblock %}
+</head>
+{% block content %}
+    <h2>Federation</h2>
+    <table id=federations_update>
+        {% for federation_id, federation_name, president_name, president_surname, founding_year, country in federation %}
+            <form id=update action="{{ url_for('federations_update_page',federation_id='0') }}" method = "post">
+                <tr id=update>
+                    <td id=update><input value="{{federation_name}}" form ="update" id="federations" type="text" placeholder="Federation Name" name="federation_name" required="required"></td>
+                    <td id=update><input value="{{president_name}}" form ="update" id="federations" type="text" placeholder="Presdient Name" name="president_name" required="required"></td>
+                    <td id=update><input value="{{president_surname}}" form ="update" id="federations" type="text" placeholder="President Surname" name="president_surname" required="required"></td>
+                    <td id=update><input value="{{founding_year}}" form ="update" id="federations" type="number" min="1800" max="2100" placeholder="Founding Year" name="founding_year" required="required"></td>
+                    <td id="update">
+                        <select form="update" id=federations name="country">
+                            {% for country_id, country_name in countries %}
+                                <option id=federations type="text" placeholder = "Country" value="{{country_id}}">{{country_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <input type="hidden" name="federation_id" value="{{federation_id}}">
+                <tr id=update>
+                    <td colspan="7" id=federations_form_add>
+                        <input form="update" id="federations_form_add" value="Update Federation" name="update" type="submit">
+                    </td>
+                </tr>
+            </form>
+        {% endfor %}
+    </table>
+{% endblock %}
+</html>

@@ -22,7 +22,13 @@
                             {% endfor %}
                         </select>
                     </td>
-                    <td id=update><input value="{{country}}" form ="update" id="curlers" type="text" placeholder="Nationality" name="nationality"></td>
+                    <td id="update">
+                        <select form="update" id=curlers name="birth_place_id">
+                            {% for country_id, country_name in countries %}
+                                <option id=curlers type="text" placeholder = "birth Place" value="{{country_id}}">{{country_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
                 </tr>
                 <input type="hidden" name="curler_id" value="{{curlerid}}">
                 <tr id=update>

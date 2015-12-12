@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Country Search{% endblock %}
+</head>
+{% block content %}
+    <h2>Championships</h2>
+    <font color="#B5F7DF ">
+ <form id="search" action="{{ url_for('countries_page')}}" method ="post">
+    <table id=championship_search width="100%" cellspacing="0" cellpadding="0">
+
+
+            <tr  width="4%"colspan="7" align="left" id="search" ><input form ="search" id="search" type="text" name="search_name" placeholder="Enter Country" required="required"></tr>
+            <tr  width="4%"align="left" id="search"><input class="add" Value="Search" name="search" id="search" type="submit" form="search"></tr>
+
+
+
+
+    <tr style="color:#2ECCFA;font-weight: bold;">
+	<td ></td>
+	<td width="22%">Championship</td>
+	<td width="13%">Place</td>
+	<td width="8%">Date</td>
+	<td width="10%">Format</td>
+	<td width="3%">Team Number</td>
+	<td width="3%"></td>
+	<td width="10%">Reward</td>
+	<td width="54%"></td>
+
+</tr>
+</font>
+	{%for id, name, place, date, type, teamNo, reward in championship%}
+	 </form>
+	 <form id="delete_form" action="{{ url_for('championships_page') }} " method = "post">
+<tr id=chform>
+
+	<td width="3%" style="background:transparent;border:0"id=checkbox ><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
+	<td width="3%"id=chform>{{name}}</td>
+	<td width="3%"id=chform>{{place}}</td>
+	<td width="3%"id=chform>{{date}}</td>
+	<td width="3%"id=chform>{{type}}</td>
+	<td align="center" width="3%"id=chform>{{teamNo}}</td>
+	<td width="3%"></td>
+	<td width="5%"id=chform>{{reward}}</td>
+	<td>
+       <a href="{{ url_for('championship_update_page',championship_id = id) }}" style="text-decoration: none"><font color="#2ECCFA">Update</font></a>
+    </td>
+</tr>
+    {% endfor %}
+    <tr id=chform>
+
+				<td><input class="add" Value="Delete" name="delete" type="submit" form="delete_form"></td></form>
+</tr>
+    </table>
+
+</html>
+
+
+	{% endblock %}
+</html>

@@ -109,6 +109,7 @@ def championships_page():
                 return redirect(url_for('championships_page'))
 
             elif "search" in request.form:
+                    print(request.form['search_name'])
                     result=search_championship(cursor, request.form['search_name'])
                     return render_template('championship_search.html', championship = result, current_time=now.ctime())
         except dbapi2.Error as e:
@@ -125,18 +126,25 @@ def championships_page():
         connection.close()
 
 def search_championship(cursor,championship1):
-    res = None
+    res = ()
     connection = dbapi2.connect(app.config['dsn'])
     try:
         cursor = connection.cursor()
         try:
-            cursor.execute("""SELECT* FROM CHAMPIONSHIP WHERE ((NAME LIKE %s) OR (PLACE LIKE %s))""",('%'+championship1+'%','%'+championship1+'%',))
+            query = """SELECT CH.ID,CH.NAME,C.COUNTRY_NAME,CH.DATE,CH.TYPE,CH.NUMBER_OF_TEAMS,CH.REWARD
+                           FROM CHAMPIONSHIP AS CH,COUNTRIES AS C
+                           WHERE(
+                               (CH.PLACE=C.COUNTRY_ID) AND ((CH.NAME LIKE %s)OR(C.COUNTRY_NAME LIKE %s)))
+                               """
+            cursor.execute(query,('%'+championship1+'%','%'+championship1+'%'))
             res = cursor.fetchall()
-        except:
-            cursor.rollback()
+            print(res)
+        except dbapi2.Error as e:
+            print(e.pgerror)
         finally:
             cursor.close()
-    except:
+    except dbapi2.Error as e:
+        print(e.pgerror)
         connection.rollback()
     finally:
         connection.close()

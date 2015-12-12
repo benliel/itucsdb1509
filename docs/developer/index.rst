@@ -24,7 +24,7 @@ Code
 
 .. toctree::
 
-   Sercan Bayındır
+   Sercan_Bayındır
    member2
    member3
    member4

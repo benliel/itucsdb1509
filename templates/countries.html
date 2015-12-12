@@ -3,12 +3,18 @@
   <head>
 	<meta charset="utf-8" />
 	{% extends "layout.html" %}
-	{% block title %}Championships{% endblock %}
+	{% block title %}Countries{% endblock %}
 </head>
 
 {% block content %} <h1 align="">Countries</h1>
 <font color="#B5F7DF ">
 <table widht="100" id=chform>
+<form id="search" action="{{ url_for('countries_page')}}" method ="post">
+        <tr id="search">
+            <td  colspan="1" align="right" id="search" ><input form ="search" id="search" type="text" name="search_name" placeholder="Enter Country" required="required"></td>
+            <td align="left" id="search"><input class="add" Value="Search" name="search" id="search" type="submit" form="search"></td>
+        </tr>
+    </form>
 <form id="delete_form" action="{{ url_for('countries_page') }} " method = "post">
 
 <tr style="color:#2ECCFA;font-weight: bold;">
@@ -42,7 +48,7 @@
 
 <tr>
 				<form id="addco" action="{{ url_for('countries_page') }} " method = "post">
-				<td id="championship_form"><input form="addco" id="chform" type="text" placeholder="country" name="country" required="required" size="7"></td>
+				<td colspan="1" align="left"id="championship_form"><input form="addco" id="chform" type="text" placeholder="country" name="country" required="required" size="20"></td>
 				</tr>
 
 				<tr id=chform>

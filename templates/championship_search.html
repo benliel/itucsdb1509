@@ -17,7 +17,6 @@
 
 
 
-
     <tr style="color:#2ECCFA;font-weight: bold;">
 	<td ></td>
 	<td width="22%">Championship</td>
@@ -32,8 +31,7 @@
 </tr>
 </font>
 	{%for id, name, place, date, type, teamNo, reward in championship%}
-	 </form>
-	 <form id="delete_form" action="{{ url_for('championships_page') }} " method = "post">
+
 <tr id=chform>
 
 	<td width="3%" style="background:transparent;border:0"id=checkbox ><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
@@ -49,6 +47,8 @@
     </td>
 </tr>
     {% endfor %}
+    </form>
+    <form id="delete_form" action="{{ url_for('championships_page') }} " method = "post">
     <tr id=chform>
 
 				<td><input class="add" Value="Delete" name="delete" type="submit" form="delete_form"></td></form>

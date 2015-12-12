@@ -138,7 +138,7 @@ def search_championship(cursor,championship1):
                                """
             cursor.execute(query,('%'+championship1+'%','%'+championship1+'%'))
             res = cursor.fetchall()
-            print(res)
+            ##print(res)
         except dbapi2.Error as e:
             print(e.pgerror)
         finally:
@@ -172,16 +172,16 @@ def championship_update_page(championship_id):
                          request.form['number_of_teams'],
                          request.form['reward'])
 
-        update_championship(cursor, request.form['championship_id'], championship1)
-        connection.commit()
+            update_championship(cursor, request.form['championship_id'], championship1)
+            connection.commit()
+
     return redirect(url_for('championships_page'))
 @app.route('/countries',methods=['GET', 'POST'])
 def countries_page():
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
-
+    now = datetime.datetime.now()
     if request.method == 'GET':
-        now = datetime.datetime.now()
         query = "SELECT DISTINCT ON(COUNTRY_NAME)COUNTRY_ID,COUNTRY_NAME,COUNTRY_CURLER,COUNTRY_CLUB,COUNTRY_TOURNAMENT FROM COUNTRIES"
         cursor.execute(query)
 
@@ -198,8 +198,33 @@ def countries_page():
                 delete_country(cursor, int(line[9:]))
                 connection.commit()
         return redirect(url_for('countries_page'))
-
-
+    elif "search" in request.form:
+            print(request.form['search_name'])
+            result=search_country(cursor, request.form['search_name'])
+            return render_template('Country_search.html', countries = result, current_time=now.ctime())
+def search_country(cursor,country):
+    res = ()
+    connection = dbapi2.connect(app.config['dsn'])
+    try:
+        cursor = connection.cursor()
+        try:
+            print(0)
+            print(country)
+            query = """SELECT*
+            FROM COUNTRIES WHERE(COUNTRY_NAME LIKE %s)"""
+            cursor.execute(query,('%'+country+'%',))
+            res = cursor.fetchall()
+        except dbapi2.Error as e:
+            print(e.pgerror)
+        finally:
+            cursor.close()
+    except dbapi2.Error as e:
+        print(e.pgerror)
+        connection.rollback()
+    finally:
+        connection.close()
+        print(res)
+        return res
 @app.route('/fixture', methods=['GET', 'POST'])
 def fixture_page():
     return get_fixture_page(app)

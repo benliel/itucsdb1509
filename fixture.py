@@ -26,15 +26,34 @@ def init_fixture_db(cursor):
         TEAM2 INTEGER NOT NULL REFERENCES CLUBS(ID) ON DELETE CASCADE ON UPDATE CASCADE,
         DATE DATE NOT NULL,
         TIME TIME NOT NULL,
-        LOCATION VARCHAR(80),
+        LOCATION INTEGER NOT NULL REFERENCES COUNTRIES(COUNTRY_ID) ON DELETE CASCADE ON UPDATE CASCADE,
         PRIMARY KEY (ID)
         )""")
 
 def add_match(app, request, match):
+    if(match.team1 == match.team2):
+        return
+    if(match.team1>match.team2):
+        temp = match.team1
+        match.team1=match.team2
+        match.team2=temp
     connection = dbapi2.connect(app.config['dsn'])
     try:
         cursor = connection.cursor()
         try:
+            cursor = connection.cursor()
+            cursor.execute("""
+            SELECT * FROM FIXTURE,CLUBS AS T1,CLUBS AS T2
+            WHERE(
+                (%s=TEAM1 OR %s=TEAM2 OR %s=TEAM1 OR %s=TEAM2) AND
+                to_date(%s, 'YYYY-MM-DD')=DATE AND
+                to_timestamp(%s, 'HH24:MI')=to_timestamp(to_char(TIME, 'HH24:MI'), 'HH24:MI')
+            );""", (match.team1, match.team1, match.team2, match.team2,
+                    match.date, match.time))
+            checkingMatch = cursor.fetchone()
+            if(checkingMatch!=None):
+                return
+            cursor.close()
             cursor = connection.cursor()
             cursor.execute("""
             INSERT INTO FIXTURE
@@ -43,13 +62,13 @@ def add_match(app, request, match):
             %s,
             to_date(%s, 'YYYY-MM-DD'),
             to_timestamp(%s, 'HH24:MI'),
-            INITCAP(%s)
+            %s
             )""", (match.team1, match.team2,
                    match.date,match.time,
                    match.location))
 
-        except:
-            cursor.rollback()
+        except dbapi2.Error as e:
+            print(e.pgerror)
         finally:
             cursor.close()
     except:
@@ -70,14 +89,13 @@ def update_match(app, id, match):
             TEAM2=%s,
             DATE=to_date(%s, 'YYYY-MM-DD'),
             TIME=to_timestamp(%s, 'HH24:MI'),
-            LOCATION=INITCAP(%s)
+            LOCATION=%s
             WHERE ID=%s
             """, (match.team1, match.team2,
                   match.date, match.time,
                   match.location, id))
-            print("done")
-        except:
-            cursor.rollback()
+        except dbapi2.Error as e:
+            print(e.pgerror)
         finally:
             cursor.close()
     except:
@@ -94,8 +112,8 @@ def delete_match(app, id):
         cursor = connection.cursor()
         try:
             cursor.execute('DELETE FROM FIXTURE WHERE ID = %s', (id,))
-        except:
-            cursor.rollback()
+        except dbapi2.Error as e:
+            print(e.pgerror)
         finally:
             cursor.close()
     except:
@@ -111,16 +129,15 @@ def get_match(app, match_id):
         cursor = connection.cursor()
         try:
             cursor.execute('''
-            SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, F.LOCATION
-            FROM FIXTURE AS F,CLUBS AS T1, CLUBS AS T2
+            SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, C.COUNTRY_NAME
+            FROM FIXTURE AS F,CLUBS AS T1, CLUBS AS T2, COUNTRIES AS C
             WHERE (
-                F.ID=%s AND T1.ID=F.TEAM1 AND T2.ID=F.TEAM2
+                F.ID=%s AND T1.ID=F.TEAM1 AND T2.ID=F.TEAM2 AND F.LOCATION=C.COUNTRY_ID
                 )
             ''', match_id);
             match = cursor.fetchone()
         except dbapi2.Error as e:
             print(e.pgerror)
-            cursor.rollback()
         finally:
             cursor.close()
     except dbapi2.Error as e:
@@ -132,21 +149,21 @@ def get_match(app, match_id):
 
 
 def search_match(app, name):
-    matches = None
+    matches = ()
     connection = dbapi2.connect(app.config['dsn'])
     try:
         cursor = connection.cursor()
         try:
             cursor.execute("""
-            SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, F.LOCATION
-            FROM FIXTURE AS F,CLUBS AS T1, CLUBS AS T2
+            SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, C.COUNTRY_NAME
+            FROM FIXTURE AS F,CLUBS AS T1, CLUBS AS T2, COUNTRIES AS C
             WHERE (
-                T1.ID=F.TEAM1 AND T2.ID=F.TEAM2 AND
+                T1.ID=F.TEAM1 AND T2.ID=F.TEAM2 AND F.LOCATION=C.COUNTRY_ID AND
                 (UPPER(T1.NAME)=UPPER(%s) OR UPPER(T2.NAME)=UPPER(%s)))
             ORDER BY DATE DESC, TIME """, (name, name))
             matches = cursor.fetchall()
-        except:
-            cursor.rollback()
+        except dbapi2.Error as e:
+            print(e.pgerror)
         finally:
             cursor.close()
     except:
@@ -156,22 +173,24 @@ def search_match(app, name):
         return matches
 
 def get_all_matches(app):
+    matches = ()
     connection = dbapi2.connect(app.config['dsn'])
     try:
         cursor=connection.cursor()
         try:
             cursor.execute('''
-            SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, F.LOCATION
-            FROM FIXTURE AS F, CLUBS AS T1, CLUBS AS T2
-            WHERE(F.TEAM1=T1.ID AND F.TEAM2=T2.ID)
+            SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, C.COUNTRY_NAME
+            FROM FIXTURE AS F, CLUBS AS T1, CLUBS AS T2, COUNTRIES AS C
+            WHERE(F.TEAM1=T1.ID AND F.TEAM2=T2.ID AND F.LOCATION=C.COUNTRY_ID)
             ORDER BY DATE DESC, TIME
             ''')
             matches = cursor.fetchall()
-        except:
-            cursor.rollback()
+        except dbapi2.Error as e:
+            print(e.pgerror)
         finally:
             cursor.close()
-    except:
+    except dbapi2.Error as e:
+        print(e.pgerror)
         connection.rollback()
     finally:
         connection.close()
@@ -184,8 +203,25 @@ def get_club_names(app):
         try:
             cursor.execute('SELECT ID,NAME FROM CLUBS')
             clubs = cursor.fetchall()
-        except:
-            cursor.rollback()
+        except dbapi2.Error as e:
+            print(e.pgerror)
+        finally:
+            cursor.close()
+    except:
+        connection.rollback()
+    finally:
+        connection.close()
+        return clubs
+
+def get_country_names(app):
+    connection=dbapi2.connect(app.config['dsn'])
+    try:
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES')
+            clubs = cursor.fetchall()
+        except dbapi2.Error as e:
+            print(e.pgerror)
         finally:
             cursor.close()
     except:
@@ -199,9 +235,11 @@ def get_fixture_page(app):
         now = datetime.datetime.now()
         matches = get_all_matches(app)
         clubs = get_club_names(app)
+        countries = get_country_names(app)
 
-        return render_template('fixture.html', matches = matches,
-                               clubs=clubs, current_time=now.ctime())
+        return render_template('fixture.html', matches=matches,
+                               clubs=clubs, countries=countries,
+                               current_time=now.ctime())
     elif 'add' in request.form:
         match = Match(request.form['team1'],
                      request.form['team2'],
@@ -226,7 +264,9 @@ def get_fixture_edit_page(app, match_id):
         now = datetime.datetime.now()
         match = get_match(app, match_id)
         clubs = get_club_names(app)
-        return render_template('fixture_edit_page.html', current_time=now.ctime(), match=match, clubs=clubs)
+        countries = get_country_names(app)
+        return render_template('fixture_edit_page.html', current_time=now.ctime(),
+                               match=match, clubs=clubs, countries = countries)
 
     if request.method == 'POST':
         match = Match(request.form['team1'],

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="{{ url_for('static', filename='fixture.css') }}" />
+	{% extends "layout.html"%}
+	<meta charset="utf-8" />
+	{% block title %}Edit Stadium{% endblock %}
+</head>
+	{% block content %}
+	<h2>Edit Stadium</h2>
+	<table id="fixtureUpdate"><tr>
+		<form id ="update" action="{{url_for('stadiums_edit_page', stadium_id=stadium[0])}}" method="POST">
+			<input type="hidden" value="{{stadium[0]}}" name="id" readonly="readonly"/>
+			<td><input id="fixtureUpdate" form="update" type="text" value="{{stadium[1]}}" name="name" required="required"></td>
+			<td>
+			<select id="fixtureUpdate" form="update" name="location" required="required">
+				{% for country in countries%}
+					<option value="{{country[0]}}" {% if (stadium[2]==country[1]) %}selected="selected"{%endif%}>{{country[1]}}</option>
+				{% endfor %}
+			</select>
+			</td>
+			<td><input id="fixtureUpdate" form="update" type="number" value="{{stadium[3]}}" name="capacity" required="required"></td>
+			<td><input id="fixtureUpdate" form="update" type="number" value="{{stadium[4]}}" name="ticket_cost" required="required"></td>
+
+			<td><input id="fixtureUpdate" form="update" type="submit" value="Update Stadium" name="update"></td>
+		</tr></form>
+	</table>
+
+
+
+
+
+	{% endblock %}
+</html>

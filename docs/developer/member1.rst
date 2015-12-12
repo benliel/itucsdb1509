@@ -1,49 +1,49 @@
 Parts Implemented by Sercan Bayındır
 ====================================
-"Fixture Table" and "Stadiums Table" is owned by me.
+"Fixture Table" and "Stadiums Table" are owned by me.
 
 Fixture Table
    Columns:
-     ID SERIAL,
+      id serial,
 
-     TEAM1 INTEGER NOT NULL REFERENCES CLUBS(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+      team1 integer not null references clubs(id) on delete cascade on update cascade,
 
-     TEAM2 INTEGER NOT NULL REFERENCES CLUBS(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+      team2 integer not null references clubs(id) on delete cascade on update cascade,
 
-     DATE DATE NOT NULL,
+      date date not null,
 
-     TIME TIME NOT NULL,
+      time time not null,
 
-     LOCATION INTEGER NOT NULL REFERENCES STADIUMS(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+      location integer not null references stadiums(id) on delete cascade on update cascade,
 
    Constraints:
-     PRIMARY KEY (ID),
+     PRIMARY KEY (id),
 
-     UNIQUE(DATE,TIME,LOCATION)
+     UNIQUE(date, time, location)
 
 Stadiums Table
    Columns:
-      ID SERIAL NOT NULL,
+      id serial not null,
 
-      NAME VARCHAR(80) NOT NULL,
+      name vachar(80) not null,
 
-      LOCATION INTEGER NOT NULL REFERENCES COUNTRIES(COUNTRY_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+      location integer not null references countries(country_id) on delete cascade on update cascade,
 
-      CAPACITY INTEGER DEFAULT -1,
+      capacity integer default -1,
 
-      COST INTEGER DEFAULT -1,
+      cost integer default -1,
 
    Constraints:
-      PRIMARY KEY(ID),
+      PRIMARY KEY(id),
 
-      CHECK(COST>=-1),
+      CHECK(cost>=-1),
 
-      CHECK(CAPACITY>=-1),
+      CHECK(capacity>=-1),
 
-      UNIQUE(NAME,LOCATION)
+      UNIQUE(name,location)
 
 
-"Stadium" and "Match" classes has been owned by me.
+"Stadium" and "Match" classes are owned by me.
 
 .. code-block:: Pyhton
    class Match:

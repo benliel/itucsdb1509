@@ -27,7 +27,8 @@ def init_fixture_db(cursor):
         DATE DATE NOT NULL,
         TIME TIME NOT NULL,
         LOCATION INTEGER NOT NULL REFERENCES STADIUMS(ID) ON DELETE CASCADE ON UPDATE CASCADE,
-        PRIMARY KEY (ID)
+        PRIMARY KEY (ID),
+        UNIQUE(DATE,TIME,LOCATION)
         )""")
 
 def add_match(app, request, match):

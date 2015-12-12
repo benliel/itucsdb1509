@@ -24,14 +24,14 @@
 		<td id=curlers>Team</td>
 		<td id=curlers>Nationality</td>
 	</tr>
-	{% for id, curler_name, curler_surname, birth_date, teamid, country, name in curlers %}
+	{% for id, curler_name, curler_surname, birth_date, teamid, birth_place_id, name, country_name in curlers %}
 	<tr id=curlers>
             <td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
             <td id=curlers>{{curler_name}}</td>
             <td id=curlers>{{curler_surname}}</td>
             <td id=curlers>{{birth_date}}</td>
             <td id=curlers>{{name}}</td>
-            <td id=curlers>{{country}}</td>
+            <td id=curlers>{{country_name}}</td>
             <td>
                 <a href="{{ url_for('curlers_update_page',curler_id = id) }}">Update</a>
             </td>
@@ -51,7 +51,13 @@
                     {% endfor %}
                 </select>
             </td>
-            <td id=fixture_form><input form ="add" id="curlers" type="text" placeholder="Nationality" name="nationality"></td>
+            <td id="curlers_form">
+                <select form="add" id=curlers name="birth_place">
+                    {% for country_id, country_name in countries %}
+                        <option id=curlers type="text" placeholder = "Birth Place" value="{{country_id}}">{{country_name}}</option>
+                    {% endfor %}
+                </select>
+            </td>
         </tr>
         <tr id=curlers>
             <td colspan="7" id=curler_form_add>

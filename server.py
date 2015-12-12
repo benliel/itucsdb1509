@@ -16,6 +16,7 @@ from championship import *
 from clubs import *
 from curlers import *
 from countries import *
+from federations import *
 
 app = Flask(__name__)
 
@@ -47,6 +48,7 @@ def initialize_database():
             DROP TABLE IF EXISTS CHAMPIONSHIP CASCADE;
             DROP TABLE IF EXISTS CURLERS CASCADE;
             DROP TABLE IF EXISTS COUNTRIES CASCADE;
+            DROP TABLE IF EXISTS FEDERATIONS CASCADE;
             ''')
             init_countries_db(cursor)
             init_clubs_db(cursor)
@@ -54,6 +56,7 @@ def initialize_database():
             init_sponsors_db(cursor)
             init_championships_db(cursor)
             init_curlers_db(cursor)
+            init_federations_db(cursor)
         except dbapi2.Error as e:
             print(e.pgerror)
         finally:
@@ -188,18 +191,21 @@ def curlers_page():
 
     if request.method == 'GET':
         now = datetime.datetime.now()
-        query = "SELECT CURLERID, CURLER_NAME, CURLER_SURNAME, BIRTH_DATE, TEAMID, COUNTRY, NAME FROM CURLERS, CLUBS WHERE (TEAMID = CLUBS.ID)"
+        query = "SELECT CURLERID, CURLER_NAME, CURLER_SURNAME, BIRTH_DATE, TEAMID, BIRTH_PLACE_ID, NAME, COUNTRY_NAME FROM CURLERS, CLUBS, COUNTRIES WHERE (TEAMID = CLUBS.ID AND BIRTH_PLACE_ID = COUNTRIES.COUNTRY_ID)"
         cursor.execute(query)
         curler = cursor.fetchall()
         query2 = "SELECT ID, NAME FROM clubs"
         cursor.execute(query2)
-        return render_template('curlers.html', curlers = curler, clubs = cursor, current_time=now.ctime())
+        _clubs = cursor.fetchall()
+        query3 = "SELECT * FROM COUNTRIES"
+        cursor.execute(query3)
+        return render_template('curlers.html', curlers = curler, clubs = _clubs, countries = cursor, current_time=now.ctime())
     elif "add" in request.form:
         curler = Curler(request.form['name'],
                      request.form['surname'],
                      request.form['birthdate'],
                      request.form['teamid'],
-                     request.form['nationality'])
+                     request.form['birth_place'])
 
         add_curler(cursor, request, curler)
 
@@ -231,19 +237,87 @@ def curlers_update_page(curler_id):
         curl = cursor.fetchall()
         query2 = "SELECT ID, NAME FROM CLUBS"
         cursor.execute(query2)
+        teams = cursor.fetchall()
+        query3 = "SELECT COUNTRY_ID, COUNTRY_NAME FROM COUNTRIES"
+        cursor.execute(query3)
         now = datetime.datetime.now()
-        return render_template('curlers_update.html', curler = curl, clubs = cursor, current_time=now.ctime())
+        return render_template('curlers_update.html', curler = curl, clubs = teams, countries = cursor, current_time=now.ctime())
     elif request.method == 'POST':
         if "update" in request.form:
             curler = Curler(request.form['name'],
                             request.form['surname'],
                             request.form['birthdate'],
                             request.form['teamid'],
-                            request.form['nationality'])
-
+                            request.form['birth_place_id'])
             update_curler(cursor, curler, request.form['curler_id'])
             connection.commit()
             return redirect(url_for('curlers_page'))
+
+@app.route('/federations', methods=['GET', 'POST'])
+def federations_page():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        query = "SELECT FEDERATION_ID, FEDERATION_NAME, PRESIDENT_NAME, PRESIDENT_SURNAME, FOUNDING_YEAR, COUNTRY, COUNTRY_NAME FROM FEDERATIONS, COUNTRIES WHERE (COUNTRY = COUNTRY_ID)"
+        cursor.execute(query)
+        federation = cursor.fetchall()
+        query2 = "SELECT COUNTRY_ID, COUNTRY_NAME FROM COUNTRIES"
+        cursor.execute(query2)
+        _countries = cursor.fetchall()
+        return render_template('federations.html', federations = federation, countries = _countries, current_time=now.ctime())
+    elif "add" in request.form:
+        federation = Federation(
+                     request.form['federation_name'],
+                     request.form['president_name'],
+                     request.form['president_surname'],
+                     request.form['founding_year'],
+                     request.form['country_id'])
+
+        add_federation(cursor, request, federation)
+
+        connection.commit()
+        return redirect(url_for('federations_page'))
+
+    elif "delete" in request.form:
+        for line in request.form:
+            if "checkbox" in line:
+                delete_federation(cursor, line[9:])
+                connection.commit()
+        return redirect(url_for('federations_page'))
+    elif "search" in request.form:
+        now = datetime.datetime.now()
+        query = "SELECT FEDERATION_ID, FEDERATION_NAME, PRESIDENT_NAME, PRESIDENT_SURNAME, FOUNDING_YEAR, COUNTRY, COUNTRY_NAME FROM FEDERATIONS, COUNTRIES WHERE (COUNTRY = COUNTRY_ID AND (FEDERATION_NAME LIKE %s OR PRESIDENT_NAME LIKE %s OR PRESIDENT_SURNAME = %s))"
+        cursor.execute(query,(request.form['search_name'], request.form['search_name'], request.form['search_name']));
+        federation = cursor.fetchall()
+        query2 = "SELECT COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES"
+        cursor.execute(query2)
+        return render_template('federations.html', federations = federation, countries = cursor, current_time=now.ctime())
+
+@app.route('/federations/<federation_id>', methods=['GET', 'POST'])
+def federations_update_page(federation_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        query = "SELECT * FROM FEDERATIONS WHERE (FEDERATION_ID = %s)"
+        cursor.execute(query, federation_id)
+        fed = cursor.fetchall()
+        query2 = "SELECT COUNTRY_ID, COUNTRY_NAME FROM COUNTRIES"
+        cursor.execute(query2)
+        now = datetime.datetime.now()
+        return render_template('federations_update.html', federation = fed, countries = cursor, current_time=now.ctime())
+    elif request.method == 'POST':
+        if "update" in request.form:
+            federation = Federation(request.form['federation_name'],
+                            request.form['president_name'],
+                            request.form['president_surname'],
+                            request.form['founding_year'],
+                            request.form['country_id'])
+            update_federation(cursor, federation, request.form['federation_id'])
+            connection.commit()
+            return redirect(url_for('federations_page'))
+
 ##Sema's Part - Curling Clubs
 @app.route('/clubs', methods=['GET', 'POST'])
 def clubs_page():

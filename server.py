@@ -18,6 +18,7 @@ from curlers import *
 from countries import *
 from stadiums import *
 from federations import *
+from news import *
 
 app = Flask(__name__)
 
@@ -51,6 +52,7 @@ def initialize_database():
             DROP TABLE IF EXISTS COUNTRIES CASCADE;
             DROP TABLE IF EXISTS STADIUMS CASCADE;
             DROP TABLE IF EXISTS FEDERATIONS CASCADE;
+            DROP TABLE IF EXISTS NEWS CASCADE;
             ''')
             init_countries_db(cursor)
             init_stadiums_db(cursor)
@@ -60,6 +62,7 @@ def initialize_database():
             init_championships_db(cursor)
             init_curlers_db(cursor)
             init_federations_db(cursor)
+            init_news_db(cursor)
         except dbapi2.Error as e:
             print(e.pgerror)
         finally:
@@ -196,6 +199,7 @@ def stadiums_page():
 def stadiums_edit_page(stadium_id=0):
     return get_stadiums_edit_page(app, stadium_id);
 
+#region ilkan engin 150120137
 @app.route('/curlers', methods=['GET', 'POST'])
 def curlers_page():
     connection = dbapi2.connect(app.config['dsn'])
@@ -328,7 +332,37 @@ def federations_update_page(federation_id):
                             request.form['country_id'])
             update_federation(cursor, federation, request.form['federation_id'])
             connection.commit()
-            return redirect(url_for('federations_page'))
+        return redirect(url_for('federations_page'))
+
+@app.route('/news',methods=['GET','POST'])
+def news_page():
+    connection=dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        query = "SELECT NEWS_ID, NEWS_HEADER, NEWS_DESCRIPTION,DATE, CLUBS.ID, CLUBS.NAME, CLUBS.CHAIR, CURLERS.CURLERID, CURLERS.CURLER_NAME, CURLERS.CURLER_SURNAME FROM NEWS n LEFT JOIN CLUBS ON (CLUBS.ID = n.TEAM_ID) LEFT JOIN CURLERS ON (CURLERS.CURLERID = n.CURLER_ID)"
+        cursor.execute(query)
+        news = cursor.fetchall()
+        return render_template('news.html', news = news, current_time = now.ctime())
+
+@app.route('/news/<news_id>')
+def news_edit_page(news_id):
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        connection=dbapi2.connect(app.config['dsn'])
+        cursor = connection.cursor()
+        query = "SELECT * FROM NEWS WHERE (NEWS_ID = %s)"
+        cursor.execute(query, news_id)
+        news = cursor.fetchall()
+        query2 = "SELECT CURLERID, CURLER_NAME, CURLER_SURNAME FROM CURLERS"
+        cursor.execute(query2)
+        curlers = cursor.fetchall()
+        query3 = "SELECT ID, NAME FROM CLUBS"
+        cursor.execute(query3)
+        return render_template('news_edit_page.html', news = news, curlers = curlers, clubs = cursor, current_time = now.ctime())
+
+            
+#end region ilkan engin 150120137
 
 ##Sema's Part - Curling Clubs
 @app.route('/clubs', methods=['GET', 'POST'])

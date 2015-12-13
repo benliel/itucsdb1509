@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='news.css') }}" />
+	{% extends "layout.html"%}
+	{% block title %}News{% endblock %}
+</head>
+{% block content %}
+    <h2>News</h2>
+    <table id="news">
+        <form id="search" action="{{ url_for('news_page')}}" method ="post">
+            <tr id=news>
+                <td align="right" id=news_header ><input form ="search"  type="text" name="search_name" placeholder="Search.." required="required"></td>
+                <td align="right" id=news_header ><input Value="Search" name="search" type="submit" form="search"></td>
+            </tr>
+        </form>
+
+        {% for news_id, news_header, news_description, date, team_id, name, chair, curler_id, curler_name, curler_surname in news %}
+        <tr id=news>
+            <td id=news_header >{{news_header}}</td>
+            <td id=news_header align="right">{{date}}</td>
+            <td id=news_header align="right">
+                <a href="{{ url_for('news_edit_page',news_id = news_id) }}">Edit</a>
+            </td>
+        </tr>
+        <tr id=news>
+            <td id=news_body >{{news_description}}</td>
+        </tr>
+        <tr id=news>
+            <td id=news_footer >{{curler_name}}</td>
+            <td id=news_footer >{{curler_surname}}</td>
+            <td id=news_footer >{{name}}</td>
+            <td id=news_footer >{{chair}}</td>
+        </tr>
+    </table>
+    {% endfor %}
+{% endblock %}
+</html>

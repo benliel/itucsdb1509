@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='news.css') }}" />
+	{% extends "layout.html"%}
+	{% block title %}News - Edit{% endblock %}
+</head>
+{% block content %}
+    <table id=news_update>
+        {% for news_id, news_header, news_description, date, team_id ,curler_id in news %}
+            <form id=news_update action="{{ url_for('federations_update_page',federation_id='0') }}" method = "post">
+                <tr id=news_update>
+                    <td id=news_update><input value="{{news_header}}" form ="update" id="news_update" type="text" placeholder="Header" name="news_header" required="required"></td>
+                </tr>
+                <tr>
+                    <td id=news_update><input value="{{news_description}}" form ="update" id="news_update" type="text" placeholder="Description" name="news_description"></td>
+                </tr>
+                <tr>
+                    <td id=news_update>
+                        <select form="update" id=federations name="country">
+                            <option value="">Related Curler</option>
+                            {% for curlerid, curler_name in curlers %}
+                                <option id=federations type="text" value="{{country_id}}">{{country_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td id=news_update>
+                        <select form="update" id=federations name="country">
+                            <option value="">Related Club</option>
+                            {% for id, name in clubs %}
+                                <option id=federations type="text" value="{{id}}">{{name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                    
+                </tr>
+                <input form="update" type="hidden" name="federation_id" value="{{federation_id}}">
+                <tr id=update>
+                    <td colspan="7" id=federations_form_add>
+                        <input form=update id="federations_form_add" value="Update Federation" name="update" type="submit">
+                    </td>
+                </tr>
+            </form>
+        {% endfor %}
+    </table>
+{% endblock %}
+</html>

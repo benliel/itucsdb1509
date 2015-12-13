@@ -5,7 +5,7 @@ class Federation:
         self.president_surname = president_surname
         self.founding_year = founding_year
         self.country_id = country_id
-
+        
 def init_federations_db(cursor):
     query = """CREATE TABLE IF NOT EXISTS FEDERATIONS (
             FEDERATION_ID SERIAL,
@@ -34,6 +34,6 @@ def delete_federation(cursor, id):
     cursor.execute(query, (id))
 
 def update_federation(cursor,federation,id):
-    query="""UPDATE FEDERATIONS SET FEDERATION_NAME=%2,PRESIDENT_NAME=%s,PRESIDENT_SURNAME=%s,FOUNDING_YEAR=%s,COUNTRY=%s WHERE(FEDERATION_ID=%s)"""
+    query="""UPDATE FEDERATIONS SET FEDERATION_NAME=%s,PRESIDENT_NAME=%s,PRESIDENT_SURNAME=%s,FOUNDING_YEAR=%s,COUNTRY=%s WHERE(FEDERATION_ID=%s)"""
     cursor.execute(query, (federation.federation_name,federation.president_name,federation.president_surname,federation.founding_year,
                    federation.country_id,id))

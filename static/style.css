@@ -62,6 +62,7 @@ input#championship_form{
 input#championship_form_button{
 	width: 30%;
 }
+
 .add {
   background: #23a2f7;
   background-image: -webkit-linear-gradient(top, #23a2f7, #0fa3ff);

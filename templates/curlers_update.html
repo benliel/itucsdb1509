@@ -10,7 +10,7 @@
     <h2>Curler</h2>
     <table id=curlers_update>
         {% for curlerid, curler_name, curler_surname, birthday, teamid, country in curler %}
-            <form id=update action="{{ url_for('curlers_update_page',curler_id='0') }}" method = "post">
+        <form id=update name="update" action="{{ url_for('curlers_update_page',curler_id='0') }}" method = "post">
                 <tr id=update>
                     <td id=update><input value="{{curler_name}}" form ="update" id="curlers" type="text" placeholder="Name" name="name" required="required"></td>
                     <td id=update><input value="{{curler_surname}}" form ="update" id="curlers" type="text" placeholder="Surname" name="surname" required="required"></td>

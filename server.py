@@ -18,6 +18,7 @@ from curlers import *
 from countries import *
 from stadiums import *
 from federations import *
+from money_balance import *
 
 app = Flask(__name__)
 
@@ -60,6 +61,7 @@ def initialize_database():
             init_championships_db(cursor)
             init_curlers_db(cursor)
             init_federations_db(cursor)
+            init_money_balances_db(cursor)
         except dbapi2.Error as e:
             print(e.pgerror)
         finally:
@@ -330,38 +332,22 @@ def federations_update_page(federation_id):
             connection.commit()
             return redirect(url_for('federations_page'))
 
-##Sema's Part - Curling Clubs
+#Sema's Part - Curling Clubs
 @app.route('/clubs', methods=['GET', 'POST'])
 def clubs_page():
-    connection = dbapi2.connect(app.config['dsn'])
-    cursor = connection.cursor()
+    return get_clubs_page(app)
 
-    if request.method == 'GET':
-        now = datetime.datetime.now()
-        query = "SELECT * FROM CLUBS"
-        cursor.execute(query)
+@app.route('/clubs/edit/<club_id>',methods=['GET','POST'])
+def clubs_edit_page(club_id=0):
+    return get_clubs_edit_page(app,club_id);
 
-        return render_template('clubs.html', clubs = cursor, current_time=now.ctime())
-    elif "add" in request.form:
-        club = Clubs(request.form['name'],
-                     request.form['place'],
-                     request.form['year'],
-                     request.form['chair'],
-                     request.form['number_of_members'],
-                     request.form['rewardnumber'])
+@app.route('/clubs_money_balances', methods=['GET', 'POST'])
+def money_balances_page():
+    return get_money_balances_page(app)
 
-        add_club(cursor, request, club)
-
-        connection.commit()
-        return redirect(url_for('clubs_page'))
-    elif "delete" in request.form:
-        for line in request.form:
-            if "checkbox" in line:
-                delete_club(cursor, int(line[9:]))
-                connection.commit()
-
-        return redirect(url_for('clubs_page'))
-
+@app.route('/clubs_money_balances/edit/<money_balance_id>',methods=['GET','POST'])
+def money_balances_edit_page(money_balance_id=0):
+    return get_money_balances_edit_page(app,money_balance_id);
 
 ##Sponsorships arrangements by Muhammed Aziz Ulak
 @app.route('/sponsors', methods=['GET', 'POST'])

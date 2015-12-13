@@ -158,14 +158,9 @@ def championship_update_page(championship_id):
     cursor = connection.cursor()
     if request.method == 'GET':
         query = """SELECT * FROM CHAMPIONSHIP WHERE (ID = %s)"""
-        now = datetime.datetime.now()
         cursor.execute(query,championship_id)
-        championship=cursor.fetchall()
-        cursor.close()
-        cursor = connection.cursor()
-        cursor.execute("SELECT COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES")
-        countries=cursor.fetchall()
-        return render_template('championship_update.html', championship = championship,countries=countries, current_time=now.ctime())
+        now = datetime.datetime.now()
+        return render_template('championship_update.html', championship = cursor, current_time=now.ctime())
     elif request.method == 'POST':
         if "update" in request.form:
             championship1 = Championships(request.form['name'],
@@ -175,9 +170,8 @@ def championship_update_page(championship_id):
                          request.form['number_of_teams'],
                          request.form['reward'])
 
-            update_championship(cursor, request.form['championship_id'], championship1)
-            connection.commit()
-
+        update_championship(cursor, request.form['championship_id'], championship1)
+        connection.commit()
     return redirect(url_for('championships_page'))
 @app.route('/countries',methods=['GET', 'POST'])
 def countries_page():

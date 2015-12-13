@@ -12,18 +12,14 @@
             <form id=update action="{{ url_for('championship_update_page',championship_id='0') }}" method = "post">
                 <tr id=update>
                     <td id=update><input size="7" value="{{name}}" form ="update" id="championships" type="text" placeholder="Name" name="name"> </td>
-                   <td> <select form="update" id=federations name="country">
-                            {% for country_id, country_name in countries %}
-                                <option id=federations type="text" placeholder = "Country" value="{{country_id}}">{{country_name}}</option>
-                            {% endfor %}
-                        </select> </td>
+                    <td id=update><input size="7" value="{{place}}" form ="update" id="championships" type="text" placeholder="Place" name="place"></td>
                     <td id=update><input size="7" value="{{date}}" form ="update" id="championships" type="date" placeholder="(dd/MM/yyyy)" name="date"></td>
                     <td id=update><input size="7" value="{{type}}" form ="update" id="championships" type="text" placeholder = "Type" name="type"></td>
                     <td id=update><input size="7" value="{{teamNo}}" form ="update" id="championships" type="number" placeholder="Team Size" name="number_of_teams"></td>
                     <td id=update><input size="7" value="{{reward}}" form ="update" id="championships" type="text" placeholder="Reward" name="reward"></td>
 
                 </tr>
-                <input type="hidden" name="country_id" value="{{id}}">
+                <input type="hidden" name="championship_id" value="{{id}}">
                 <tr id=update>
                     <td colspan="7" id=championship_form_update>
                         <input class="add"form="update" id="championship_form_update" value="Update Championship" name="update" type="submit">

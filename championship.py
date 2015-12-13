@@ -38,11 +38,13 @@ def add_championship(cursor, request, championship1):
         cursor.execute(query, (championship1.name, championship1.place, championship1.date,
                                 championship1.type, championship1.teamNo,championship1.reward))
 
-
+        cursor.execute("""UPDATE COUNTRIES
+        SET COUNTRY_TOURNAMENT=COUNTRY_TOURNAMENT+1 WHERE (COUNTRY_ID=%s)""",(championship1.place))
 
 def delete_championship(cursor, id):
         query="""DELETE FROM CHAMPIONSHIP WHERE ID = %s"""
         cursor.execute(query, (int(id),))
+
 
 def update_championship(cursor, id, championship1):
             query="""

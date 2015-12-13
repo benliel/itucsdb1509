@@ -29,10 +29,11 @@ def add_curler(cursor, request, curler):
     )"""
     cursor.execute(query, (curler.curler_name, curler.curler_surname, curler.birthdate,
                            curler.teamid, curler.country))
-
+    
 def delete_curler(cursor, id):
     query="""DELETE FROM CURLERS WHERE CURLERID = %s"""
     cursor.execute(query, (int(id),))
+
 
 def update_curler(cursor,curler,id):
     query="""UPDATE CURLERS SET CURLER_NAME=%s,CURLER_SURNAME=%s,BIRTH_DATE=%s,TEAMID=%s,COUNTRY=%s WHERE(CURLERID=%s)"""

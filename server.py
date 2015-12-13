@@ -18,6 +18,11 @@ from curlers import *
 from countries import *
 from stadiums import *
 from coach import *
+from federations import *
+from money_balance import *
+from penalty import *
+from equipments import *
+from points import *
 
 app = Flask(__name__)
 
@@ -51,6 +56,11 @@ def initialize_database():
             DROP TABLE IF EXISTS COUNTRIES CASCADE;
             DROP TABLE IF EXISTS STADIUMS CASCADE;
             DROP TABLE IF EXISTS COACHES CASCADE;
+            DROP TABLE IF EXISTS FEDERATIONS CASCADE;
+            DROP TABLE IF EXISTS PENALTY CASCADE;
+            DROP TABLE IF EXISTS EQUIPMENTS CASCADE;
+            DROP TABLE IF EXISTS POINTS CASCADE;
+            DROP TABLE IF EXISTS MONEY_BALANCE CASCADE;
             ''')
             init_countries_db(cursor)
             init_stadiums_db(cursor)
@@ -60,6 +70,12 @@ def initialize_database():
             init_championships_db(cursor)
             init_curlers_db(cursor)
             init_coach_db(cursor)
+            init_federations_db(cursor)
+            init_money_balances_db(cursor)
+            init_penalty_db(cursor)
+            init_equipments_db(cursor)
+            init_points_db(cursor)
+
         except dbapi2.Error as e:
             print(e.pgerror)
         finally:
@@ -353,9 +369,18 @@ def coach_update_page(coach_id):
 @app.route('/fixture', methods=['GET', 'POST'])
 def fixture_page():
     return get_fixture_page(app)
+@app.route('/fixture/<stadium_id>')
+def fixture_filter_page(stadium_id):
+    return get_fixture_filter_page(app, stadium_id)
 @app.route('/fixture/edit/<match_id>', methods=['GET', 'POST'])
 def fixture_edit_page(match_id=0):
     return get_fixture_edit_page(app, match_id);
+@app.route('/points', methods=['GET', 'POST'])
+def points_page():
+    return get_points_page(app)
+@app.route('/points/edit/<points_id>', methods=['GET', 'POST'])
+def points_edit_page(points_id=0):
+    return get_points_edit_page(app, points_id)
 @app.route('/stadiums', methods=['GET', 'POST'])
 def stadiums_page():
     return get_stadiums_page(app)
@@ -370,18 +395,21 @@ def curlers_page():
 
     if request.method == 'GET':
         now = datetime.datetime.now()
-        query = "SELECT CURLERID, CURLER_NAME, CURLER_SURNAME, BIRTH_DATE, TEAMID, COUNTRY, NAME FROM CURLERS, CLUBS WHERE (TEAMID = CLUBS.ID)"
+        query = "SELECT CURLERID, CURLER_NAME, CURLER_SURNAME, BIRTH_DATE, TEAMID, BIRTH_PLACE_ID, NAME, COUNTRY_NAME FROM CURLERS, CLUBS, COUNTRIES WHERE (TEAMID = CLUBS.ID AND BIRTH_PLACE_ID = COUNTRIES.COUNTRY_ID)"
         cursor.execute(query)
         curler = cursor.fetchall()
         query2 = "SELECT ID, NAME FROM clubs"
         cursor.execute(query2)
-        return render_template('curlers.html', curlers = curler, clubs = cursor, current_time=now.ctime())
+        _clubs = cursor.fetchall()
+        query3 = "SELECT * FROM COUNTRIES"
+        cursor.execute(query3)
+        return render_template('curlers.html', curlers = curler, clubs = _clubs, countries = cursor, current_time=now.ctime())
     elif "add" in request.form:
         curler = Curler(request.form['name'],
                      request.form['surname'],
                      request.form['birthdate'],
                      request.form['teamid'],
-                     request.form['nationality'])
+                     request.form['birth_place'])
 
         add_curler(cursor, request, curler)
 
@@ -413,51 +441,103 @@ def curlers_update_page(curler_id):
         curl = cursor.fetchall()
         query2 = "SELECT ID, NAME FROM CLUBS"
         cursor.execute(query2)
+        teams = cursor.fetchall()
+        query3 = "SELECT COUNTRY_ID, COUNTRY_NAME FROM COUNTRIES"
+        cursor.execute(query3)
         now = datetime.datetime.now()
-        return render_template('curlers_update.html', curler = curl, clubs = cursor, current_time=now.ctime())
+        return render_template('curlers_update.html', curler = curl, clubs = teams, countries = cursor, current_time=now.ctime())
     elif request.method == 'POST':
         if "update" in request.form:
             curler = Curler(request.form['name'],
                             request.form['surname'],
                             request.form['birthdate'],
                             request.form['teamid'],
-                            request.form['nationality'])
-
+                            request.form['birth_place_id'])
             update_curler(cursor, curler, request.form['curler_id'])
             connection.commit()
             return redirect(url_for('curlers_page'))
-##Sema's Part - Curling Clubs
-@app.route('/clubs', methods=['GET', 'POST'])
-def clubs_page():
+
+@app.route('/federations', methods=['GET', 'POST'])
+def federations_page():
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
 
     if request.method == 'GET':
         now = datetime.datetime.now()
-        query = "SELECT * FROM CLUBS"
+        query = "SELECT FEDERATION_ID, FEDERATION_NAME, PRESIDENT_NAME, PRESIDENT_SURNAME, FOUNDING_YEAR, COUNTRY, COUNTRY_NAME FROM FEDERATIONS, COUNTRIES WHERE (COUNTRY = COUNTRY_ID)"
         cursor.execute(query)
-
-        return render_template('clubs.html', clubs = cursor, current_time=now.ctime())
+        federation = cursor.fetchall()
+        query2 = "SELECT COUNTRY_ID, COUNTRY_NAME FROM COUNTRIES"
+        cursor.execute(query2)
+        _countries = cursor.fetchall()
+        return render_template('federations.html', federations = federation, countries = _countries, current_time=now.ctime())
     elif "add" in request.form:
-        club = Clubs(request.form['name'],
-                     request.form['place'],
-                     request.form['year'],
-                     request.form['chair'],
-                     request.form['number_of_members'],
-                     request.form['rewardnumber'])
+        federation = Federation(
+                     request.form['federation_name'],
+                     request.form['president_name'],
+                     request.form['president_surname'],
+                     request.form['founding_year'],
+                     request.form['country_id'])
 
-        add_club(cursor, request, club)
+        add_federation(cursor, request, federation)
 
         connection.commit()
-        return redirect(url_for('clubs_page'))
+        return redirect(url_for('federations_page'))
+
     elif "delete" in request.form:
         for line in request.form:
             if "checkbox" in line:
-                delete_club(cursor, int(line[9:]))
+                delete_federation(cursor, line[9:])
                 connection.commit()
+        return redirect(url_for('federations_page'))
+    elif "search" in request.form:
+        now = datetime.datetime.now()
+        query = "SELECT FEDERATION_ID, FEDERATION_NAME, PRESIDENT_NAME, PRESIDENT_SURNAME, FOUNDING_YEAR, COUNTRY, COUNTRY_NAME FROM FEDERATIONS, COUNTRIES WHERE (COUNTRY = COUNTRY_ID AND (FEDERATION_NAME LIKE %s OR PRESIDENT_NAME LIKE %s OR PRESIDENT_SURNAME = %s))"
+        cursor.execute(query,(request.form['search_name'], request.form['search_name'], request.form['search_name']));
+        federation = cursor.fetchall()
+        query2 = "SELECT COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES"
+        cursor.execute(query2)
+        return render_template('federations.html', federations = federation, countries = cursor, current_time=now.ctime())
 
-        return redirect(url_for('clubs_page'))
+@app.route('/federations/<federation_id>', methods=['GET', 'POST'])
+def federations_update_page(federation_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        query = "SELECT * FROM FEDERATIONS WHERE (FEDERATION_ID = %s)"
+        cursor.execute(query, federation_id)
+        fed = cursor.fetchall()
+        query2 = "SELECT COUNTRY_ID, COUNTRY_NAME FROM COUNTRIES"
+        cursor.execute(query2)
+        now = datetime.datetime.now()
+        return render_template('federations_update.html', federation = fed, countries = cursor, current_time=now.ctime())
+    elif request.method == 'POST':
+        if "update" in request.form:
+            federation = Federation(request.form['federation_name'],
+                            request.form['president_name'],
+                            request.form['president_surname'],
+                            request.form['founding_year'],
+                            request.form['country_id'])
+            update_federation(cursor, federation, request.form['federation_id'])
+            connection.commit()
+            return redirect(url_for('federations_page'))
 
+#Sema's Part - Curling Clubs
+@app.route('/clubs', methods=['GET', 'POST'])
+def clubs_page():
+    return get_clubs_page(app)
+
+@app.route('/clubs/edit/<club_id>',methods=['GET','POST'])
+def clubs_edit_page(club_id=0):
+    return get_clubs_edit_page(app,club_id);
+
+@app.route('/clubs_money_balances', methods=['GET', 'POST'])
+def money_balances_page():
+    return get_money_balances_page(app)
+
+@app.route('/clubs_money_balances/edit/<money_balance_id>',methods=['GET','POST'])
+def money_balances_edit_page(money_balance_id=0):
+    return get_money_balances_edit_page(app,money_balance_id);
 
 ##Sponsorships arrangements by Muhammed Aziz Ulak
 @app.route('/sponsors', methods=['GET', 'POST'])
@@ -467,6 +547,24 @@ def sponsors_page():
 @app.route('/sponsors/edit/<sponsor_id>',methods=['GET','POST'])
 def sponsors_edit_page(sponsor_id=0):
     return get_sponsors_edit_page(app,sponsor_id);
+
+##Penalty arrangements by Muhammed Aziz Ulak
+@app.route('/penalty', methods=['GET', 'POST'])
+def penalty_page():
+    return get_penalty_page(app)
+
+@app.route('/penalty/edit/<penalty_id>',methods=['GET','POST'])
+def penalty_edit_page(penalty_id=0):
+    return get_penalty_edit_page(app,penalty_id);
+
+##Equipment arrangements by Muhammed Aziz Ulak
+@app.route('/equipments', methods=['GET', 'POST'])
+def equipments_page():
+    return get_equipments_page(app)
+
+@app.route('/equipments/edit/<equipment_id>',methods=['GET','POST'])
+def equipments_edit_page(equipment_id=0):
+    return get_equipments_edit_page(app,equipment_id);
 
 
 if __name__ == '__main__':

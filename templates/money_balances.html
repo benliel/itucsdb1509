@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Money Balances of Clubs{% endblock %}
+</head>
+	{% block content %}<h2>Money Balances of Clubs</h2>
+
+	<table id=money_balance>
+	<tr>
+	<td id="money_balance" colspan="0" align="right">
+	<form id="search" action="{{url_for('money_balances_page')}}" method="POST">
+		<input form="search" type="text" placeholder="Club's Name To Search" name="money_balance_to_search" required="required">
+		<input form="search" type="submit" value="Search" name="search">
+	</form>
+	</td>
+	</tr>
+		<tr id=money_balance>
+				<td>
+		</td>{% if(clubs|length>0)%}
+				<form id="add" action="{{ url_for('money_balances_page') }} " method = "post">
+				<td id="money_balance_form">
+				<select id="money_balance_form" form="add" name="club" required="required">
+					<option disabled="disabled" selected="selected" hidden="hidden">Select a club</option>
+				{% for club in clubs%}
+					<option value="{{club[0]}}">{{club[1]}}</option>
+				{% endfor %}
+				</select>
+				<td id="money_balance_form"><input form ="add" id="money_balance" type="number" placeholder="Incomes($)" name="incomes" required="required"></td>
+				<td id="money_balance_form"><input form ="add" id="money_balance" type="number" placeholder="Expenses($)" name="expenses" required="required"></td>
+				<td id="money_balance_form"><input form ="add" id="money_balance" type="number" placeholder="Profit($)" name="profit" required="required"></td>
+		</tr>
+		<tr id=money_balance>
+				<td colspan="6" id=money_balances_form_add>
+					<input form="add" id="money_balance_form_add" value="Add Money Balance of Club" name="add" type="submit"></form>
+					</td>
+		</tr>
+		{%else%}
+		</tr>
+					<tr id="money_balance_form">
+					<td id="money_balance_form" colspan="6">You cannot add money balance of clubs, since there are no clubs added in the database!
+		</tr>
+		{%endif%}
+
+
+	</table>
+
+	<table border="1" style="width:60%">
+	{% for id, club, incomes, expenses, profit in money_balances %}
+	<tr id=money_balance>
+		<td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"> </td>
+		<td id=money_balance>{{club}}</td>
+		<td id=money_balance>{{incomes}}</td>
+		<td id=money_balance>{{expenses}}</td>
+		<td id=money_balance>{{profit}}</td>
+		<td><a href="{{url_for('money_balances_edit_page', money_balance_id=id)}}"><img alt="edit{{id}}" src="/static/edit.png" height="20px"></td>
+	</tr>
+	{% endfor %}
+
+	<form id="delete_form" action="{{ url_for('money_balances_page') }} " method = "post">
+
+		<tr id=money_balance>
+				<td colspan="6" id=money_balances_form_add>
+				<input Value="Delete" name="delete" type="submit" form="delete_form">
+					</form>
+					</td>
+			</tr>
+
+	</table>
+
+
+	{% endblock %}
+
+</html>

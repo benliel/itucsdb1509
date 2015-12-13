@@ -10,7 +10,8 @@
 
 	<table id=fixture>
 	<tr>
-	<td id="fixture" colspan="5" align="right">
+	<td id="fixture" colspan="4" align="center">Click on stadium name to see which matches are scheduled in the stadium</td>
+	<td id="fixture" colspan="1" align="right">
 	<form id="search" action="{{url_for('stadiums_page')}}" method="POST">
 		<input form="search" type="text" placeholder="Stadium name or country name to search" name="line_to_search" required="required">
 		<input form="search" type="submit" value="Search" name="search">
@@ -18,14 +19,22 @@
 	</td>
 	</tr>
 	<form id="delete_form" action="{{ url_for('stadiums_page') }} " method = "post">
+	<tr>
+	<td id=checkbox></td>
+	<td id=fixture align="center">STADIUM NAME</td>
+	<td id=fixture align="center">LOCATION</td>
+	<td id=fixture align="center">CAPACITY(people)</td>
+	<td id=fixture align="center">TICKET COST($)</td>
 
+	</tr>
 	{% for id, name, location, capacity, ticket_cost in stadiums %}
 	<tr id=fixture>
 		<td id=checkbox>
 		<input form ="delete_form" type="checkbox" name="checkbox_{{id}}">
 		<a href="{{url_for('stadiums_edit_page', stadium_id=id)}}"><img alt="edit{{id}}" src="/static/edit.png" height="20px"></a>
 		</td>
-		<td id=fixture>{{name}}</td>
+		<td id=fixture><a href={{url_for('fixture_filter_page', stadium_id=id)}}>
+		{{name}}</a></td>
 		<td id=fixture>{{location}}</td>
 		<td id=fixture>{{capacity}}</td>
 		<td id=fixture>{{ticket_cost}}</td>

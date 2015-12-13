@@ -1,10 +1,10 @@
 class Curler:
-    def __init__(self, name, surname, birthdate, teamid, country):
+    def __init__(self, name, surname, birthdate, teamid, birthplaceId):
         self.curler_name = name
         self.curler_surname = surname
         self.birthdate = birthdate
         self.teamid = teamid
-        self.country = country
+        self.birth_place_id = birthplaceId
 
 def init_curlers_db(cursor):
     query = """CREATE TABLE IF NOT EXISTS CURLERS (
@@ -12,15 +12,15 @@ def init_curlers_db(cursor):
             CURLER_NAME varchar(80) NOT NULL,
             CURLER_SURNAME varchar(80) NOT NULL,
             BIRTH_DATE varchar(20),
-            TEAMID integer REFERENCES CLUBS(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-            COUNTRY varchar(80),
+            TEAMID integer REFERENCES CLUBS(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
+            BIRTH_PLACE_ID integer REFERENCES COUNTRIES ON UPDATE CASCADE ON DELETE RESTRICT, 
             PRIMARY KEY (CURLERID)
             )"""
     cursor.execute(query)
 
 def add_curler(cursor, request, curler):
     query = """INSERT INTO CURLERS
-    (CURLER_NAME, CURLER_SURNAME, BIRTH_DATE, TEAMID, COUNTRY) VALUES (
+    (CURLER_NAME, CURLER_SURNAME, BIRTH_DATE, TEAMID, BIRTH_PLACE_ID) VALUES (
     %s,
     %s,
     %s,
@@ -28,14 +28,13 @@ def add_curler(cursor, request, curler):
     %s
     )"""
     cursor.execute(query, (curler.curler_name, curler.curler_surname, curler.birthdate,
-                           curler.teamid, curler.country))
-    
+                           curler.teamid, curler.birth_place_id))
+
 def delete_curler(cursor, id):
     query="""DELETE FROM CURLERS WHERE CURLERID = %s"""
     cursor.execute(query, (int(id),))
 
-
 def update_curler(cursor,curler,id):
-    query="""UPDATE CURLERS SET CURLER_NAME=%s,CURLER_SURNAME=%s,BIRTH_DATE=%s,TEAMID=%s,COUNTRY=%s WHERE(CURLERID=%s)"""
+    query="""UPDATE CURLERS SET CURLER_NAME=%s,CURLER_SURNAME=%s,BIRTH_DATE=%s,TEAMID=%s,BIRTH_PLACE_ID=%s WHERE(CURLERID=%s)"""
     cursor.execute(query, (curler.curler_name,curler.curler_surname,curler.birthdate,
-                   curler.teamid,curler.country,id))
+                   curler.teamid,curler.birth_place_id,id))

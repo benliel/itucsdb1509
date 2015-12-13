@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='fixture.css') }}" />
+	{% extends "layout.html"%}
+	{% block title %}Points Table{% endblock %}
+</head>
+	{% block content %}<h2>Points Table</h2>
+
+	<table id=fixture>
+	<tr>
+	<td id="fixture" colspan="5" align="right">
+	<form id="search" action="{{url_for('points_page')}}" method="POST">
+		<input form="search" type="text" placeholder="Team or championship to search" name="line_to_search" required="required">
+		<input form="search" type="submit" value="Search" name="search">
+	</form>
+	</td>
+	</tr>
+	<form id="delete_form" action="{{ url_for('points_page') }} " method = "post">
+	<tr>
+	<td id="checkbox"></td>
+	<td id="fixture" align="center">CHAMPIONSHIP</td>
+	<td id="fixture" align="center">CLUB</td>
+	<td id="fixture" align="center">POINTS</td>
+	<td id="fixture" align="center">WINS</td>
+	</tr>
+	{% for id, championship, club, points, wins in data %}
+	<tr id=fixture>
+		<td id=checkbox>
+		<input form ="delete_form" type="checkbox" name="checkbox_{{id}}">
+		<a href="{{url_for('points_edit_page', points_id=id)}}"><img alt="edit{{id}}" src="/static/edit.png" height="20px"></a>
+		</td>
+		<td id=fixture>{{championship}}</td>
+		<td id=fixture>{{club}}</td>
+		<td id=fixture>{{points}}</td>
+		<td id=fixture>{{wins}}</td>
+	</tr>
+	{% endfor %}
+		<tr id=fixture>
+				<td><input Value="Delete" name="delete" type="submit" form="delete_form"></form></td>
+				{% if(clubs|length>0 and championships|length>0)%}
+				<form id="add" action="{{ url_for('points_page') }} " method = "post">
+				<td id="fixture_form">
+				<select id="fixture_form" form="add" name="championship" required="required">
+					<option disabled="disabled" selected="selected" hidden="hidden">Select a championship</option>
+				{% for championship in championships%}
+					<option value="{{championship[0]}}">{{championship[1]}}</option>
+				{% endfor %}
+				</select>
+				<td id="fixture_form">
+				<select id="fixture_form" form="add" name="club" required="required">
+					<option disabled="disabled" selected="selected" hidden="hidden">Select a club</option>
+				{% for club in clubs%}
+					<option value="{{club[0]}}">{{club[1]}}</option>
+				{% endfor %}
+				</select>
+				</td>
+				<td id="fixture_form">
+					<input form ="add" id="fixture" type="number" min="0" placeholder="Points" name="points" required="required">
+				</td>
+				<td id="fixture_form">
+					<input form ="add" id="fixture" type="number" min="0" placeholder="Wins" name="wins" required="required">
+				</td>
+			</tr>
+			<tr id="fixture">
+				<td colspan="5" id=fixture_form_add>
+					<input form="add" id="fixture_form_add" value="Add Point Data" name="add" type="submit"></form>
+				</td>
+			</tr>
+
+					{%else%}
+					</tr>
+					<tr id="fixture_form">
+					<td id="fixture_form" colspan="5">You cannot add match, since there are no clubs/championships added in the database!
+					</tr>
+					{%endif%}
+
+
+	</table>
+
+
+
+	{% endblock %}
+</html>

@@ -31,6 +31,8 @@ def init_sponsors_db(cursor):
         BUDGET INTEGER NOT NULL,
         PRIMARY KEY (ID)
         )""")
+        fill_table(cursor)
+
 
 def add_sponsor(app, request, sponsor):
     connection = dbapi2.connect(app.config['dsn'])
@@ -231,3 +233,35 @@ def search_sponsor(app, name):
     finally:
         connection.close()
         return sponsors
+def fill_table(cursor):
+    cursor.execute("""
+
+            INSERT INTO SPONSORS
+            (NAME, SUPPORTEDTEAM, BUDGET) VALUES (
+            'SAMSUNG',
+            1,
+            200000
+            );
+
+            INSERT INTO SPONSORS
+            (NAME, SUPPORTEDTEAM, BUDGET) VALUES (
+            'HONDA',
+            2,
+            100000
+            );
+
+            INSERT INTO SPONSORS
+            (NAME, SUPPORTEDTEAM, BUDGET) VALUES (
+            'HONDA',
+            3,
+            145000
+            );
+
+            INSERT INTO SPONSORS
+            (NAME, SUPPORTEDTEAM, BUDGET) VALUES (
+            'VODAFONE',
+            3,
+            545000
+            );
+
+            """)

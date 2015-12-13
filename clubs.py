@@ -36,6 +36,3 @@ def add_club(cursor, request, club):
 def delete_club(cursor, id):
         query="""DELETE FROM CLUBS WHERE ID = %s"""
         cursor.execute(query, (int(id),))
-
-
-

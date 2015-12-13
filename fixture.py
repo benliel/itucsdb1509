@@ -157,7 +157,7 @@ def get_match(app, match_id):
             SELECT F.ID, T1.NAME, T2.NAME, F.DATE, F.TIME, S.NAME
             FROM FIXTURE AS F,CLUBS AS T1, CLUBS AS T2, STADIUMS AS S
             WHERE (
-                F.ID=%s AND T1.ID=F.TEAM1 AND T2.ID=F.TEAM2 AND F.LOCATION=S.COUNTRY_ID
+                F.ID=%s AND T1.ID=F.TEAM1 AND T2.ID=F.TEAM2 AND F.LOCATION=S.ID
                 )
             ''', match_id);
             match = cursor.fetchone()

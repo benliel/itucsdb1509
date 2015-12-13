@@ -15,39 +15,42 @@ from store import Store
 from fixture import *
 from sponsors import *
 from curlers import *
+from clubs import *
+from money_balance import *
 from psycopg2.tests import dbapi20
 
-class Sponsors:
-    def __init__(self, name, supportedteam, budget):
-        self.name = name
-        self.supportedteam = supportedteam
-        self.budget = budget
+class Money_balances:
+    def __init__(self, club, incomes, expenses, profit):
+        self.club = club
+        self.incomes = incomes
+        self.expenses = expenses
+        self.profit = profit
 
-def init_sponsors_db(cursor):
-        cursor.execute("""CREATE TABLE IF NOT EXISTS SPONSORS (
+def init_money_balances_db(cursor):
+        cursor.execute("""CREATE TABLE IF NOT EXISTS MONEY_BALANCE (
         ID SERIAL,
-        NAME VARCHAR(80) NOT NULL,
-        SUPPORTEDTEAM INTEGER NOT NULL REFERENCES CLUBS(ID) ON DELETE CASCADE ON UPDATE CASCADE,
-        BUDGET INTEGER NOT NULL,
+        CLUB INTEGER NOT NULL REFERENCES CLUBS(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+        INCOMES INTEGER NOT NULL,
+        EXPENSES INTEGER NOT NULL,
+        PROFIT INTEGER NOT NULL,
         PRIMARY KEY (ID)
         )""")
 
-
-
-def add_sponsor(app, request, sponsor):
+def add_money_balance(app, request, money_balance):
     connection = dbapi2.connect(app.config['dsn'])
     try:
         cursor = connection.cursor()
         try:
             cursor = connection.cursor()
             cursor.execute("""
-            INSERT INTO SPONSORS
-            (NAME, SUPPORTEDTEAM, BUDGET) VALUES (
+            INSERT INTO MONEY_BALANCE
+            (CLUB, INCOMES, EXPENSES, PROFIT) VALUES (
+            %s,
             %s,
             %s,
             %s
-            )""", (sponsor.name, sponsor.supportedteam,
-                   sponsor.budget))
+            )""", (money_balance.club, money_balance.incomes,
+                   money_balance.expenses, money_balance.profit))
 
         except:
             cursor.rollback()
@@ -59,12 +62,12 @@ def add_sponsor(app, request, sponsor):
         connection.commit()
         connection.close()
 
-def delete_sponsor(app, id):
+def delete_money_balance(app, id):
     connection = dbapi2.connect(app.config['dsn'])
     try:
         cursor = connection.cursor()
         try:
-            cursor.execute('DELETE FROM SPONSORS WHERE ID = %s', (id,))
+            cursor.execute('DELETE FROM MONEY_BALANCE WHERE ID = %s', (id,))
         except:
             cursor.rollback()
         finally:
@@ -76,46 +79,49 @@ def delete_sponsor(app, id):
         connection.close()
 
 
-def get_sponsors_page(app):
+def get_money_balances_page(app):
+    print(request.form)
+
     if request.method == 'GET':
         now = datetime.datetime.now()
-        sponsors = get_all_sponsors(app)
+        money_balances = get_all_money_balances(app)
         clubs = get_club_names(app)
 
-        return render_template('sponsors.html', sponsors = sponsors,
+        return render_template('money_balances.html', money_balances = money_balances,
                                clubs=clubs, current_time=now.ctime())
     elif "add" in request.form:
+        money_balance = Money_balances(request.form['club'],
+                     request.form['incomes'],
+                     request.form['expenses'],
+                     request.form['profit'])
 
-        sponsor = Sponsors(request.form['name'],
-                     request.form['supportedteam'],
-                     request.form['budget'])
-
-        add_sponsor(app, request, sponsor)
-        return redirect(url_for('sponsors_page'))
+        add_money_balance(app, request, money_balance)
+        return redirect(url_for('money_balances_page'))
     elif "delete" in request.form:
         for line in request.form:
             if "checkbox" in line:
-                delete_sponsor(app, int(line[9:]))
+                delete_money_balance(app, int(line[9:]))
 
-        return redirect(url_for('sponsors_page'))
+        return redirect(url_for('money_balances_page'))
     elif 'search' in request.form:
-        sponsors = search_sponsor(app, request.form['sponsor_to_search'])
-        return render_template('sponsors_search_page.html', sponsors = sponsors)
+        money_balances = search_money_balance(app, request.form['money_balance_to_search'])
+        return render_template('money_balance_search_page.html', money_balances = money_balances)
 
 
-def get_sponsors_edit_page(app,sponsor_id):
+def get_money_balances_edit_page(app,money_balance_id):
     if request.method == 'GET':
         now = datetime.datetime.now()
-        sponsor = get_sponsor(app, sponsor_id)
+        money_balance = get_money_balance(app, money_balance_id)
         clubs = get_club_names(app)
-        return render_template('sponsors_edit_page.html', current_time=now.ctime(), sponsor=sponsor, clubs=clubs)
+        return render_template('money_balance_edit_page.html', current_time=now.ctime(), money_balance=money_balance, clubs=clubs)
 
     if request.method == 'POST':
-        sponsor = Sponsors(request.form['name'],
-                      request.form['supportedteam'],
-                      request.form['budget'])
-        update_sponsor(app, request.form['id'], sponsor)
-        return redirect(url_for('sponsors_page'))
+        money_balance = Money_balances(request.form['club'],
+                     request.form['incomes'],
+                     request.form['expenses'],
+                     request.form['profit'])
+        update_money_balance(app, request.form['id'], money_balance)
+        return redirect(url_for('money_balances_page'))
 
 def get_club_names(app):
     clubs=None
@@ -137,20 +143,19 @@ def get_club_names(app):
         connection.close()
         return clubs
 
-def get_sponsor(app, sponsor_id):
-    sponsor=None
+def get_money_balance(app, money_balance_id):
     connection = dbapi2.connect(app.config['dsn'])
     try:
         cursor = connection.cursor()
         try:
             cursor.execute('''
-            SELECT S.ID, S.NAME, T.NAME, S.BUDGET
-            FROM SPONSORS AS S,CLUBS AS T
+            SELECT M.ID, C.NAME, M.INCOMES, M.EXPENSES, M.PROFIT
+            FROM MONEY_BALANCE AS M,CLUBS AS C
             WHERE (
-                S.ID=%s AND T.ID=S.SUPPORTEDTEAM
+                M.ID=%s AND C.ID=M.CLUB
                 )
-            ''', sponsor_id);
-            sponsor = cursor.fetchone()
+            ''', money_balance_id);
+            money_balance = cursor.fetchone()
         except dbapi2.Error as e:
             print(e.pgerror)
             cursor.rollback()
@@ -161,21 +166,22 @@ def get_sponsor(app, sponsor_id):
         connection.rollback()
     finally:
         connection.close()
-        return sponsor
+        return money_balance
 
-def update_sponsor(app, id, sponsor):
+def update_money_balance(app, id, money_balance):
     connection = dbapi2.connect(app.config['dsn'])
     try:
         cursor = connection.cursor()
         try:
             cursor.execute("""
-            UPDATE SPONSORS
-            SET NAME = %s,
-            SUPPORTEDTEAM = %s,
-            BUDGET = %s
+            UPDATE MONEY_BALANCE
+            SET CLUB = %s,
+            INCOMES = %s,
+            EXPENSES = %s,
+            PROFIT = %s
             WHERE ID= %s
-            """, (sponsor.name, sponsor.supportedteam,
-                  sponsor.budget, id))
+            """, (money_balance.club, money_balance.incomes,
+                   money_balance.expenses, money_balance.profit, id))
         except:
             cursor.rollback()
         finally:
@@ -186,42 +192,43 @@ def update_sponsor(app, id, sponsor):
         connection.commit()
         connection.close()
 
-def get_all_sponsors(app):
-    sponsors=None
+def get_all_money_balances(app):
+    money_balances=None
     connection = dbapi2.connect(app.config['dsn'])
     try:
         cursor=connection.cursor()
         try:
+
             cursor.execute('''
-            SELECT S.ID, S.NAME, T.NAME, S.BUDGET
-            FROM SPONSORS AS S, CLUBS AS T
-            WHERE(S.SUPPORTEDTEAM=T.ID)
+            SELECT M.ID, C.NAME, M.INCOMES, M.EXPENSES, M. PROFIT
+            FROM MONEY_BALANCE AS M, CLUBS AS C
+            WHERE(M.CLUB=C.ID)
             ORDER BY 1
             ''')
-            sponsors = cursor.fetchall()
+            money_balances = cursor.fetchall()
         except:
             cursor.rollback()
         finally:
             cursor.close()
-    except:
+    except dbapi2.Error as e:
+        print(e.pgerror)
         connection.rollback()
     finally:
         connection.close()
-        return sponsors
+        return money_balances
 
-def search_sponsor(app, name):
+def search_money_balance(app, name):
     connection = dbapi2.connect(app.config['dsn'])
     try:
         cursor = connection.cursor()
         try:
             cursor.execute("""
-            SELECT S.ID, S.NAME, T.NAME, S.BUDGET
-            FROM SPONSORS AS S, CLUBS AS T
+            SELECT M.ID, C.NAME, M.INCOMES, M.EXPENSES, M. PROFIT
+            FROM MONEY_BALANCE AS M, CLUBS AS C
             WHERE(
-                UPPER(S.NAME)=UPPER(%s) AND
-                S.SUPPORTEDTEAM=T.ID
+                UPPER(C.NAME)=UPPER(%s) AND M.CLUB=C.ID
             )""", (name,))
-            sponsors = cursor.fetchall()
+            money_balances = cursor.fetchall()
         except dbapi2.Error as e:
             print(e.pgerror)
             cursor.rollback()
@@ -232,36 +239,4 @@ def search_sponsor(app, name):
         connection.rollback()
     finally:
         connection.close()
-        return sponsors
-def fill_table(cursor):
-    cursor.execute("""
-
-            INSERT INTO SPONSORS
-            (NAME, SUPPORTEDTEAM, BUDGET) VALUES (
-            'SAMSUNG',
-            1,
-            200000
-            );
-
-            INSERT INTO SPONSORS
-            (NAME, SUPPORTEDTEAM, BUDGET) VALUES (
-            'HONDA',
-            2,
-            100000
-            );
-
-            INSERT INTO SPONSORS
-            (NAME, SUPPORTEDTEAM, BUDGET) VALUES (
-            'HONDA',
-            3,
-            145000
-            );
-
-            INSERT INTO SPONSORS
-            (NAME, SUPPORTEDTEAM, BUDGET) VALUES (
-            'VODAFONE',
-            3,
-            545000
-            );
-
-            """)
+        return money_balances

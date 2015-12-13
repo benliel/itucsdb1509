@@ -6,42 +6,75 @@
 	{% block title %}Clubs{% endblock %}
 </head>
 	{% block content %}<h2>Clubs</h2>
-	
+
 	<table id=clubs>
-	<form id="delete_form" action="{{ url_for('clubs_page') }} " method = "post">
-	
-	{% for id, name, place, year, chair, number_of_members, rewardnumber in clubs %}
-	<tr id=clubs>
-		<td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
+	<tr>
+	<td id="club" colspan="6" align="right">{% if(countries|length>0)%}
+	<form id="search" action="{{url_for('clubs_page')}}" method="POST">
+		<input form="search" type="text" placeholder="Club Name To Search" name="club_to_search" required="required">
+		<input form="search" type="submit" value="Search" name="search">
+	</form>
+	</td>
+	</tr>
+
+
+				<form id="add" action="{{ url_for('clubs_page') }} " method = "post">
+				<td id="clubs_form"><input form="add" id="clubs" type="text" placeholder="Name" name="name" required="required"></td>
+				<td id="clubs_form">
+				<select id="clubs_form" form="add" name="place" required="required">
+					<option disabled="disabled" selected="selected" hidden="hidden">Select a country</option>
+				{% for country in countries%}
+					<option value="{{country[0]}}">{{country[1]}}</option>
+				{% endfor %}
+				</select>
+				<td id="clubs_form"><input form="add" id="clubs" type="number" min="1000" max="2100" name="year" required="required"></td>
+				<td id="clubs_form"><input form="add" id="clubs" type="text" placeholder="Chair Name" name="chair" required="required"></td>
+				<td id="clubs_form"><input form="add" id="clubs" type="number" min="0" placeholder="Number of Members" name="number_of_members" required="required"></td>
+				<td id="clubs_form"><input form="add" id="clubs" type="number" min="0" placeholder="Number of Rewards" name="rewardnumber" onfocus="this.value=''" required="required"></td>
+			</tr>
+
+		<tr id=clubs>
+			<td colspan="6" id=clubs_form_add>
+				<input form="add" id="clubs_form_add" value="Add Club" name="add" type="submit"></form>
+			</td>
+		</tr>
+		{%else%}
+		</tr>
+					<tr id="clubs_form">
+					<td id="clubs_form" colspan="6">You cannot add club, since there are no countries added in the database!
+					</tr>
+					{%endif%}
+
+	</table>
+
+	<table border="1" style="width:60%">
+		{% for id, name, place, year, chair, number_of_members, rewardnumber in clubs %}
+	<tr id=club>
+		<td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"> </td>
 		<td id=clubs>{{name}}</td>
 		<td id=clubs>{{place}}</td>
 		<td id=clubs>{{year}}</td>
 		<td id=clubs>{{chair}}</td>
 		<td id=clubs>{{number_of_members}}</td>
 		<td id=clubs>{{rewardnumber}}</td>
+		<td><a href="{{url_for('clubs_edit_page', club_id=id)}}"><img alt="edit{{id}}" src="/static/edit.png" height="20px"></td>
 	</tr>
 	{% endfor %}
-	
-	
-	<tr id=clubs>
-				<td><input Value="Delete" name="delete" type="submit" form="delete_form"></form></td>
-				<form id="add" action="{{ url_for('clubs_page') }} " method = "post">
-				<td id="clubs_form"><input form="add" id="clubs" type="text" placeholder="Name" name="name" required="required"></td>
-				<td id="clubs_form"><input form="add" id="clubs" type="text" placeholder="Place" name="place" required="required"></td>
-				<td id="clubs_form"><input form="add" id="clubs" type="number" min="1000" max="2100" name="year" required="required"></td>
-				<td id="clubs_form"><input form="add" id="clubs" type="text" placeholder="Chair Name" name="chair" required="required"></td>
-				<td id="clubs_form"><input form="add" id="clubs" type="number" min="0" placeholder="Number of Members" name="number_of_members" required="required"></td>
-				<td id="clubs_form"><input form="add" id="clubs" type="number" min="0" placeholder="Number of Rewards" name="rewardnumber" onfocus="this.value=''" required="required"></td>
 
-			</tr>
-			
-			<tr id=clubs>
-				<td colspan="6" id=clubs_form_add>
-					<input form="add" id="clubs_form_add" value="Add Club" name="add" type="submit"></form>
+<form id="delete_form" action="{{ url_for('clubs_page') }} " method = "post">
+
+		<tr id=club>
+				<td colspan="8" id=clubs_form_add>
+				<input Value="Delete" name="delete" type="submit" form="delete_form">
+					</form>
 					</td>
 			</tr>
-					
+		<tr id=clubs>
+
 	</table>
 
+
+
 	{% endblock %}
+
 </html>

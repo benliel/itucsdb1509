@@ -9,7 +9,15 @@
 	{% block content %}
 	<h2>Edit Equipment</h2>
 
-	<table id="equipmentUpdate"><tr>
+	<table id="equipmentUpdate">
+
+	<tr id=equipments>
+		<td id=equipments>Equipment Name</td>
+		<td id=equipments>Manufacturer</td>
+		<td id=equipments>Price</td>
+		<td id=equipments>Country</td>
+	</tr>
+	<tr>
 		<form id ="update" action="{{url_for('equipments_edit_page', equipment_id=equipment[0])}}" method="POST">
 			<input type="hidden" value="{{equipment[0]}}" name="id" readonly="readonly"/>
 

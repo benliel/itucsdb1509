@@ -60,6 +60,14 @@
 	<table border="1" style="width:60%">
 	{% for id, name, manufacturer, price , country in equipments %}
 	<tr id=equipments>
+		<td id=checkbox></td>
+		<td id=equipments>Equipment Name</td>
+		<td id=equipments>Manufacturer</td>
+		<td id=equipments>Price</td>
+		<td id=equipments>Country</td>
+		<td></td>
+	</tr>
+	<tr id=equipments>
 		<td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"> </td>
 		<td id=equipments>{{name}}</td>
 		<td id=equipments>{{manufacturer}}</td>

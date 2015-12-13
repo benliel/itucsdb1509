@@ -19,6 +19,13 @@
 	<form id="delete_form" action="{{ url_for('equipments_page') }} " method = "post">
 
 	{% for id, name, manufacturer, price , country  in equipments %}
+	<tr id=equipments>
+		<td id=checkbox></td>
+		<td id=equipments>Equipment Name</td>
+		<td id=equipments>Manufacturer</td>
+		<td id=equipments>Price</td>
+		<td id=equipments>Country</td>
+	</tr>
 	<tr id="equipments" >
 		<td id=checkbox>
 		<input form ="delete_form" type="checkbox" name="checkbox_{{id}}">

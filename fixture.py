@@ -30,6 +30,74 @@ def init_fixture_db(cursor):
         PRIMARY KEY (ID),
         UNIQUE(DATE,TIME,LOCATION)
         )""")
+        add_test_data(cursor)
+
+def add_test_data(cursor):
+    cursor.execute("""
+    insert into fixture values(
+    default,
+    1,
+    2,
+    to_date('01.01.2016','DD.MM.YYYY'),
+    to_timestamp('20.00', 'HH24.MM'),
+    1
+    );
+    """)
+    cursor.execute("""
+    insert into fixture values(
+    default,
+    3,
+    4,
+    to_date('01.01.2016','DD.MM.YYYY'),
+    to_timestamp('20.00', 'HH24.MM'),
+    2
+    );
+    """)
+    cursor.execute("""
+    insert into fixture values(
+    default,
+    1,
+    3,
+    to_date('08.01.2016','DD.MM.YYYY'),
+    to_timestamp('21.00', 'HH24.MM'),
+    3
+    );
+    """)
+    cursor.execute("""
+    insert into fixture values(
+    default,
+    2,
+    4,
+    to_date('08.01.2016','DD.MM.YYYY'),
+    to_timestamp('21.00', 'HH24.MM'),
+    4
+    );
+    """)
+    cursor.execute("""
+    insert into fixture values(
+    default,
+    1,
+    4,
+    to_date('15.01.2016','DD.MM.YYYY'),
+    to_timestamp('22.00', 'HH24.MM'),
+    1
+    );
+    """)
+    cursor.execute("""
+    insert into fixture values(
+    default,
+    2,
+    3,
+    to_date('15.01.2016','DD.MM.YYYY'),
+    to_timestamp('22.00', 'HH24.MM'),
+    2
+    );
+    """)
+
+
+
+
+
 
 def add_match(app, request, match):
     if(match.team1 == match.team2):

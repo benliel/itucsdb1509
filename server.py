@@ -83,7 +83,7 @@ def initialize_database():
         ###########
     except dbapi2.Error as e:
         print(e.pgerror)
-        cursor.rollback()
+        connection.rollback()
     finally:
         connection.commit()
         connection.close()

@@ -31,6 +31,48 @@ def init_stadiums_db(cursor):
     UNIQUE(NAME,LOCATION)
     )
     """)
+    add_test_data(cursor)
+
+def add_test_data(cursor):
+    cursor.execute("""
+    insert into stadiums values(
+    default,
+    'Sabancı Stadyumu',
+    1,
+    3000,
+    30
+    );
+    """)
+    cursor.execute("""
+    insert into stadiums values(
+    default,
+    'Koç Stadyumu',
+    2,
+    2500,
+    45
+    );
+    """)
+    cursor.execute("""
+    insert into stadiums values(
+    default,
+    'Bill Gates Stadium',
+    3,
+    10000,
+    5
+    );
+    """)
+    cursor.execute("""
+    insert into stadiums values(
+    default,
+    'Steeve Jobs Stadium',
+    4,
+    2000,
+    100
+    );
+    """)
+
+
+
 
 def get_stadiums_page(app):
     if request.method == 'GET':

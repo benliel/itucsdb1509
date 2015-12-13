@@ -245,6 +245,7 @@ def update_club(app, id, club):
         connection.commit()
         connection.close()
 
+
 def get_all_clubs(app):
     clubs=None
     connection = dbapi2.connect(app.config['dsn'])

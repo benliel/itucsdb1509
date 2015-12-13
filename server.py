@@ -401,7 +401,7 @@ def curlers_page():
         query2 = "SELECT ID, NAME FROM clubs"
         cursor.execute(query2)
         _clubs = cursor.fetchall()
-        query3 = "SELECT * FROM COUNTRIES"
+        query3 = "SELECT COUNTRY_ID, COUNTRY_NAME FROM COUNTRIES"
         cursor.execute(query3)
         return render_template('curlers.html', curlers = curler, clubs = _clubs, countries = cursor, current_time=now.ctime())
     elif "add" in request.form:

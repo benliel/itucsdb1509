@@ -277,7 +277,6 @@ def coach_page():
         cursor = connection.cursor()
         cursor.execute("SELECT COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES")
         countries=cursor.fetchall()
-        print("oww")
         return render_template('coach.html', coach = coach1,countries=countries,clubs=clubs1, current_time=now.ctime())
     elif "add" in request.form:
         Coach1 = Coach(request.form['name'],
@@ -297,8 +296,31 @@ def coach_page():
         return redirect(url_for('coach_page'))
     elif "search" in request.form:
             print(request.form['search_name'])
-            result=search_country(cursor, request.form['search_name'])
-            return render_template('Country_search.html', countries = result, current_time=now.ctime())
+            result=search_coach(cursor, request.form['search_name'])
+            return render_template('coach_search.html', coach = result, current_time=now.ctime())
+def search_coach(cursor,coach):
+    res = ()
+    connection = dbapi2.connect(app.config['dsn'])
+    try:
+        cursor = connection.cursor()
+        try:
+            print(0)
+            print(coach)
+            query = """SELECT*
+            FROM COACHES WHERE(COACH_NAME LIKE %s)"""
+            cursor.execute(query,('%'+coach+'%',))
+            res = cursor.fetchall()
+        except dbapi2.Error as e:
+            print(e.pgerror)
+        finally:
+            cursor.close()
+    except dbapi2.Error as e:
+        print(e.pgerror)
+        connection.rollback()
+    finally:
+        connection.close()
+        print(res)
+        return res
 @app.route('/fixture', methods=['GET', 'POST'])
 def fixture_page():
     return get_fixture_page(app)

@@ -261,16 +261,22 @@ def coach_page():
     cursor = connection.cursor()
     now = datetime.datetime.now()
     if request.method == 'GET':
-        query = """SELECT *
-         FROM COACHES
-         ORDER BY COACH_NAME DESC """
+        query2 = "SELECT ID, NAME FROM CLUBS"
+        cursor.execute(query2)
+        clubs1 = cursor.fetchall()
+        query = """SELECT CO.COACH_ID,CO.COACH_NAME,CO.COACH_SURNAME,CO.COACH_AGE,C.COUNTRY_NAME,CL.NAME
+                           FROM COACHES AS CO,COUNTRIES AS C,CLUBS AS CL
+                           WHERE(
+                               (CO.COACH_COUNTRY=C.COUNTRY_ID) AND (CO.COACH_CLUB=CL.ID))
+                               """
         cursor.execute(query)
         coach1=cursor.fetchall()
         cursor.close()
         cursor = connection.cursor()
         cursor.execute("SELECT COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES")
         countries=cursor.fetchall()
-        return render_template('coach.html', coach = coach1,countries=countries, current_time=now.ctime())
+        print("oww")
+        return render_template('coach.html', coach = coach1,countries=countries,clubs=clubs1, current_time=now.ctime())
     elif "add" in request.form:
         Coach1 = Coach(request.form['name'],
                          request.form['surname'],
@@ -279,7 +285,6 @@ def coach_page():
                          request.form['club'])
         add_coach(cursor, request,Coach1)
         connection.commit()
-        print(1)
         return redirect(url_for('coach_page'))
 
     elif "delete" in request.form:

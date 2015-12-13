@@ -250,3 +250,4 @@ def search_club(app, name):
         connection.close()
         return clubs
 
+

@@ -1,31 +1,45 @@
-
 <!DOCTYPE html>
 <html>
   <head>
 	<meta charset="utf-8" />
 	{% extends "layout.html" %}
-	{% block title %}Championships{% endblock %}
+	{% block title %}Countries{% endblock %}
 </head>
 
 {% block content %} <h1 align="">Countries</h1>
 <font color="#B5F7DF ">
-<table widht="100" id=chform>
+<table widht="100%" id=chform>
+<form id="search" action="{{ url_for('countries_page')}}" method ="post">
+        <tr id="search">
+            <td  colspan="1" align="right" id="search" ><input form ="search" id="search" type="text" name="search_name" placeholder="Enter Country or Continent" required="required"></td>
+            <td align="left" id="search"><input class="add" Value="Search" name="search" id="search" type="submit" form="search"></td>
+        </tr>
+    </form>
 <form id="delete_form" action="{{ url_for('countries_page') }} " method = "post">
 
 <tr style="color:#2ECCFA;font-weight: bold;">
 
 
 	<td ></td>
-	<td width="8%">Country</td>
-	<td width="92%"></td>
+	<td width="20%">Country</td>
+	<td width="20%">Continent</td>
+	<td width="20%">Capital</td>
+	<td width="20%">Idependancy Year</td>
+	<td width="80%"></td>
 
 
 </tr>
 </font>
-{%for id, name in countries%}
+{%for id, name,continent,capital,independency in countries%}
 <tr id=chform>
 	<td width="3%" style="background:transparent;border:0"id=checkbox ><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
 	<td width="3%"id=chform>{{name}}</td>
+	<td width="3%"id=chform>{{continent}}</td>
+	<td width="3%"id=chform>{{capital}}</td>
+	<td width="3%"id=chform>{{independency}}</td>
+	<td>
+       <a href="{{ url_for('country_update_page',country_id = id) }}" style="text-decoration: none"><font color="#2ECCFA">Update</font></a>
+    </td>
 </tr>
 {%endfor%}
 
@@ -37,7 +51,20 @@
 
 <tr>
 				<form id="addco" action="{{ url_for('countries_page') }} " method = "post">
-				<td id="championship_form"><input form="addco" id="chform" type="text" placeholder="country" name="country" required="required" size="7"></td>
+				<td colspan="1" align="left"id="championship_form"><input form="addco" id="chform" type="text" placeholder="Country" name="country" required="required" size="20"></td>
+				<td colspan="1" align="left"id="championship_form">
+				<select data-placeholder="Choose a format..." tabindex="4" name="continent" required="required">
+      				<option value="">Choose a Continent</option>
+      				<option value="Afrika">Africa</option>
+      				<option value="America">America</option>
+      				<option value="Asia">Asia</option>
+      				<option value="Australia and Oceania">Australia and Oceania</option>
+      				<option value="Europe">Europe</option>
+      				<option value="Antarctica">Antarctica</option>
+				</select>
+				</td>
+				<td colspan="1" align="left"id="championship_form"><input form="addco" id="chform" type="text" placeholder="Capital" name="capital" required="required" size="15"></td>
+				<td colspan="1" align="left"id="championship_form"><input form="addco" id="chform" type="text" placeholder="Independency Year" name="independency" required="required" size="15"></td>
 				</tr>
 
 				<tr id=chform>

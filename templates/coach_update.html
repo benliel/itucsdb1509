@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Coach Update{% endblock %}
+</head>
+{% block content %}
+    <h2>Coach</h2>
+    <table id=championship_update>
+    <tr style="color:#2ECCFA;font-weight: bold;">
+
+
+	<td ></td>
+	<td width="10%">Name</td>
+	<td width="10%">Surname</td>
+	<td width="10%">Age</td>
+	<td width="10%">Country</td>
+	<td width="10%">Club</td>
+	<td width="73%"></td>
+
+
+</tr>
+</font>
+{%for id, name,surname,age,country,club in coach%}
+            <form id=update action="{{ url_for('coach_update_page',coach_id='0') }}" method = "post">
+                <tr id=update>
+                	<td></td>
+                    <td id=update><input size="7" value="{{name}}" form ="update" id="championships" type="text" placeholder="Name" name="name"> </td>
+                    <td id=update><input size="7" value="{{surname}}" form ="update" id="championships" type="date" placeholder="surname" name="surname"></td>
+                    <td id=update><input size="7" value="{{age}}" form ="update" id="championships" type="text" placeholder = "age" name="age"></td>
+                    <td id=update>
+                     <select id="fixtureUpdate" form="update" name="country" required="required">
+					{% for country in countries%}
+					<option value="{{country[0]}}" {% if (country==country[0]) %}selected="selected"{%endif%}>{{country[1]}}</option>
+					{% endfor %}
+					</select>
+                    </td>
+              <td id=update>
+              <select id="update" form="update" name="club" required="required">
+				{% for club in clubs%}
+					<option value="{{club[0]}}" {% if (club==club[0]) %}selected="selected"{%endif%}>{{club[1]}}</option>
+				{% endfor %}
+			</select>
+              </td>
+                </tr>
+				 <input type="hidden" name="coach_id" value="{{id}}">
+                <tr id=update>
+                    <td colspan="7" id=championship_form_update>
+                        <input class="add"form="update" id="championship_form_update" value="Update Championship" name="update" type="submit">
+                    </td>
+                </tr>
+            </form>
+        {% endfor %}
+    </table>
+</html>
+
+
+	{% endblock %}
+</html>

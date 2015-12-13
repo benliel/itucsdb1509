@@ -33,6 +33,7 @@ def init_equipments_db(cursor):
         COUNTRY INTEGER NOT NULL REFERENCES COUNTRIES(COUNTRY_ID) ON DELETE CASCADE ON UPDATE CASCADE,
         PRIMARY KEY (ID)
         )""")
+        fill_table(cursor)
 
 def add_equipment(app, request, equipment):
     connection = dbapi2.connect(app.config['dsn'])
@@ -235,3 +236,35 @@ def search_equipment(app, name):
     finally:
         connection.close()
         return equipments
+def fill_table(cursor):
+    cursor.execute("""
+            INSERT INTO EQUIPMENTS
+            (NAME, MANUFACTURER, PRICE, COUNTRY) VALUES (
+            'Broom',
+            'Mazula Holding',
+            300,
+            1
+            );
+            INSERT INTO EQUIPMENTS
+            (NAME, MANUFACTURER, PRICE, COUNTRY) VALUES (
+            'Rink',
+            'Mazula A.Ş.',
+            11100,
+            1
+            );
+            INSERT INTO EQUIPMENTS
+            (NAME, MANUFACTURER, PRICE, COUNTRY) VALUES (
+            'Shoes',
+            'Mazula Inc.',
+            100,
+            1
+            );
+            INSERT INTO EQUIPMENTS
+            (NAME, MANUFACTURER, PRICE, COUNTRY) VALUES (
+            'Rock',
+            'Mazula San. Tic. LTD.',
+            400,
+            1
+            );
+
+            """)

@@ -14,18 +14,95 @@ from flask.helpers import url_for
 def init_points_db(cursor):
     cursor.execute("""
     create table if not exists points(
-    id serial not null primary key,
-    championship integer not null references championship(id)
+    ID serial not null primary key,
+    CHAMPIONSHIP integer not null references championship(id)
     on update cascade on delete cascade,
-    club integer not null references clubs(id)
+    CLUB integer not null references clubs(id)
     on update cascade on delete cascade,
-    points integer default 0,
-    wins integer default 0,
+    POINTS integer default 0,
+    WINS integer default 0,
     check(points>=0),
     check(wins>=0),
     unique(championship, club)
     );
     """)
+    add_test_data(cursor)
+
+def add_test_data(cursor):
+    cursor.execute("""
+    insert into points values(
+    default,
+    1,
+    1,
+    48,
+    24
+    )
+    """)
+    cursor.execute("""
+    insert into points values(
+    default,
+    1,
+    2,
+    40,
+    22
+    )
+    """)
+    cursor.execute("""
+    insert into points values(
+    default,
+    1,
+    3,
+    45,
+    21
+    )
+    """)
+    cursor.execute("""
+    insert into points values(
+    default,
+    1,
+    4,
+    50,
+    25
+    )
+    """)
+    cursor.execute("""
+    insert into points values(
+    default,
+    2,
+    1,
+    60,
+    29
+    )
+    """)
+    cursor.execute("""
+    insert into points values(
+    default,
+    2,
+    2,
+    62,
+    30
+    )
+    """)
+    cursor.execute("""
+    insert into points values(
+    default,
+    2,
+    3,
+    58,
+    29
+    )
+    """)
+    cursor.execute("""
+    insert into points values(
+    default,
+    2,
+    4,
+    57,
+    31
+    )
+    """)
+
+
 
 def get_points_page(app):
     if(request.method=='GET'):

@@ -326,6 +326,9 @@ def coach_update_page(coach_id):
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
     if request.method == 'GET':
+        query2 = "SELECT ID, NAME FROM CLUBS"
+        cursor.execute(query2)
+        clubs1 = cursor.fetchall()
         cursor.close()
         cursor = connection.cursor()
         cursor.execute("SELECT COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES")
@@ -334,7 +337,7 @@ def coach_update_page(coach_id):
         now = datetime.datetime.now()
         cursor.execute(query,coach_id)
         coach1=cursor.fetchall()
-        return render_template('coach_update.html', coach=coach1,countries=countries1, current_time=now.ctime())
+        return render_template('coach_update.html', coach=coach1,countries=countries1,clubs=clubs1, current_time=now.ctime())
     elif request.method == 'POST':
         if "update" in request.form:
              Coach1 = Coach(request.form['name'],

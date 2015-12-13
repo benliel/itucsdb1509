@@ -36,7 +36,13 @@
 					{% endfor %}
 					</select>
                     </td>
-              <td id=update><input size="7" value="{{club}}" form ="update" id="championships" type="text" placeholder="club" name="club"></td>
+              <td id=update>
+              <select id="update" form="update" name="club" required="required">
+				{% for club in clubs%}
+					<option value="{{club[0]}}" {% if (club==club[0]) %}selected="selected"{%endif%}>{{club[1]}}</option>
+				{% endfor %}
+			</select>
+              </td>
                 </tr>
 				 <input type="hidden" name="coach_id" value="{{id}}">
                 <tr id=update>

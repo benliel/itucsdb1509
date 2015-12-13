@@ -10,19 +10,19 @@
 	<table id=clubs>
 	<form id="delete_form" action="{{ url_for('clubs_page') }} " method = "post">
 
-<tr style="color:#2ECCFA;font-weight: bold;">
+	{% for id, name, place, year, chair, number_of_members, rewardnumber in clubs %}
+	<tr id=clubs>
+		<td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
+		<td id=clubs>{{name}}</td>
+		<td id=clubs>{{place}}</td>
+		<td id=clubs>{{year}}</td>
+		<td id=clubs>{{chair}}</td>
+		<td id=clubs>{{number_of_members}}</td>
+		<td id=clubs>{{rewardnumber}}</td>
+	</tr>
+	{% endfor %}
 
 
-	<td ></td>
-	<td width="3%">Name</td>
-	<td width="4%">Surname</td>
-	<td width="3%">Age</td>
-	<td width="7%">Country</td>
-	<td width="10%">Club</td>
-	<td width="73%"></td>
-
-
-</tr>
 	<tr id=clubs>
 				<td><input Value="Delete" name="delete" type="submit" form="delete_form"></form></td>
 				<form id="add" action="{{ url_for('clubs_page') }} " method = "post">

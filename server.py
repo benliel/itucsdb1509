@@ -429,8 +429,8 @@ def curlers_page():
         return redirect(url_for('curlers_page'))
     elif "search" in request.form:
         now = datetime.datetime.now()
-        query = "SELECT CURLERID, CURLER_NAME, CURLER_SURNAME, BIRTH_DATE, TEAMID, COUNTRY, NAME FROM curlers, clubs WHERE ((TEAMID = CLUBS.ID) AND (CURLER_NAME LIKE %s OR CURLER_SURNAME = %s))"
-        cursor.execute(query,(request.form['search_name'], request.form['search_name']));
+        query = "SELECT CURLERID, CURLER_NAME, CURLER_SURNAME, BIRTH_DATE, TEAMID, BIRTH_PLACE_ID,COUNTRY_NAME, NAME FROM curlers LEFT JOIN clubs ON (TEAMID = CLUBS.ID) LEFT JOIN COUNTRIES ON (BIRTH_PLACE_ID = COUNTRY_ID) WHERE (CURLER_NAME LIKE '%%' || %s || '%%' OR CURLER_SURNAME LIKE '%%' || %s || '%%')"
+        cursor.execute(query,('%' + request.form['search_name'] + '%', '%' + request.form['search_name'] + '%'));
         curler = cursor.fetchall()
         query2 = "SELECT ID,NAME FROM clubs"
         cursor.execute(query2)
@@ -484,10 +484,8 @@ def federations_page():
                                 request.form['country_id'])
                      
         add_federation(cursor, request, federation)
-
         connection.commit()
         return redirect(url_for('federations_page'))
-
     elif "delete" in request.form:
         for line in request.form:
             if "checkbox" in line:
@@ -496,8 +494,8 @@ def federations_page():
         return redirect(url_for('federations_page'))
     elif "search" in request.form:
         now = datetime.datetime.now()
-        query = "SELECT FEDERATION_ID, FEDERATION_NAME, PRESIDENT_NAME, PRESIDENT_SURNAME, FOUNDING_YEAR, COUNTRY, COUNTRY_NAME FROM FEDERATIONS, COUNTRIES WHERE (COUNTRY = COUNTRY_ID AND (FEDERATION_NAME LIKE %s OR PRESIDENT_NAME LIKE %s OR PRESIDENT_SURNAME = %s))"
-        cursor.execute(query,(request.form['search_name'], request.form['search_name'], request.form['search_name']));
+        query = "SELECT FEDERATION_ID, FEDERATION_NAME, PRESIDENT_NAME, PRESIDENT_SURNAME, FOUNDING_YEAR, COUNTRY, COUNTRY_NAME FROM FEDERATIONS LEFT JOIN COUNTRIES ON COUNTRY = COUNTRY_ID WHERE ((FEDERATION_NAME LIKE '%%' || %s || '%%' OR PRESIDENT_NAME LIKE '%%' || %s || '%%' OR PRESIDENT_SURNAME LIKE '%%' || %s || '%%'))"
+        cursor.execute(query,('%' + request.form['search_name'] + '%', '%' + request.form['search_name'] + '%', '%' + request.form['search_name'] + '%'));
         federation = cursor.fetchall()
         query2 = "SELECT COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES"
         cursor.execute(query2)
@@ -524,7 +522,7 @@ def federations_update_page(federation_id):
                             request.form['country_id'])
             update_federation(cursor, federation, request.form['federation_id'])
             connection.commit()
-        return redirect(url_for('federations_page'))
+            return redirect(url_for('federations_page'))
 
 @app.route('/news',methods=['GET','POST'])
 def news_page():
@@ -543,13 +541,13 @@ def news_page():
         cursor.execute(query, ('%' + search + '%',))
         news = cursor.fetchall()
         return render_template('news.html', news = news, current_time = now.ctime())
-@app.route('/addnews',methods=['GET','POSt'])
+@app.route('/newsadd',methods=['GET','POST'])
 def news_add_page():
     connection=dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
     if request.method == 'GET':
         now = datetime.datetime.now()
-        query = "SELECt CURLERID, CURLER_NAME FROM CURLERS"
+        query = "SELECT CURLERID, CURLER_NAME FROM CURLERS"
         cursor.execute(query)
         curlers = cursor.fetchall()
         query2 = "SELECT ID, NAME FROM CLUBS"
@@ -565,7 +563,7 @@ def news_add_page():
         connection.commit()
         return redirect(url_for('news_page'))
     
-@app.route('/news/<news_id>')
+@app.route('/news/<news_id>', methods=['GET','POST'])
 def news_edit_page(news_id):
     now = datetime.datetime.now()
     connection=dbapi2.connect(app.config['dsn'])
@@ -580,14 +578,16 @@ def news_edit_page(news_id):
         query3 = "SELECT ID, NAME FROM CLUBS"
         cursor.execute(query3)
         return render_template('news_edit_page.html', news = news, curlers = curlers, clubs = cursor, current_time = now.ctime())
-    elif "update" in request.form:
-        news = News(request.form['news_header'],
-                    request.form['news_description'],
-                    time.strftime("%Y-%m-%d"),
-                    request.form['curler'],
-                    request.form['club'])
-        add_news(cursor,request, news)
-        return redirect(url_for('news_page'))
+    elif request.method == 'POST':
+        if "update" in request.form:
+            news = News(request.form['news_header'],
+                        request.form['news_description'],
+                        time.strftime("%Y-%m-%d"),
+                        request.form['curler'],
+                        request.form['club'])
+            update_news(cursor, news, request.form['news_id'])
+            connection.commit()
+            return redirect(url_for('news_page'))
 #end region ilkan engin 150120137
 
 #Sema's Part - Curling Clubs

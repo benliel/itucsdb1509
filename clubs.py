@@ -39,6 +39,47 @@ def init_clubs_db(cursor):
             REWARDNUMBER INTEGER,
             PRIMARY KEY(ID)
             )""")
+    add_test_data(cursor)
+
+def add_test_data(cursor):
+    cursor.execute("""
+    INSERT INTO CLUBS
+        (NAME, PLACES, YEAR, CHAIR, NUMBER_OF_MEMBERS, REWARDNUMBER) VALUES (
+        'Orlando Curling Club',
+         1,
+         2014,
+        'Bryan Pittard',
+        '7865',
+        '0');
+        INSERT INTO CLUBS
+        (NAME, PLACES, YEAR, CHAIR, NUMBER_OF_MEMBERS, REWARDNUMBER) VALUES (
+        'Wausau Curling Club',
+         1,
+         1896,
+        'Jennie Moran',
+        '54403',
+        '11');
+
+    INSERT INTO CLUBS
+        (NAME, PLACES, YEAR, CHAIR, NUMBER_OF_MEMBERS, REWARDNUMBER) VALUES (
+        'Fenerbahçe',
+         3,
+         2011,
+        'Aziz Yıldırım',
+        '9002',
+        '1');
+
+    INSERT INTO CLUBS
+        (NAME, PLACES, YEAR, CHAIR, NUMBER_OF_MEMBERS, REWARDNUMBER) VALUES (
+        'Galatasaray',
+        3,
+        2000,
+        'Dursun Aydın Ozbek',
+        '17864',
+        '5'
+        )""")
+
+
 
 
 def add_club(app, request, club):

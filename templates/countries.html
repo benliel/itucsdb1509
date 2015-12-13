@@ -22,21 +22,21 @@
 
 	<td ></td>
 	<td width="20%">Country</td>
-	<td width="20%">Curlers</td>
-	<td width="20%">Clubs</td>
-	<td width="20%">Tournaments</td>
+	<td width="20%">Continent</td>
+	<td width="20%">Capital</td>
+	<td width="20%">Idependancy Year</td>
 	<td width="80%"></td>
 
 
 </tr>
 </font>
-{%for id, name,curler,club,tournament in countries%}
+{%for id, name,continent,capital,independency in countries%}
 <tr id=chform>
 	<td width="3%" style="background:transparent;border:0"id=checkbox ><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
 	<td width="3%"id=chform>{{name}}</td>
-	<td width="3%"id=chform>{{curler}}</td>
-	<td width="3%"id=chform>{{club}}</td>
-	<td width="3%"id=chform>{{tournament}}</td>
+	<td width="3%"id=chform>{{continent}}</td>
+	<td width="3%"id=chform>{{capital}}</td>
+	<td width="3%"id=chform>{{independency}}</td>
 	<td>
        <a href="{{ url_for('country_update_page',country_id = id) }}" style="text-decoration: none"><font color="#2ECCFA">Update</font></a>
     </td>
@@ -51,7 +51,20 @@
 
 <tr>
 				<form id="addco" action="{{ url_for('countries_page') }} " method = "post">
-				<td colspan="1" align="left"id="championship_form"><input form="addco" id="chform" type="text" placeholder="country" name="country" required="required" size="20"></td>
+				<td colspan="1" align="left"id="championship_form"><input form="addco" id="chform" type="text" placeholder="Country" name="country" required="required" size="20"></td>
+				<td colspan="1" align="left"id="championship_form">
+				<select data-placeholder="Choose a format..." tabindex="4" name="continent" required="required">
+      				<option value="">Choose a Continent</option>
+      				<option value="Afrika">Africa</option>
+      				<option value="America">America</option>
+      				<option value="Asia">Asia</option>
+      				<option value="Australia and Oceania">Australia and Oceania</option>
+      				<option value="Europe">Europe</option>
+      				<option value="Antarctica">Antarctica</option>
+				</select>
+				</td>
+				<td colspan="1" align="left"id="championship_form"><input form="addco" id="chform" type="text" placeholder="Capital" name="capital" required="required" size="15"></td>
+				<td colspan="1" align="left"id="championship_form"><input form="addco" id="chform" type="text" placeholder="Independency Year" name="independency" required="required" size="15"></td>
 				</tr>
 
 				<tr id=chform>

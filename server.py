@@ -183,14 +183,18 @@ def countries_page():
     cursor = connection.cursor()
     now = datetime.datetime.now()
     if request.method == 'GET':
-        query = """SELECT COUNTRY_ID,COUNTRY_NAME,COUNTRY_CURLER,COUNTRY_CLUB,COUNTRY_TOURNAMENT
+
+        query = """SELECT COUNTRY_ID,COUNTRY_NAME,COUNTRY_CONTINENT,COUNTRY_CAPITAL,COUNTRY_INDEPEN_YEAR
          FROM COUNTRIES GROUP BY COUNTRY_ID
          ORDER BY COUNTRY_NAME DESC """
         cursor.execute(query)
 
         return render_template('countries.html', countries = cursor.fetchall(), current_time=now.ctime())
     elif "add" in request.form:
-        country1 = Countries(request.form['country'],0,0,0)
+        country1 = Countries(request.form['country'],
+                             request.form['continent'],
+                             request.form['capital'],
+                             request.form['independency'])
         add_country(cursor, request,country1)
         connection.commit()
         return redirect(url_for('countries_page'))

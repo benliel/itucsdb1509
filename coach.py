@@ -12,7 +12,7 @@ def init_coach_db(cursor):
     COACH_NAME VARCHAR(80) NOT NULL ,
     COACH_SURNAME VARCHAR(80) ,
     COACH_AGE INTEGER ,
-    COACH_COUNTRY VARCHAR(80) ,
+    COACH_COUNTRY INTEGER NOT NULL REFERENCES COUNTRIES(COUNTRY_ID) ON DELETE CASCADE ON UPDATE CASCADE ,
     COACH_CLUB VARCHAR(80)NOT NULL,
     PRIMARY KEY(COACH_ID)
     )"""
@@ -25,10 +25,10 @@ def add_coach(cursor, request, coach):
         INITCAP(%s),
         INITCAP(%s),
         %s,
-        INITCAP(%s),
-        INITCAP(%s))"""
+        %s,
+        %s)"""
         cursor.execute(query, (coach.name,coach.surname,coach.age,coach.country,coach.club))
-
+        print(0)
 def delete_coach(cursor, id):
         query="""DELETE FROM COACHES WHERE COACH_ID = %s"""
         cursor.execute(query, (int(id),))

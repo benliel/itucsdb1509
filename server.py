@@ -265,8 +265,12 @@ def coach_page():
          FROM COACHES
          ORDER BY COACH_NAME DESC """
         cursor.execute(query)
-
-        return render_template('coach.html', coach = cursor.fetchall(), current_time=now.ctime())
+        coach1=cursor.fetchall()
+        cursor.close()
+        cursor = connection.cursor()
+        cursor.execute("SELECT COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES")
+        countries=cursor.fetchall()
+        return render_template('coach.html', coach = coach1,countries=countries, current_time=now.ctime())
     elif "add" in request.form:
         Coach1 = Coach(request.form['name'],
                          request.form['surname'],
@@ -275,6 +279,7 @@ def coach_page():
                          request.form['club'])
         add_coach(cursor, request,Coach1)
         connection.commit()
+        print(1)
         return redirect(url_for('coach_page'))
 
     elif "delete" in request.form:

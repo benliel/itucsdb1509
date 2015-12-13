@@ -57,7 +57,14 @@
 				<td "id="championship_form"><input form="addco" id="chform" type="text" placeholder="Name" name="name" required="required" size="20"></td>
 				<td "id="championship_form"><input form="addco" id="chform" type="text" placeholder="Surname" name="surname" required="required" size="20"></td>
 				<td id="championship_form"><input form="addco" id="chform" type="text" placeholder="Age" name="age" required="required" size="7"></td>
-				<td id="championship_form"><input form="addco" id="chform" type="text" placeholder="Country" name="country" required="required" size="10"></td>
+				<td id="championship_form">
+				    <select data-placeholder="Choose a Country..." tabindex="4" name="country">
+      			<option disabled="disabled" selected="selected" hidden="hidden">Select a country</option>
+      			{% for country in countries%}
+					<option value="{{country[0]}}">{{country[1]}}</option>
+				{% endfor %}
+    			</select>
+				</td>
 				<td id="championship_form"><input form="addco" id="chform" type="text" placeholder="Club" name="club" required="required" size="10"></td>
 				</tr>
 

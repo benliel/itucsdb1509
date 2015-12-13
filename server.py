@@ -157,10 +157,14 @@ def championship_update_page(championship_id):
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
     if request.method == 'GET':
+        cursor.close()
+        cursor = connection.cursor()
+        cursor.execute("SELECT COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES")
+        countries=cursor.fetchall()
         query = """SELECT * FROM CHAMPIONSHIP WHERE (ID = %s)"""
         cursor.execute(query,championship_id)
         now = datetime.datetime.now()
-        return render_template('championship_update.html', championship = cursor, current_time=now.ctime())
+        return render_template('championship_update.html', championship = cursor,countries=countries, current_time=now.ctime())
     elif request.method == 'POST':
         if "update" in request.form:
             championship1 = Championships(request.form['name'],

@@ -12,7 +12,13 @@
             <form id=update action="{{ url_for('championship_update_page',championship_id='0') }}" method = "post">
                 <tr id=update>
                     <td id=update><input size="7" value="{{name}}" form ="update" id="championships" type="text" placeholder="Name" name="name"> </td>
-                    <td id=update><input size="7" value="{{place}}" form ="update" id="championships" type="text" placeholder="Place" name="place"></td>
+                    <td id=update>
+                    <select id="fixtureUpdate" form="update" name="place" required="required">
+					{% for country in countries%}
+					<option value="{{country[0]}}" {% if (place==country[0]) %}selected="selected"{%endif%}>{{country[1]}}</option>
+					{% endfor %}
+					</select>
+                    </td>
                     <td id=update><input size="7" value="{{date}}" form ="update" id="championships" type="date" placeholder="(dd/MM/yyyy)" name="date"></td>
                     <td id=update><input size="7" value="{{type}}" form ="update" id="championships" type="text" placeholder = "Type" name="type"></td>
                     <td id=update><input size="7" value="{{teamNo}}" form ="update" id="championships" type="number" placeholder="Team Size" name="number_of_teams"></td>

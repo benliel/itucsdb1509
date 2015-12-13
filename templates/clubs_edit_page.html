@@ -13,7 +13,13 @@
 		<form id ="update" action="{{url_for('clubs_edit_page', club_id=club[0])}}" method="POST">
 			<input type="hidden" value="{{club[0]}}" name="id" readonly="readonly"/>
 			<td><input id="ClubUpdate" form="update" type="text" value="{{club[1]}}" name="name" required="required"></td>
-			<td><input id="ClubUpdate" form="update" type="text" value="{{club[2]}}" name="place" required="required"></td>
+			<td>
+			<select id="ClubUpdate" form="update" name="place" required="required">
+				{% for country in countries%}
+					<option value="{{country[0]}}" {% if club[2]==country[1] %}selected{%endif%}>{{country[1]}}</option>
+				{% endfor %}
+			</select>
+			</td>
 			<td><input id="ClubUpdate" form="update" type="number" min="1000" max="2100" value="{{club[3]}}" name="year" required="required"></td>
 			<td><input id="ClubUpdate" form="update" type="text" value="{{club[4]}}" name="chair" required="required"></td>
 			<td><input id="ClubUpdate" form="update" type="number" value="{{club[5]}}" name="number_of_members" required="required"></td>

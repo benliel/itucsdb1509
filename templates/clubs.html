@@ -9,7 +9,7 @@
 
 	<table id=clubs>
 	<tr>
-	<td id="club" colspan="6" align="right">
+	<td id="club" colspan="6" align="right">{% if(countries|length>0)%}
 	<form id="search" action="{{url_for('clubs_page')}}" method="POST">
 		<input form="search" type="text" placeholder="Club Name To Search" name="club_to_search" required="required">
 		<input form="search" type="submit" value="Search" name="search">
@@ -20,8 +20,14 @@
 
 				<form id="add" action="{{ url_for('clubs_page') }} " method = "post">
 				<td id="clubs_form"><input form="add" id="clubs" type="text" placeholder="Name" name="name" required="required"></td>
-				<td id="clubs_form"><input form="add" id="clubs" type="text" placeholder="Place" name="place" required="required"></td>
-				<td id="clubs_form"><input form="add" id="clubs" type="number" min="1000" max="2100" name="year" required="required"></td>
+				<td id="clubs_form">
+				<select id="clubs_form" form="add" name="place" required="required">
+					<option disabled="disabled" selected="selected" hidden="hidden">Select a country</option>
+				{% for country in countries%}
+					<option value="{{country[0]}}">{{country[1]}}</option>
+				{% endfor %}
+				</select>
+				<td id="clubs_form"><input form="add" id="clubs" type="number" min="1000" max="2100" placeholder="Founded Year" name="year" required="required"></td>
 				<td id="clubs_form"><input form="add" id="clubs" type="text" placeholder="Chair Name" name="chair" required="required"></td>
 				<td id="clubs_form"><input form="add" id="clubs" type="number" min="0" placeholder="Number of Members" name="number_of_members" required="required"></td>
 				<td id="clubs_form"><input form="add" id="clubs" type="number" min="0" placeholder="Number of Rewards" name="rewardnumber" onfocus="this.value=''" required="required"></td>
@@ -32,6 +38,12 @@
 				<input form="add" id="clubs_form_add" value="Add Club" name="add" type="submit"></form>
 			</td>
 		</tr>
+		{%else%}
+		</tr>
+					<tr id="clubs_form">
+					<td id="clubs_form" colspan="6">You cannot add club, since there are no countries added in the database!
+					</tr>
+					{%endif%}
 
 	</table>
 

@@ -3,9 +3,6 @@ import os
 import json
 import re
 import psycopg2 as dbapi2
-
-
-
 from flask import Flask
 from flask import redirect
 from flask import request
@@ -31,6 +28,9 @@ def init_sponsors_db(cursor):
         BUDGET INTEGER NOT NULL,
         PRIMARY KEY (ID)
         )""")
+        fill_table(cursor)
+
+
 
 def add_sponsor(app, request, sponsor):
     connection = dbapi2.connect(app.config['dsn'])
@@ -231,3 +231,51 @@ def search_sponsor(app, name):
     finally:
         connection.close()
         return sponsors
+def fill_table(cursor):
+    cursor.execute("""
+            INSERT INTO COUNTRIES
+        (COUNTRY_NAME,COUNTRY_CONTINENT,COUNTRY_CAPITAL,COUNTRY_INDEPEN_YEAR) VALUES (
+        INITCAP('Holland'),
+        'Antartica',
+        'Amsterdam',
+        '1889');
+
+        INSERT INTO CLUBS
+        (NAME, PLACES, YEAR, CHAIR, NUMBER_OF_MEMBERS, REWARDNUMBER) VALUES (
+        'Mazula FC',
+        1,
+        1995,
+        'Aziz ULAK',
+        250,
+        100
+        );
+
+            INSERT INTO SPONSORS
+            (NAME, SUPPORTEDTEAM, BUDGET) VALUES (
+            'SAMSUNG',
+            1,
+            200000
+            );
+
+            INSERT INTO SPONSORS
+            (NAME, SUPPORTEDTEAM, BUDGET) VALUES (
+            'HONDA',
+            1,
+            100000
+            );
+
+            INSERT INTO SPONSORS
+            (NAME, SUPPORTEDTEAM, BUDGET) VALUES (
+            'MICROSOFT',
+            1,
+            145000
+            );
+
+            INSERT INTO SPONSORS
+            (NAME, SUPPORTEDTEAM, BUDGET) VALUES (
+            'VODAFONE',
+            1,
+            545000
+            );
+
+            """)

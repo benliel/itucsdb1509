@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8" />
+	{% extends "layout.html" %}
+	{% block title %}Coaches{% endblock %}
+</head>
+
+{% block content %} <h1 align="">Coaches</h1>
+<font color="#B5F7DF ">
+<table width="100%" id=chform>
+<form id="search" action="{{ url_for('coach_page')}}" method ="post">
+        <tr id="search">
+            <td  colspan="1" align="right" id="search" ><input form ="search" id="search" type="text" name="search_name" placeholder="Enter Country" required="required"></td>
+            <td align="left" id="search"><input class="add" Value="Search" name="search" id="search" type="submit" form="search"></td>
+        </tr>
+    </form>
+<form id="delete_form" action="{{ url_for('coach_page') }} " method = "post">
+
+<tr style="color:#2ECCFA;font-weight: bold;">
+
+
+	<td ></td>
+	<td width="3%">Name</td>
+	<td width="4%">Surname</td>
+	<td width="3%">Age</td>
+	<td width="7%">Country</td>
+	<td width="10%">Club</td>
+	<td width="73%"></td>
+
+
+</tr>
+</font>
+{%for id, name,surname,age,country,club in coach%}
+<tr id=chform>
+	<td width="3%" style="background:transparent;border:0"id=checkbox ><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
+	<td width="3%"id=chform>{{name}}</td>
+	<td width="3%"id=chform>{{surname}}</td>
+	<td width="3%"id=chform>{{age}}</td>
+	<td width="3%"id=chform>{{country}}</td>
+	<td width="3%"id=chform>{{club}}</td>
+	<td>
+       <a href="{{ url_for('country_update_page',country_id = id) }}" style="text-decoration: none"><font color="#2ECCFA">Update</font></a>
+    </td>
+    <td width="50%"></td>
+</tr>
+{%endfor%}
+
+
+<tr id=chform>
+				<td><input class="add" Value="Delete" name="delete" type="submit" form="delete_form"></td></form>
+</tr>
+
+
+<tr>
+				<form id="addco" action="{{ url_for('coach_page') }} " method = "post">
+				<td "id="championship_form"><input form="addco" id="chform" type="text" placeholder="Name" name="name" required="required" size="20"></td>
+				<td "id="championship_form"><input form="addco" id="chform" type="text" placeholder="Surname" name="surname" required="required" size="20"></td>
+				<td id="championship_form"><input form="addco" id="chform" type="text" placeholder="Age" name="age" required="required" size="7"></td>
+				<td id="championship_form"><input form="addco" id="chform" type="text" placeholder="Country" name="country" required="required" size="10"></td>
+				<td id="championship_form"><input form="addco" id="chform" type="text" placeholder="Club" name="club" required="required" size="10"></td>
+				</tr>
+
+				<tr id=chform>
+					<td colspan="4" style="text-align: left" id="co_form_button">
+					<input form="addco" class="add" id="co_form_button" value="Add Country" name="add" type="submit" >
+					</form>
+					</td>
+				</tr>
+
+</table>
+
+{% endblock %}
+</html>

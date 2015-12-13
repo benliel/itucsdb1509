@@ -17,6 +17,7 @@ from clubs import *
 from curlers import *
 from countries import *
 from stadiums import *
+from coach import *
 
 app = Flask(__name__)
 
@@ -49,6 +50,7 @@ def initialize_database():
             DROP TABLE IF EXISTS CURLERS CASCADE;
             DROP TABLE IF EXISTS COUNTRIES CASCADE;
             DROP TABLE IF EXISTS STADIUMS CASCADE;
+            DROP TABLE IF EXISTS COACHES CASCADE;
             ''')
             init_countries_db(cursor)
             init_stadiums_db(cursor)
@@ -57,6 +59,7 @@ def initialize_database():
             init_sponsors_db(cursor)
             init_championships_db(cursor)
             init_curlers_db(cursor)
+            init_coach_db(cursor)
         except dbapi2.Error as e:
             print(e.pgerror)
         finally:
@@ -252,6 +255,38 @@ def country_update_page(country_id):
             connection.commit()
 
     return redirect(url_for('countries_page'))
+@app.route('/coaches',methods=['GET', 'POST'])
+def coach_page():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    now = datetime.datetime.now()
+    if request.method == 'GET':
+        query = """SELECT *
+         FROM COACHES
+         ORDER BY COACH_NAME DESC """
+        cursor.execute(query)
+
+        return render_template('coach.html', coach = cursor.fetchall(), current_time=now.ctime())
+    elif "add" in request.form:
+        Coach1 = Coach(request.form['name'],
+                         request.form['surname'],
+                         request.form['age'],
+                         request.form['country'],
+                         request.form['club'])
+        add_coach(cursor, request,Coach1)
+        connection.commit()
+        return redirect(url_for('coach_page'))
+
+    elif "delete" in request.form:
+        for line in request.form:
+            if "checkbox" in line:
+                delete_coach(cursor, int(line[9:]))
+                connection.commit()
+        return redirect(url_for('coach_page'))
+    elif "search" in request.form:
+            print(request.form['search_name'])
+            result=search_country(cursor, request.form['search_name'])
+            return render_template('Country_search.html', countries = result, current_time=now.ctime())
 @app.route('/fixture', methods=['GET', 'POST'])
 def fixture_page():
     return get_fixture_page(app)

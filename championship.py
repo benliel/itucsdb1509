@@ -24,6 +24,8 @@ def init_championships_db(cursor):
     PRIMARY KEY(ID)
     )"""
     cursor.execute(query)
+    fill_championships_db(cursor)
+
 def fill_championships_db(cursor):
     query="""INSERT INTO CHAMPIONSHIP
         (NAME, PLACE, DATE, TYPE, NUMBER_OF_TEAMS,REWARD) VALUES (

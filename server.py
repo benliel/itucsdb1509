@@ -76,9 +76,9 @@ def initialize_database():
             init_equipments_db(cursor)
             init_points_db(cursor)
 
-            fill_countries_db(cursor)
-            fill_coach_db(cursor)
-            fill_championships_db(cursor)
+
+
+
         except dbapi2.Error as e:
             print(e.pgerror)
         finally:

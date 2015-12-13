@@ -15,6 +15,7 @@ def init_countries_db(cursor):
     PRIMARY KEY(COUNTRY_ID)
     )"""
     cursor.execute(query)
+    fill_countries_db(cursor)
 
 def fill_countries_db(cursor):
     query="""INSERT INTO COUNTRIES

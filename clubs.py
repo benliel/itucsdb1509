@@ -247,7 +247,6 @@ def update_club(app, id, club):
 
 
 def get_all_clubs(app):
-    clubs=None
     connection = dbapi2.connect(app.config['dsn'])
     try:
         cursor=connection.cursor()
@@ -257,12 +256,14 @@ def get_all_clubs(app):
             FROM CLUBS AS C, COUNTRIES AS K
             WHERE C.PLACES=K.COUNTRY_ID
             ''')
+            print(1)
             clubs = cursor.fetchall()
         except:
             cursor.rollback()
         finally:
             cursor.close()
-    except:
+    except dbapi2.Error as e:
+        print(e.pgerror)
         connection.rollback()
     finally:
         connection.close()

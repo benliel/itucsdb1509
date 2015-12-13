@@ -17,6 +17,7 @@ def init_coach_db(cursor):
     PRIMARY KEY(COACH_ID)
     )"""
     cursor.execute(query)
+    fill_coach_db(cursor)
 
 def fill_coach_db(cursor):
     query = """

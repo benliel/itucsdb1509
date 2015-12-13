@@ -38,6 +38,9 @@
 	<td width="3%"id=chform>{{curler}}</td>
 	<td width="3%"id=chform>{{club}}</td>
 	<td width="3%"id=chform>{{tournament}}</td>
+	<td>
+       <a href="{{ url_for('country_update_page',country_id = id) }}" style="text-decoration: none"><font color="#2ECCFA">Update</font></a>
+    </td>
 </tr>
 {%endfor%}
 	 </form>

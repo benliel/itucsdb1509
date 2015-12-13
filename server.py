@@ -182,7 +182,9 @@ def countries_page():
     cursor = connection.cursor()
     now = datetime.datetime.now()
     if request.method == 'GET':
-        query = "SELECT DISTINCT ON(COUNTRY_NAME)COUNTRY_ID,COUNTRY_NAME,COUNTRY_CURLER,COUNTRY_CLUB,COUNTRY_TOURNAMENT FROM COUNTRIES"
+        query = """SELECT COUNTRY_ID,COUNTRY_NAME,COUNTRY_CURLER,COUNTRY_CLUB,COUNTRY_TOURNAMENT
+         FROM COUNTRIES GROUP BY COUNTRY_ID
+         ORDER BY COUNTRY_NAME DESC """
         cursor.execute(query)
 
         return render_template('countries.html', countries = cursor.fetchall(), current_time=now.ctime())
@@ -225,6 +227,31 @@ def search_country(cursor,country):
         connection.close()
         print(res)
         return res
+@app.route('/contries/<country_id>', methods=['GET', 'POST'])
+def country_update_page(country_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        query = """SELECT * FROM COUNTRIES WHERE (COUNTRY_ID = %s)"""
+        now = datetime.datetime.now()
+        cursor.execute(query,country_id)
+        country1=cursor.fetchall()
+        cursor.close()
+        cursor = connection.cursor()
+        cursor.execute("SELECT COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES")
+        countries1=cursor.fetchall()
+        return render_template('Country_update.html', countries=country1, current_time=now.ctime())
+    elif request.method == 'POST':
+        if "update" in request.form:
+            country1 = Countries(request.form['name'],
+                         request.form['curler'],
+                         request.form['club'],
+                         request.form['tournament'])
+
+            update_country(cursor, request.form['country_id'], country1)
+            connection.commit()
+
+    return redirect(url_for('countries_page'))
 @app.route('/fixture', methods=['GET', 'POST'])
 def fixture_page():
     return get_fixture_page(app)

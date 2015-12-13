@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Country Update{% endblock %}
+</head>
+{% block content %}
+    <h2>Countries</h2>
+    <table id=championship_update>
+{%for countryid, name,curler,club,tournament in countries%}
+            <form id=update action="{{ url_for('country_update_page',country_id='0') }}" method = "post">
+                <tr id=update>
+                    <td id=update><input size="7" value="{{name}}" form ="update" id="championships" type="text" placeholder="Name" name="name"> </td>
+                    <td id=update><input size="7" value="{{curler}}" form ="update" id="championships" type="date" placeholder="curler" name="curler"></td>
+                    <td id=update><input size="7" value="{{club}}" form ="update" id="championships" type="text" placeholder = "Type" name="club"></td>
+                    <td id=update><input size="7" value="{{tournament}}" form ="update" id="championships" type="text" placeholder="Tournament" name="tournament"></td>
+
+                </tr>
+                <input type="hidden" name="country_id" value="{{countryid}}">
+                <tr id=update>
+                    <td colspan="7" id=championship_form_update>
+                        <input class="add"form="update" id="championship_form_update" value="Update Championship" name="update" type="submit">
+                    </td>
+                </tr>
+            </form>
+        {% endfor %}
+    </table>
+</html>
+
+
+	{% endblock %}
+</html>

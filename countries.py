@@ -29,3 +29,14 @@ def add_country(cursor, request, country):
 def delete_country(cursor, id):
         query="""DELETE FROM COUNTRIES WHERE COUNTRY_ID = %s"""
         cursor.execute(query, (int(id),))
+def update_country(cursor, id, country):
+            query="""
+            UPDATE COUNTRIES
+            SET COUNTRY_NAME=INITCAP(%s),
+            COUNTRY_CURLER=%s,
+            COUNTRY_CLUB=%s,
+            COUNTRY_TOURNAMENT=%s
+            WHERE COUNTRY_ID=%s
+            """
+            cursor.execute(query,(country.name, country.curler, country.club,
+                                country.tournament, id),)

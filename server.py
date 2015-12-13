@@ -18,6 +18,7 @@ from curlers import *
 from countries import *
 from stadiums import *
 from federations import *
+from points import *
 
 app = Flask(__name__)
 
@@ -51,6 +52,7 @@ def initialize_database():
             DROP TABLE IF EXISTS COUNTRIES CASCADE;
             DROP TABLE IF EXISTS STADIUMS CASCADE;
             DROP TABLE IF EXISTS FEDERATIONS CASCADE;
+            DROP TABLE IF EXISTS POINTS CASCADE;
             ''')
             init_countries_db(cursor)
             init_stadiums_db(cursor)
@@ -60,6 +62,8 @@ def initialize_database():
             init_championships_db(cursor)
             init_curlers_db(cursor)
             init_federations_db(cursor)
+            init_points_db(cursor)
+
         except dbapi2.Error as e:
             print(e.pgerror)
         finally:
@@ -189,6 +193,12 @@ def fixture_filter_page(stadium_id):
 @app.route('/fixture/edit/<match_id>', methods=['GET', 'POST'])
 def fixture_edit_page(match_id=0):
     return get_fixture_edit_page(app, match_id);
+@app.route('/points', methods=['GET', 'POST'])
+def points_page():
+    return get_points_page(app)
+@app.route('/points/edit/<points_id>', methods=['GET', 'POST'])
+def points_edit_page(points_id=0):
+    return get_points_edit_page(app, points_id)
 @app.route('/stadiums', methods=['GET', 'POST'])
 def stadiums_page():
     return get_stadiums_page(app)

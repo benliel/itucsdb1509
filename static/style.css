@@ -17,12 +17,20 @@ display: inline; margin-right: 1em; font-size: 80%;
 }
 
 table#clubs{
-	width: 80%;
+	width: 60%;
 	background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.7));
 	border-style: ridge;
 	border-width: 4px;
 	border-color: yellow;
 }
+table#money_balance{
+	width: 60%;
+	background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.7));
+	border-style: ridge;
+	border-width: 4px;
+	border-color: yellow;
+}
+
 td#clubs{
 	border-style: inset;
 	border-width: 1px;
@@ -38,11 +46,11 @@ td#clubs_form_add{
 	text-align: center;
 }
 input#clubs_form{
-	width: 95%;
+	width: 80%;
 	layout-gravity: center;
 }
 input#clubs_form_add{
-	width: 40%;
+	width: 20%;
 }
 table#chform{
 }

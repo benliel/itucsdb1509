@@ -218,10 +218,10 @@ def search_penalty(app, name):
         cursor = connection.cursor()
         try:
             cursor.execute("""
-            SELECT P.ID, C.NAME, P.STARTDATE, P.ENDDATE , P.TYPE
+            SELECT P.ID, C.CURLER_NAME, P.STARTDATE, P.ENDDATE , P.TYPE
             FROM PENALTY AS P, CURLERS AS C
             WHERE(
-                UPPER(C.NAME)=UPPER(%s) AND
+                UPPER(C.CURLER_NAME)=UPPER(%s) AND
                 P.PERSONNAME=C.CURLERID
             )""", (name,))
             penalties = cursor.fetchall()

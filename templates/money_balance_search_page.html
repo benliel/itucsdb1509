@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Money Balance of Clubs{% endblock %}
+</head>
+	{% block content %}<h2>Money Balance of Clubs</h2>
+
+	<table id=money_balances  border="1" style="width:60%">
+
+	<form id="delete_form" action="{{ url_for('money_balances_page') }} " method = "post">
+
+	{% for id, club, incomes, expenses, profit in money_balances %}
+	<tr id=money_balance >
+		<td id=checkbox>
+		<input form ="delete_form" type="checkbox" name="checkbox_{{id}}">
+		<a href="{{url_for('money_balances_edit_page', money_balance_id=id)}}"><img alt="edit{{id}}" src="/static/edit.png" height="20px"></a>
+		</td>
+		<td id=money_balance>{{club}}</td>
+		<td id=money_balance>{{incomes}}</td>
+		<td id=money_balance>{{expenses}}</td>
+		<td id=money_balance>{{profit}}</td>
+	</tr>
+	{% endfor %}
+
+
+
+		<tr id=money_balance>
+				<td colspan="5" id=clubs_form_add><input Value="Delete" name="delete" type="submit" form="delete_form"></form>
+		</td>
+
+
+	</table>
+
+
+
+	{% endblock %}
+</html>

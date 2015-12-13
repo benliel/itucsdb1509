@@ -32,7 +32,7 @@ def init_clubs_db(cursor):
     cursor.execute( """CREATE TABLE IF NOT EXISTS CLUBS (
             ID SERIAL,
             NAME VARCHAR(80) NOT NULL,
-            PLACE VARCHAR(80) NOT NULL,
+            PLACES INTEGER NOT NULL REFERENCES COUNTRIES(COUNTRY_ID) ON DELETE CASCADE ON UPDATE CASCADE,
             YEAR NUMERIC(4) NOT NULL,
             CHAIR VARCHAR(80) NOT NULL,
             NUMBER_OF_MEMBERS INTEGER NOT NULL,
@@ -48,7 +48,7 @@ def add_club(app, request, club):
         try:
             cursor = connection.cursor()
             cursor.execute("""INSERT INTO CLUBS
-        (NAME, PLACE, YEAR, CHAIR, NUMBER_OF_MEMBERS, REWARDNUMBER) VALUES (
+        (NAME, PLACES, YEAR, CHAIR, NUMBER_OF_MEMBERS, REWARDNUMBER) VALUES (
         %s,
         %s,
         %s,
@@ -89,9 +89,11 @@ def get_clubs_page(app):
     if request.method == 'GET':
         now = datetime.datetime.now()
         clubs = get_all_clubs(app)
+        countries = get_country_names(app)
 
         return render_template('clubs.html',
-                               clubs=clubs, current_time=now.ctime())
+                               clubs=clubs, countries=countries,
+                               current_time=now.ctime())
 
     elif "add" in request.form:
         club = Clubs(request.form['name'],
@@ -119,7 +121,8 @@ def get_clubs_edit_page(app,club_id):
     if request.method == 'GET':
         now = datetime.datetime.now()
         club = get_club(app, club_id)
-        return render_template('clubs_edit_page.html', current_time=now.ctime(), club=club)
+        countries = get_country_names(app)
+        return render_template('clubs_edit_page.html', current_time=now.ctime(), club=club, countries=countries)
 
     if request.method == 'POST':
         club = Clubs(request.form['name'],
@@ -131,6 +134,23 @@ def get_clubs_edit_page(app,club_id):
         update_club(app, request.form['id'], club)
         return redirect(url_for('clubs_page'))
 
+def get_country_names(app):
+    connection=dbapi2.connect(app.config['dsn'])
+    try:
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT COUNTRY_ID,COUNTRY_NAME FROM COUNTRIES')
+            countries = cursor.fetchall()
+        except dbapi2.Error as e:
+            print(e.pgerror)
+        finally:
+            cursor.close()
+    except:
+        connection.rollback()
+    finally:
+        connection.close()
+        return countries
+
 
 def get_club(app, club_id):
     club=None
@@ -139,10 +159,10 @@ def get_club(app, club_id):
         cursor = connection.cursor()
         try:
             cursor.execute('''
-            SELECT C.ID, C.NAME, C.PLACE, C.YEAR, C.CHAIR, C.NUMBER_OF_MEMBERS, C.REWARDNUMBER
-            FROM CLUBS AS C
+            SELECT C.ID, C.NAME, S.COUNTRY_NAME, C.YEAR, C.CHAIR, C.NUMBER_OF_MEMBERS, C.REWARDNUMBER
+            FROM CLUBS AS C,COUNTRIES AS S
             WHERE (
-                C.ID=%s
+                C.ID=%s AND C.PLACES=S.COUNTRY_ID
                 )
             ''', club_id);
             club = cursor.fetchone()
@@ -166,7 +186,7 @@ def update_club(app, id, club):
             cursor.execute("""
             UPDATE CLUBS
             SET NAME = %s,
-            PLACE = %s,
+            PLACES = %s,
             YEAR = %s,
             CHAIR=%s,
             NUMBER_OF_MEMBERS=%s,
@@ -191,8 +211,9 @@ def get_all_clubs(app):
         cursor=connection.cursor()
         try:
             cursor.execute('''
-            SELECT C.ID, C.NAME, C.PLACE, C.YEAR, C.CHAIR, C.NUMBER_OF_MEMBERS, C.REWARDNUMBER
-            FROM CLUBS AS C
+            SELECT C.ID, C.NAME, K.COUNTRY_NAME, C.YEAR, C.CHAIR, C.NUMBER_OF_MEMBERS, C.REWARDNUMBER
+            FROM CLUBS AS C, COUNTRIES AS K
+            WHERE C.PLACES=K.COUNTRY_ID
             ''')
             clubs = cursor.fetchall()
         except:
@@ -211,10 +232,11 @@ def search_club(app, name):
         cursor = connection.cursor()
         try:
             cursor.execute("""
-            SELECT C.ID, C.NAME, C.PLACE, C.YEAR, C.CHAIR, C.NUMBER_OF_MEMBERS, C.REWARDNUMBER
-            FROM CLUBS AS C
+            SELECT C.ID, C.NAME, S.COUNTRY_NAME, C.YEAR, C.CHAIR, C.NUMBER_OF_MEMBERS, C.REWARDNUMBER
+            FROM CLUBS AS C , COUNTRIES AS S
             WHERE(
-                UPPER(C.NAME)=UPPER(%s)
+                UPPER(C.NAME)=UPPER(%s) AND
+                C.PLACES=S.COUNTRY_ID
             )""", (name,))
             clubs = cursor.fetchall()
         except dbapi2.Error as e:

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Equipments{% endblock %}
+</head>
+	{% block content %}<h2>Equipments</h2>
+
+	<table id=equipments>
+	<tr>
+	<td id="equipment" colspan="6" align="right">
+	<form id="search" action="{{url_for('equipments_page')}}" method="POST">
+		<input form="search" type="text" placeholder="Equipment Name To Search" name="equipment_to_search" required="required">
+		<input form="search" type="submit" value="Search" name="search">
+	</form>
+	</td>
+	</tr>
+	<form id="delete_form" action="{{ url_for('equipments_page') }} " method = "post">
+
+
+
+		<tr id=equipments>
+				<td colspan="6" id=equipments_form_add>
+				<input Value="Delete" name="delete" type="submit" form="delete_form">
+					</form>
+					</td>
+			</tr>
+		<tr id=equipments>
+				<td>
+		</td>{% if(countries|length>0)%}
+				<form id="add" action="{{ url_for('equipments_page') }} " method = "post">
+				<td id="equipments_form"><input form ="add" id="equipments" type="text" placeholder="Name of Equipment" name="name" required="required"></td>
+				<td id="equipments_form"><input form ="add" id="equipments" type="text" placeholder="Manufecturer" name="manufacturer" required="required"></td>
+				<td id="equipments_form"><input form ="add" id="equipments" type="number" placeholder="Price" name="price" required="required"></td>
+				<td id="equipments_form">
+				<select id="equipments_form" form="add" name="country" required="required">
+					<option disabled="disabled" selected="selected" hidden="hidden">Select a Country</option>
+				{% for country in countries%}
+					<option value="{{country[0]}}">{{country[1]}}</option>
+				{% endfor %}
+				</select>
+				<td id="equipments_form">
+			</tr>
+						<tr id=equipments>
+				<td colspan="6" id=equipments_form_add>
+					<input form="add" id="equipments_form_add" value="Add Equipment" name="add" type="submit"></form>
+					</td>
+					</tr>
+					{%else%}
+					</tr>
+					<tr id="equipments_form">
+					<td id="equipments_form" colspan="6">You cannot add equipment, since there are no country added in the database!
+					</tr>
+					{%endif%}
+
+
+	</table>
+
+	<table border="1" style="width:60%">
+	{% for id, name, manufacturer, price , country in equipments %}
+	<tr id=equipments>
+		<td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"> </td>
+		<td id=equipments>{{name}}</td>
+		<td id=equipments>{{manufacturer}}</td>
+		<td id=equipments>{{price}}</td>
+		<td id=equipments>{{country}}</td>
+		<td><a href="{{url_for('equipments_edit_page', equipment_id=id)}}"><img alt="edit{{id}}" src="/static/file_edit.png" height="20px">Edit</td>
+	</tr>
+	{% endfor %}
+
+	</table>
+	{% endblock %}
+
+</html>

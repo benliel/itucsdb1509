@@ -32,14 +32,16 @@ def add_coach(cursor, request, coach):
 def delete_coach(cursor, id):
         query="""DELETE FROM COACHES WHERE COACH_ID = %s"""
         cursor.execute(query, (int(id),))
-def update_coach(cursor, id, country):
+def update_coach(cursor, id, coach):
             query="""
-            UPDATE COUNTRIES
-            SET COUNTRY_NAME=INITCAP(%s),
-            COUNTRY_CURLER=%s,
-            COUNTRY_CLUB=%s,
-            COUNTRY_TOURNAMENT=%s
-            WHERE COUNTRY_ID=%s
+            UPDATE COACHES
+            SET COACH_NAME=INITCAP(%s),
+            COACH_SURNAME=INITCAP(%s),
+            COACH_AGE=%s,
+            COACH_COUNTRY=%s,
+            COACH_CLUB=%s
+            WHERE COACH_ID=%s
             """
-            cursor.execute(query,(country.name, country.curler, country.club,
-                                country.tournament, id),)
+            print(1)
+            cursor.execute(query,(coach.name, coach.surname, coach.age,
+                                coach.country,coach.club, id),)

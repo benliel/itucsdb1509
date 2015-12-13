@@ -50,7 +50,7 @@ def add_test_data(cursor):
     4,
     to_date('01.01.2016','DD.MM.YYYY'),
     to_timestamp('20.00', 'HH24.MM'),
-    1
+    2
     );
     """)
     cursor.execute("""
@@ -60,7 +60,7 @@ def add_test_data(cursor):
     3,
     to_date('08.01.2016','DD.MM.YYYY'),
     to_timestamp('21.00', 'HH24.MM'),
-    1
+    3
     );
     """)
     cursor.execute("""
@@ -70,7 +70,7 @@ def add_test_data(cursor):
     4,
     to_date('08.01.2016','DD.MM.YYYY'),
     to_timestamp('21.00', 'HH24.MM'),
-    1
+    4
     );
     """)
     cursor.execute("""
@@ -90,7 +90,7 @@ def add_test_data(cursor):
     3,
     to_date('15.01.2016','DD.MM.YYYY'),
     to_timestamp('22.00', 'HH24.MM'),
-    1
+    2
     );
     """)
 

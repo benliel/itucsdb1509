@@ -15,7 +15,78 @@ def init_countries_db(cursor):
     PRIMARY KEY(COUNTRY_ID)
     )"""
     cursor.execute(query)
+    fill_countries_db(cursor)
 
+def fill_countries_db(cursor):
+    query="""INSERT INTO COUNTRIES
+        (COUNTRY_NAME,COUNTRY_CONTINENT,COUNTRY_CAPITAL,COUNTRY_INDEPEN_YEAR) VALUES (
+        'United States',
+        'America',
+        'Washington,D.C',
+        '1776');
+
+        INSERT INTO COUNTRIES
+        (COUNTRY_NAME,COUNTRY_CONTINENT,COUNTRY_CAPITAL,COUNTRY_INDEPEN_YEAR) VALUES (
+        'Greece',
+        'Europe',
+        'Athens',
+        '1830');
+        INSERT INTO COUNTRIES
+        (COUNTRY_NAME,COUNTRY_CONTINENT,COUNTRY_CAPITAL,COUNTRY_INDEPEN_YEAR) VALUES (
+        'Turkey',
+        'Asia',
+        'Ankara',
+        '1923');
+        INSERT INTO COUNTRIES
+        (COUNTRY_NAME,COUNTRY_CONTINENT,COUNTRY_CAPITAL,COUNTRY_INDEPEN_YEAR) VALUES (
+        'Germany',
+        'Europe',
+        'Berlin',
+        '1875');
+         INSERT INTO COUNTRIES
+        (COUNTRY_NAME,COUNTRY_CONTINENT,COUNTRY_CAPITAL,COUNTRY_INDEPEN_YEAR) VALUES (
+        'Great Britain',
+        'Europe',
+        'London',
+        '1776');
+        INSERT INTO COUNTRIES
+        (COUNTRY_NAME,COUNTRY_CONTINENT,COUNTRY_CAPITAL,COUNTRY_INDEPEN_YEAR) VALUES (
+        'Russia',
+        'Asia',
+        'Moscow',
+        '1991');
+          INSERT INTO COUNTRIES
+        (COUNTRY_NAME,COUNTRY_CONTINENT,COUNTRY_CAPITAL,COUNTRY_INDEPEN_YEAR) VALUES (
+        'China',
+        'Asia',
+        'Beijing',
+        '1912');
+         INSERT INTO COUNTRIES
+        (COUNTRY_NAME,COUNTRY_CONTINENT,COUNTRY_CAPITAL,COUNTRY_INDEPEN_YEAR) VALUES (
+        'Philippines',
+        'Asia',
+        'Manila',
+        '1898');
+        INSERT INTO COUNTRIES
+        (COUNTRY_NAME,COUNTRY_CONTINENT,COUNTRY_CAPITAL,COUNTRY_INDEPEN_YEAR) VALUES (
+        'Canada',
+        'America',
+        'Ottawa',
+        '1867');
+         INSERT INTO COUNTRIES
+        (COUNTRY_NAME,COUNTRY_CONTINENT,COUNTRY_CAPITAL,COUNTRY_INDEPEN_YEAR) VALUES (
+        'Sweden',
+        'Europe',
+        'Stockholm',
+        '1523');
+        INSERT INTO COUNTRIES
+        (COUNTRY_NAME,COUNTRY_CONTINENT,COUNTRY_CAPITAL,COUNTRY_INDEPEN_YEAR) VALUES (
+        'France',
+        'Europe',
+        'Rome',
+        '1789');
+        """
+    cursor.execute(query)
 def add_country(cursor, request, country):
 
         query = """INSERT INTO COUNTRIES

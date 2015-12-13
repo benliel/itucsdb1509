@@ -17,7 +17,34 @@ def init_coach_db(cursor):
     PRIMARY KEY(COACH_ID)
     )"""
     cursor.execute(query)
+    fill_coach_db(cursor)
 
+def fill_coach_db(cursor):
+    query = """
+        INSERT INTO COACHES
+            (COACH_NAME,COACH_SURNAME,COACH_AGE,COACH_COUNTRY,COACH_CLUB) VALUES (
+            'George',
+            'Hemington',
+            40,
+            1,
+            1);
+        INSERT INTO COACHES
+        (COACH_NAME,COACH_SURNAME,COACH_AGE,COACH_COUNTRY,COACH_CLUB) VALUES (
+        'Richert',
+        'Muher',
+        38,
+        3,
+        2);
+
+         INSERT INTO COACHES
+        (COACH_NAME,COACH_SURNAME,COACH_AGE,COACH_COUNTRY,COACH_CLUB) VALUES (
+        'Albert',
+        'Zinger',
+        45,
+        5,
+        4);
+        """
+    cursor.execute(query)
 def add_coach(cursor, request, coach):
 
         query = """INSERT INTO COACHES
@@ -28,7 +55,6 @@ def add_coach(cursor, request, coach):
         %s,
         %s)"""
         cursor.execute(query, (coach.name,coach.surname,coach.age,coach.country,coach.club))
-        print(0)
 def delete_coach(cursor, id):
         query="""DELETE FROM COACHES WHERE COACH_ID = %s"""
         cursor.execute(query, (int(id),))
@@ -42,6 +68,5 @@ def update_coach(cursor, id, coach):
             COACH_CLUB=%s
             WHERE COACH_ID=%s
             """
-            print(1)
             cursor.execute(query,(coach.name, coach.surname, coach.age,
                                 coach.country,coach.club, id),)

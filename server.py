@@ -131,7 +131,6 @@ def championships_page():
                 return redirect(url_for('championships_page'))
 
             elif "search" in request.form:
-                    print(request.form['search_name'])
                     result=search_championship(cursor, request.form['search_name'])
                     return render_template('championship_search.html', championship = result, current_time=now.ctime())
         except dbapi2.Error as e:
@@ -160,7 +159,6 @@ def search_championship(cursor,championship1):
                                """
             cursor.execute(query,('%'+championship1+'%','%'+championship1+'%'))
             res = cursor.fetchall()
-            ##print(res)
         except dbapi2.Error as e:
             print(e.pgerror)
         finally:
@@ -225,7 +223,6 @@ def countries_page():
                 connection.commit()
         return redirect(url_for('countries_page'))
     elif "search" in request.form:
-            print(request.form['search_name'])
             result=search_country(cursor, request.form['search_name'])
             return render_template('Country_search.html', countries = result, current_time=now.ctime())
 def search_country(cursor,country):
@@ -234,8 +231,6 @@ def search_country(cursor,country):
     try:
         cursor = connection.cursor()
         try:
-            print(0)
-            print(country)
             query = """SELECT*
             FROM COUNTRIES WHERE((COUNTRY_NAME LIKE %s)OR (COUNTRY_CONTINENT LIKE %s))"""
             cursor.execute(query,('%'+country+'%','%'+country+'%'))
@@ -249,7 +244,6 @@ def search_country(cursor,country):
         connection.rollback()
     finally:
         connection.close()
-        print(res)
         return res
 @app.route('/contries/<country_id>', methods=['GET', 'POST'])
 def country_update_page(country_id):
@@ -314,7 +308,6 @@ def coach_page():
                 connection.commit()
         return redirect(url_for('coach_page'))
     elif "search" in request.form:
-            print(request.form['search_name'])
             result=search_coach(cursor, request.form['search_name'])
             return render_template('coach_search.html', coach = result, current_time=now.ctime())
 def search_coach(cursor,coach):
@@ -323,8 +316,6 @@ def search_coach(cursor,coach):
     try:
         cursor = connection.cursor()
         try:
-            print(0)
-            print(coach)
             query = """SELECT*
             FROM COACHES WHERE(COACH_NAME LIKE %s)"""
             cursor.execute(query,('%'+coach+'%',))
@@ -338,7 +329,6 @@ def search_coach(cursor,coach):
         connection.rollback()
     finally:
         connection.close()
-        print(res)
         return res
 @app.route('/coaches/<coach_id>', methods=['GET', 'POST'])
 def coach_update_page(coach_id):

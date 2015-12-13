@@ -85,7 +85,6 @@ def get_penalty_page(app):
         return render_template('penalty.html', penalties = penalties,
                                curlers=curlers, current_time=now.ctime())
     elif "add" in request.form:
-        print(request.form)
         penalty = Penalty(request.form['personname'],
                      request.form['startdate'],
                      request.form['enddate'],

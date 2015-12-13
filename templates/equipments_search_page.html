@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Equipments{% endblock %}
+</head>
+	{% block content %}<h2>Equipments</h2>
+
+	<table id="equipments" border="1" style="width:60%">
+	<tr>
+	<td id="equipments" colspan="6" align="right">
+	<form id="search" action="{{url_for('equipments_page')}}" method="post">
+		<input form="search" type="text" placeholder="Equipment Name To Search" name="equipment_to_search" required="required">
+		<input form="search" type="submit" value="Search" name="search">
+	</form>
+	</td>
+	</tr>
+	<form id="delete_form" action="{{ url_for('equipments_page') }} " method = "post">
+
+	{% for id, name, manufacturer, price , country  in equipments %}
+	<tr id=equipments>
+		<td id=checkbox></td>
+		<td id=equipments>Equipment Name</td>
+		<td id=equipments>Manufacturer</td>
+		<td id=equipments>Price</td>
+		<td id=equipments>Country</td>
+	</tr>
+	<tr id="equipments" >
+		<td id=checkbox>
+		<input form ="delete_form" type="checkbox" name="checkbox_{{id}}">
+		<a href="{{url_for('equipments_edit_page', equipment_id=id)}}"><img alt="edit{{id}}" src="/static/file_edit.png" height="20px">Edit</a>
+		</td>
+		<td id="equipments">{{name}}</td>
+		<td id="equipments">{{manufacturer}}</td>
+		<td id="equipments">{{price}}</td>
+		<td id="equipments">{{country}}</td>
+	</tr>
+	{% endfor %}
+
+
+
+		<tr id=equipments>
+				<td><input Value="Delete" name="delete" type="submit" form="delete_form"></form>
+		</td>
+
+
+	</table>
+
+
+
+	{% endblock %}
+</html>

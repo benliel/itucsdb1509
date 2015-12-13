@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Penalties{% endblock %}
+</head>
+	{% block content %}<h2>Penalties</h2>
+
+	<table id=penalties border="1" style="width:60%">
+	<tr>
+	<td id="penalties" colspan="6" align="right">
+	<form id="search" action="{{url_for('penalty_page')}}" method="post">
+		<input form="search" type="text" placeholder="Curler Name To Search" name="penalty_to_search" required="required">
+		<input form="search" type="submit" value="Search" name="search">
+	</form>
+	</td>
+	</tr>
+	<form id="delete_form" action="{{ url_for('penalty_page') }} " method = "post">
+
+	{% for id, personname, startdate, enddate , type  in penalties %}
+	<tr id=penalty">
+		<td id=checkbox>
+		<input form ="delete_form" type="checkbox" name="checkbox_{{id}}">
+		<a href="{{url_for('penalty_edit_page', penalty_id=id)}}"><img alt="edit{{id}}" src="/static/file_edit.png" height="20px">Edit</a>
+		</td>
+		<td id=penalty>{{personname}}</td>
+		<td id=penalty>{{startdate}}</td>
+		<td id=penalty>{{enddate}}</td>
+		<td id=penalty>{{type}}</td>
+	</tr>
+	{% endfor %}
+
+		<tr id=penalty>
+				<td><input Value="Delete" name="delete" type="submit" form="delete_form"></form>
+		</td>
+
+	</table>
+
+	{% endblock %}
+</html>

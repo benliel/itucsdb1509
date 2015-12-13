@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Edit Penalty{% endblock %}
+</head>
+	{% block content %}
+	<h2>Edit Penalty</h2>
+
+	<table id="penaltyUpdate"><tr>
+		<form id ="update" action="{{url_for('penalty_edit_page', penalty_id=penalty[0])}}" method="POST">
+			<input type="hidden" value="{{penalty[0]}}" name="id" readonly="readonly"/>
+			<td>
+			<select id="penaltyUpdate" form="update" name="personname" required="required">
+				{% for curler in curlers%}
+					<option value="{{curler[0]}}" {% if penalty[1]==curler[1] %}selected{%endif%}>{{curler[1]}}</option>
+				{% endfor %}
+			</select>
+			</td>
+			<td><input id="penaltyUpdate" form="update" type="date" value="{{penalty[2]}}" name="startdate" required="required"></td>
+			<td><input id="penaltyUpdate" form="update" type="date" value="{{penalty[3]}}" name="enddate" required="required"></td>
+			<td><input id="penaltyUpdate" form="update" type="text" value="{{penalty[4]}}" name="type" required="required"></td>
+			<td><input id="penaltyUpdate" form="update" type="submit" value="Update Penalty" name="update"></td>
+		</tr></form>
+	</table>
+
+
+	{% endblock %}
+</html>

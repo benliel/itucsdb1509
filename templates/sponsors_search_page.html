@@ -7,7 +7,7 @@
 </head>
 	{% block content %}<h2>Sponsors</h2>
 
-	<table id=sponsors>
+	<table id=sponsors border="1" style="width:60%">
 	<tr>
 	<td id="sponsors" colspan="6" align="right">
 	<form id="search" action="{{url_for('sponsors_page')}}" method="post">
@@ -19,20 +19,20 @@
 	<form id="delete_form" action="{{ url_for('sponsors_page') }} " method = "post">
 
 	{% for id, name, supportedteam, budget  in sponsors %}
-	<tr id=fixture>
+	<tr id=sponsors >
 		<td id=checkbox>
 		<input form ="delete_form" type="checkbox" name="checkbox_{{id}}">
 		<a href="{{url_for('sponsors_edit_page', sponsor_id=id)}}"><img alt="edit{{id}}" src="/static/edit.png" height="20px"></a>
 		</td>
-		<td id=fixture>{{name}}</td>
-		<td id=fixture>{{supportedteam}}</td>
-		<td id=fixture>{{budget}}</td>
+		<td id=sponsors>{{name}}</td>
+		<td id=sponsors>{{supportedteam}}</td>
+		<td id=sponsors>{{budget}}</td>
 	</tr>
 	{% endfor %}
 
 
 
-		<tr id=fixture>
+		<tr id=sponsors>
 				<td><input Value="Delete" name="delete" type="submit" form="delete_form"></form>
 		</td>
 

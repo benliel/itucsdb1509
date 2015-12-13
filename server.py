@@ -18,6 +18,8 @@ from curlers import *
 from countries import *
 from stadiums import *
 from federations import *
+from penalty import *
+from equipments import *
 from points import *
 
 app = Flask(__name__)
@@ -52,6 +54,8 @@ def initialize_database():
             DROP TABLE IF EXISTS COUNTRIES CASCADE;
             DROP TABLE IF EXISTS STADIUMS CASCADE;
             DROP TABLE IF EXISTS FEDERATIONS CASCADE;
+            DROP TABLE IF EXISTS PENALTY CASCADE;
+            DROP TABLE IF EXISTS EQUIPMENTS CASCADE;
             DROP TABLE IF EXISTS POINTS CASCADE;
             ''')
             init_countries_db(cursor)
@@ -62,6 +66,8 @@ def initialize_database():
             init_championships_db(cursor)
             init_curlers_db(cursor)
             init_federations_db(cursor)
+            init_penalty_db(cursor)
+            init_equipments_db(cursor)
             init_points_db(cursor)
 
         except dbapi2.Error as e:
@@ -381,6 +387,24 @@ def sponsors_page():
 @app.route('/sponsors/edit/<sponsor_id>',methods=['GET','POST'])
 def sponsors_edit_page(sponsor_id=0):
     return get_sponsors_edit_page(app,sponsor_id);
+
+##Penalty arrangements by Muhammed Aziz Ulak
+@app.route('/penalty', methods=['GET', 'POST'])
+def penalty_page():
+    return get_penalty_page(app)
+
+@app.route('/penalty/edit/<penalty_id>',methods=['GET','POST'])
+def penalty_edit_page(penalty_id=0):
+    return get_penalty_edit_page(app,penalty_id);
+
+##Equipment arrangements by Muhammed Aziz Ulak
+@app.route('/equipments', methods=['GET', 'POST'])
+def equipments_page():
+    return get_equipments_page(app)
+
+@app.route('/equipments/edit/<equipment_id>',methods=['GET','POST'])
+def equipments_edit_page(equipment_id=0):
+    return get_equipments_edit_page(app,equipment_id);
 
 
 if __name__ == '__main__':

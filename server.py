@@ -218,8 +218,8 @@ def search_country(cursor,country):
             print(0)
             print(country)
             query = """SELECT*
-            FROM COUNTRIES WHERE(COUNTRY_NAME LIKE %s)"""
-            cursor.execute(query,('%'+country+'%',))
+            FROM COUNTRIES WHERE((COUNTRY_NAME LIKE %s)OR (COUNTRY_CONTINENT LIKE %s))"""
+            cursor.execute(query,('%'+country+'%','%'+country+'%'))
             res = cursor.fetchall()
         except dbapi2.Error as e:
             print(e.pgerror)

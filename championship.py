@@ -24,7 +24,61 @@ def init_championships_db(cursor):
     PRIMARY KEY(ID)
     )"""
     cursor.execute(query)
+def fill_championships_db(cursor):
+    query="""INSERT INTO CHAMPIONSHIP
+        (NAME, PLACE, DATE, TYPE, NUMBER_OF_TEAMS,REWARD) VALUES (
+        'Air Canada S.B',
+        9,
+        to_date('13.09.2019', 'DD-MM-YYYY'),
+        'Single Elimination',
+        5,
+        '5.000.000$');
 
+        INSERT INTO CHAMPIONSHIP
+        (NAME, PLACE, DATE, TYPE, NUMBER_OF_TEAMS,REWARD) VALUES (
+        'France Curling Championship',
+        11,
+        to_date('23.11.2018', 'DD-MM-YYYY'),
+        'League',
+        5,
+        '20.000.000$');
+
+        INSERT INTO CHAMPIONSHIP
+        (NAME, PLACE, DATE, TYPE, NUMBER_OF_TEAMS,REWARD) VALUES (
+        'World Golden Broom',
+        5,
+        to_date('20.10.2020', 'DD-MM-YYYY'),
+        'Round Robin',
+        4,
+        '100.000.000$');
+
+         INSERT INTO CHAMPIONSHIP
+        (NAME, PLACE, DATE, TYPE, NUMBER_OF_TEAMS,REWARD) VALUES (
+        ' Ford World Curling Ch.',
+        7,
+        to_date('08.09.2022', 'DD-MM-YYYY'),
+        'Round Robin',
+        4,
+        '150.000.000$');
+
+         INSERT INTO CHAMPIONSHIP
+        (NAME, PLACE, DATE, TYPE, NUMBER_OF_TEAMS,REWARD) VALUES (
+        'World Mixed Doubles Curling Ch.',
+        8,
+        to_date('18.01.2020', 'DD-MM-YYYY'),
+        'Double Elimination',
+        4,
+        '300.000.000$');
+        INSERT INTO CHAMPIONSHIP
+        (NAME, PLACE, DATE, TYPE, NUMBER_OF_TEAMS,REWARD) VALUES (
+        'WCF Championships',
+        1,
+        to_date('18.01.2020', 'DD-MM-YYYY'),
+        'Double Elimination',
+        4,
+        '120.000.000$');
+        """
+    cursor.execute(query)
 def add_championship(cursor, request, championship1):
         query = """INSERT INTO CHAMPIONSHIP
         (NAME, PLACE, DATE, TYPE, NUMBER_OF_TEAMS,REWARD) VALUES (

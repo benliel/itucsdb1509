@@ -18,6 +18,32 @@ def init_coach_db(cursor):
     )"""
     cursor.execute(query)
 
+def fill_coach_db(cursor):
+    query = """
+        INSERT INTO COACHES
+            (COACH_NAME,COACH_SURNAME,COACH_AGE,COACH_COUNTRY,COACH_CLUB) VALUES (
+            'George',
+            'Hemington',
+            40,
+            1,
+            1);
+        INSERT INTO COACHES
+        (COACH_NAME,COACH_SURNAME,COACH_AGE,COACH_COUNTRY,COACH_CLUB) VALUES (
+        'Richert',
+        'Muher',
+        38,
+        3,
+        2);
+
+         INSERT INTO COACHES
+        (COACH_NAME,COACH_SURNAME,COACH_AGE,COACH_COUNTRY,COACH_CLUB) VALUES (
+        'Albert',
+        'Zinger',
+        45,
+        5,
+        4);
+        """
+    cursor.execute(query)
 def add_coach(cursor, request, coach):
 
         query = """INSERT INTO COACHES

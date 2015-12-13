@@ -76,6 +76,9 @@ def initialize_database():
             init_equipments_db(cursor)
             init_points_db(cursor)
 
+            fill_countries_db(cursor)
+            fill_coach_db(cursor)
+            fill_championships_db(cursor)
         except dbapi2.Error as e:
             print(e.pgerror)
         finally:
@@ -202,7 +205,7 @@ def countries_page():
 
         query = """SELECT COUNTRY_ID,COUNTRY_NAME,COUNTRY_CONTINENT,COUNTRY_CAPITAL,COUNTRY_INDEPEN_YEAR
          FROM COUNTRIES GROUP BY COUNTRY_ID
-         ORDER BY COUNTRY_NAME DESC """
+         ORDER BY COUNTRY_NAME """
         cursor.execute(query)
 
         return render_template('countries.html', countries = cursor.fetchall(), current_time=now.ctime())

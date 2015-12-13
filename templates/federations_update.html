@@ -17,7 +17,7 @@
                     <td id=update><input value="{{president_surname}}" form ="update" id="federations" type="text" placeholder="President Surname" name="president_surname" required="required"></td>
                     <td id=update><input value="{{founding_year}}" form ="update" id="federations" type="number" min="1800" max="2100" placeholder="Founding Year" name="founding_year" required="required"></td>
                     <td id="update">
-                        <select form="update" id=federations name="country">
+                        <select form="update" id=federations name="country_id">
                             {% for country_id, country_name in countries %}
                                 <option id=federations type="text" placeholder = "Country" value="{{country_id}}">{{country_name}}</option>
                             {% endfor %}

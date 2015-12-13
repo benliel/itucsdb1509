@@ -16,63 +16,57 @@ nav li {
 display: inline; margin-right: 1em; font-size: 80%;
 }
 
-table#fixture {
+table#curlers {
 	width: 100%;
 	background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.7));
 	border-style: ridge;
 	border-width: 2px;
 	border-color: white;
 }
-td#fixture {
+td#curlers {
 	width: 20%;
 	border-style: inset;
 	border-width: 1px;
 	border-color: white;
-}
-table#fixtureUpdate {
-	width: 100%;
-	background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.7));
-	border-style: ridge;
-	border-width: 2px;
-	border-color: white;
-}
-td#fixtureUpdate {
-	width: 20%;
-	border-style: inset;
-	border-width: 1px;
-	border-color: white;
-}
-input#fixtureUpdate {
-	width: 90%;
-	layout-gravity: center;
-	text-align: center;
-}
-select#fixtureUpdate {
-	width: 100%;
-}
-td#checkbox {
-	width: 7%;
-	border-style: inset;
-	border-width: 1px;
-	border-color: white;
-}
-td#fixture_form {
-	border-style: inset;
-	border-width: 1px;
-	border-color: white;
-	text-align: center;
-}
-input#fixture_form {
-	width: 100%;
-	layout-gravity: center;
-}
-select#fixture_form{
-	width: 100%;
 }
 
-td#fixture_form_add {
-	text-align: center;
+td#curlers_header {
+	width: 20%;
+	border-style: inset;
+	border-width: 1px;
+	border-color: black;
+        text-decoration-color: black;
+        color: black;
 }
-input#fixture_form_add {
-	width: 30%;
+
+table#curlersupdate {
+	width: 100%;
+	background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.7));
+	border-style: ridge;
+	border-width: 2px;
+	border-color: white;
+}
+
+td#curlersupdate {
+	width: 20%;
+	border-style: inset;
+	border-width: 1px;
+	border-color: white;
+}
+
+td#curlers_add {
+	width: 20%;
+	border-style: inset;
+	border-width: 1px;
+	border-color: white;
+}
+
+select#curlers_add {
+    width: 90%;
+    alignment-adjust: central;
+}
+
+input#curlers_add {
+    width: 90%;
+    alignment-adjust: central;
 }

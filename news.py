@@ -62,5 +62,18 @@ def delete_news(cursor, id):
     cursor.execute(query, (id))
 
 def update_news(cursor,news,id):
-    query="""UPDATE NEWS SET NEWS_HEADER=%s,NEWS_DESCRIPTION=%s,DATE=%s,TEAM_ID=%s,CURLER_ID=%s WHERE(NEWS_ID=%s)"""
-    cursor.execute(query, (news.news_header, news.news_description, news.date,news.team_id,news.curler_id, id))
+    if not news.curler_id:
+        if not news.team_id:
+            query="""UPDATE NEWS SET NEWS_HEADER=%s,NEWS_DESCRIPTION=%s,DATE=%s WHERE(NEWS_ID=%s)"""
+            cursor.execute(query, (news.news_header, news.news_description, news.date, id))
+        else:
+            query="""UPDATE NEWS SET NEWS_HEADER=%s,NEWS_DESCRIPTION=%s,DATE=%s,TEAM_ID=%s WHERE(NEWS_ID=%s)"""
+            cursor.execute(query, (news.news_header, news.news_description, news.date,news.team_id, id))
+    else:
+        if not news.team_id:
+            query="""UPDATE NEWS SET NEWS_HEADER=%s,NEWS_DESCRIPTION=%s,DATE=%s,CURLER_ID=%s WHERE(NEWS_ID=%s)"""
+            cursor.execute(query, (news.news_header, news.news_description, news.date,news.curler_id, id))
+        else:
+            query="""UPDATE NEWS SET NEWS_HEADER=%s,NEWS_DESCRIPTION=%s,DATE=%s,TEAM_ID=%s,CURLER_ID=%s WHERE(NEWS_ID=%s)"""
+            cursor.execute(query, (news.news_header, news.news_description, news.date,news.team_id,news.curler_id, id))
+    

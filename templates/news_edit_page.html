@@ -21,26 +21,26 @@
                     <td id=news_update>
                         <select form="update" id=federations name="curler">
                             <option value="">Related Curler</option>
-                            {% for curlerid, curler_name in curlers %}
-                                <option id=federations type="text" value="{{curlerid}}">{{curler_name}}</option>
+                            {% for curlerid, curler_name, curler_surname in curlers %}
+                                <option id=news type="text" value="{{curlerid}}">{{curler_name}} {{curler_surname}}</option>
                             {% endfor %}
                         </select>
                     </td>
                     <td id=news_update>
-                        <select form="update" id=federations name="club">
+                        <select form="update" id=news name="club">
                             <option value="">Related Club</option>
                             {% for id, name in clubs %}
-                                <option id=federations type="text" value="{{id}}">{{name}}</option>
+                                <option id=news type="text" value="{{id}}">{{name}}</option>
                             {% endfor %}
                         </select>
                     </td>
                 </tr>
                     
                 </tr>
-                <input form="update" type="hidden" name="federation_id" value="{{federation_id}}">
+                <input form="update" type="hidden" name="news_id" value="{{news_id}}">
                 <tr id=update>
-                    <td colspan="7" id=federations_form_add>
-                        <input form=update id="federations_form_add" value="Update Federation" name="update" type="submit">
+                    <td colspan="7" id=news_form_update>
+                        <input form=update id="news_form_update" value="Update News" name="update" type="submit">
                     </td>
                 </tr>
             </form>

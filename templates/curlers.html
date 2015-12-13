@@ -1,71 +1,74 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8" />
-	{% extends "layout.html"%}
-	{% block title %}Curlers{% endblock %}
-</head>
-{% block content %}
-<h2>Curlers</h2>
-<table id=curlers>
-    <form id="search" action="{{ url_for('curlers_page')}}" method ="post">
-        <tr id="search">
-            <td colspan="7" align="right" id="search" ><input form ="search" id="search" type="text" name="search_name" placeholder="Name or Surname to Search" required="required"></td>
-            <td align="right" id="search"><input Value="Search" name="search" id="search" type="submit" form="search"></td>
-        </tr>
-    </form>
-    <form id="delete_form" action="{{ url_for('curlers_page') }} " method = "post">
-	<tr id=curlers>
-		<td id=checkbox><input form ="delete_form" type="checkbox" name="select_all"></td>
-		<td id=curlers>Name</td>
-		<td id=curlers>Surname</td>
-		<td id=curlers>Birth Date</td>
-		<td id=curlers>Team</td>
-		<td id=curlers>Nationality</td>
-	</tr>
-	{% for id, curler_name, curler_surname, birth_date, teamid, birth_place_id, name, country_name in curlers %}
-	<tr id=curlers>
-            <td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
-            <td id=curlers>{{curler_name}}</td>
-            <td id=curlers>{{curler_surname}}</td>
-            <td id=curlers>{{birth_date}}</td>
-            <td id=curlers>{{name}}</td>
-            <td id=curlers>{{country_name}}</td>
-            <td>
-                <a href="{{ url_for('curlers_update_page',curler_id = id) }}">Update</a>
-            </td>
-	</tr>
-	{% endfor %}
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='curlers.css') }}" />
+        {% extends "layout.html"%}
+        {% block title %}Curlers{% endblock %}
+    </head>
+    {% block content %}
+        <h2>Curlers</h2>
+        <table id=curlers>
+            <form id="search" action="{{ url_for('curlers_page')}}" method ="post">
+                <tr id="search">
+                    <td colspan="7" align="right" id="search" ><input form ="search" id="search" type="text" name="search_name" placeholder="Name or Surname to Search" required="required"></td>
+                    <td align="right" id="search"><input Value="Search" name="search" id="search" type="submit" form="search"></td>
+                </tr>
+            </form>
+            <form id="delete_form" action="{{ url_for('curlers_page') }} " method = "post">
+                <tr id=curlers>
+                    <td id=checkbox colspan="1"></td>
+                    <td id=curlers_header>Name</td>
+                    <td id=curlers_header>Surname</td>
+                    <td id=curlers_header>Birth Date</td>
+                    <td id=curlers_header>Team</td>
+                    <td id=curlers_header>Nationality</td>
+                </tr>
+                {% for id, curler_name, curler_surname, birth_date, teamid, birth_place_id, name, country_name in curlers %}
+                    <tr id=curlers>
+                        <td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"></td>
+                        <td id=curlers>{{curler_name}}</td>
+                        <td id=curlers>{{curler_surname}}</td>
+                        <td id=curlers>{{birth_date}}</td>
+                        <td id=curlers>{{name}}</td>
+                        <td id=curlers>{{country_name}}</td>
+                        <td>
+                            <a href="{{ url_for('curlers_update_page',curler_id = id) }}">Update</a>
+                        </td>
+                    </tr>
+                {% endfor %}
 
-        <tr id=curlers>
-            <td><input Value="Delete" name="delete" type="submit" form="delete_form"></td></form>
+                <tr>
+                    <td><input Value="Delete" name="delete" type="submit" form="delete_form"></td>
+                </tr>
+            </form>
             <form id=add action="{{ url_for('curlers_page') }} " method = "post">
-            <td id=curlers_form><input form ="add" id=curlers type="text" placeholder="Name" name="name" required="required"></td>
-            <td id=curlers_form><input form ="add" id=curlers type="text" placeholder="Surname" name="surname" required="required"></td>
-            <td id=curlers_form><input form ="add" id=curlers type="date" placeholder="Birthday (dd/MM/yyyy)" name="birthdate"></td>
-            <td id="curlers_form">
-                <select form="add" id=curlers name="teamid">
-                    {% for id, name in clubs %}
-                        <option id=curlers type="text" placeholder = "Team" value="{{id}}">{{name}}</option>
-                    {% endfor %}
-                </select>
-            </td>
-            <td id="curlers_form">
-                <select form="add" id=curlers name="birth_place">
-                    {% for country_id, country_name in countries %}
-                        <option id=curlers type="text" placeholder = "Birth Place" value="{{country_id}}">{{country_name}}</option>
-                    {% endfor %}
-                </select>
-            </td>
-        </tr>
-        <tr id=curlers>
-            <td colspan="7" id=curler_form_add>
-                <input form="add" id="curler_form_add" value="Add curler" name="add" type="submit"></form>
-            </td>
-        </tr>
+                <tr>
+                    <td id="curler_add"></td>
+                    <td id=curlers_add><input id=curlers_add form ="add" type="text" placeholder="Name" name="name" required="required"></td>
+                    <td id=curlers_ad><input id=curlers_add form ="add" type="text" placeholder="Surname" name="surname" required="required"></td>
+                    <td id=curlers_add><input id=curlers_add form ="add" type="date" placeholder="Birthday (dd/MM/yyyy)" name="birthdate"></td>
+                    <td id="curlers_add">
+                        <select id=curlers_add form="add" name="teamid">
+                            {% for id, name in clubs %}
+                                <option type="text" placeholder = "Team" value="{{id}}">{{name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td id="curlers_add">
+                        <select id=curlers_add form="add" id=curlers_add name="birth_place">
+                            {% for country_id, country_name in countries %}
+                                <option type="text" placeholder = "Birth Place" value="{{country_id}}">{{country_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td colspan="7" id=curler_add>
+                        <input form="add" id="curler_form_add" value="Add curler" name="add" type="submit">
+                    </td>
+                </tr>
+            </form>
 
-
-    </table>
+        </table>
     {% endblock %}
 </html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Edit CLUBS{% endblock %}
+</head>
+	{% block content %}
+	<h2>Edit CLUB</h2>
+
+	<table id="ClubUpdate" border="1" style="width:60%"><tr>
+		<form id ="update" action="{{url_for('clubs_edit_page', club_id=club[0])}}" method="POST">
+			<input type="hidden" value="{{club[0]}}" name="id" readonly="readonly"/>
+			<td><input id="ClubUpdate" form="update" type="text" value="{{club[1]}}" name="name" required="required"></td>
+			<td><input id="ClubUpdate" form="update" type="text" value="{{club[2]}}" name="place" required="required"></td>
+			<td><input id="ClubUpdate" form="update" type="number" min="1000" max="2100" value="{{club[3]}}" name="year" required="required"></td>
+			<td><input id="ClubUpdate" form="update" type="text" value="{{club[4]}}" name="chair" required="required"></td>
+			<td><input id="ClubUpdate" form="update" type="number" value="{{club[5]}}" name="number_of_members" required="required"></td>
+			<td><input id="ClubUpdate" form="update" type="number" value="{{club[6]}}" name="rewardnumber" required="required"></td>
+
+		</tr>
+		<tr>
+			<td colspan="8" id=clubs_form_add><input id="ClubUpdate" form="update" type="submit" value="Update Club" name="update"></td>
+		</tr>
+		</form>
+	</table>
+
+
+	{% endblock %}
+</html>

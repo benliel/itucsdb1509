@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	{% extends "layout.html"%}
+	{% block title %}Penalties{% endblock %}
+</head>
+	{% block content %}<h2>Penalties</h2>
+
+	<table id=penalties>
+	<tr>
+	<td id="penalties" colspan="6" align="right">
+	<form id="search" action="{{url_for('penalty_page')}}" method="POST">
+		<input form="search" type="text" placeholder="Curler Name To Search" name="penalty_to_search" required="required">
+		<input form="search" type="submit" value="Search" name="search">
+	</form>
+	</td>
+	</tr>
+	<form id="delete_form" action="{{ url_for('penalty_page') }} " method = "post">
+
+
+
+		<tr id=penalties>
+				<td colspan="6" id=penalties_form_add>
+				<input Value="Delete" name="delete" type="submit" form="delete_form">
+					</form>
+					</td>
+			</tr>
+		<tr id=penalties>
+				<td>
+		</td>{% if(curlers|length>0)%}
+				<form id="add" action="{{ url_for('penalty_page') }} " method = "post">
+				<td id="penalties_form">
+				<select id="penalties_form" form="add" name="personname" required="required">
+					<option disabled="disabled" selected="selected" hidden="hidden">Select a Curler</option>
+				{% for curler in curlers%}
+					<option value="{{curler[0]}}">{{curler[1]}}</option>
+				{% endfor %}
+				</select>
+				<td id="penalties_form">
+				<td id="penalties_form"><input form ="add" id="penalties" type="date" placeholder="Start Date" name="startdate" required="required"></td>
+				<td id="penalties_form"><input form ="add" id="penalties" type="date" placeholder="End Date" name="enddate" required="required"></td>
+				<td id="penalties_form"><input form ="add" id="penalties" type="text" placeholder="Type" name="type" required="required"></td>
+
+			</tr>
+
+
+						<tr id="penalties">
+				<td colspan="6" id=penalties_form_add>
+					<input form="add" id="penalties_form_add" value="Add Penalty" name="add" type="submit"></form>
+					</td>
+					</tr>
+					{%else%}
+					</tr>
+					<tr id="penalties_form">
+					<td id="penalties_form" colspan="6">You cannot add penalty, since there are no curlers added in the database!
+					</tr>
+					{%endif%}
+
+
+	</table>
+
+	<table border="1" style="width:60%;  background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.7))" >
+	{% for id, personname, startdate, enddate, type in penalties %}
+	<tr id="penalties">
+		<td id="checkbox"><input form ="delete_form" type="checkbox" name="checkbox_{{id}}"> </td>
+		<td id="penaltypersonname">{{personname}}</td>
+		<td id="penaltystartdate">{{startdate}}</td>
+		<td id="penaltyenddate">{{enddate}}</td>
+		<td id="penaltytype">{{type}}</td>
+		<td><a href="{{url_for('penalty_edit_page', penalty_id=id)}}"><img alt="edit{{id}}" src="/static/file_edit.png" height="20px">Edit</td>
+	</tr>
+	{% endfor %}
+
+	</table>
+
+
+	{% endblock %}
+
+</html>

@@ -1,4 +1,4 @@
-class Federation:
+class News:
     def __init__(self,news_header, news_description, date ,team_id, curler_id):
         self.news_header = news_header
         self.news_description = news_description
@@ -19,16 +19,44 @@ def init_news_db(cursor):
     cursor.execute(query)
 
 def add_news(cursor, request, news):
-    query = """INSERT INTO NEWS
-    (NEWS_HEADER,NEWS_DESCRIPTION, DATE, TEAM_ID, CURLER_ID) VALUES (
-    %s,
-    %s,
-    %s,
-    %s,
-    %s
-    )"""
-    cursor.execute(query, (news.news_header, news.news_description, news.date,news.team_id, news.curler_id))
-
+    if not news.curler_id:
+        if not news.team_id:
+            query = """INSERT INTO NEWS
+            (NEWS_HEADER,NEWS_DESCRIPTION, DATE) VALUES (
+            %s,
+            %s,
+            %s
+            )"""
+            cursor.execute(query, (news.news_header, news.news_description, news.date))
+        else:
+            query = """INSERT INTO NEWS
+            (NEWS_HEADER,NEWS_DESCRIPTION, DATE, TEAM_ID) VALUES (
+            %s,
+            %s,
+            %s,
+            %s
+            )"""
+            cursor.execute(query, (news.news_header, news.news_description, news.date,news.team_id))
+    else:
+        if not news.team_id:
+            query = """INSERT INTO NEWS
+            (NEWS_HEADER,NEWS_DESCRIPTION, DATE, CURLER_ID) VALUES (
+            %s,
+            %s,
+            %s,
+            %s
+            )"""
+            cursor.execute(query, (news.news_header, news.news_description, news.date, news.curler_id))            
+        else:
+            query = """INSERT INTO NEWS
+            (NEWS_HEADER,NEWS_DESCRIPTION, DATE, TEAM_ID, CURLER_ID) VALUES (
+            %s,
+            %s,
+            %s,
+            %s,
+            %s
+            )"""
+            cursor.execute(query, (news.news_header, news.news_description, news.date,news.team_id, news.curler_id))
 def delete_news(cursor, id):
     query="""DELETE FROM NEWS WHERE NEWS_ID = %s"""
     cursor.execute(query, (id))

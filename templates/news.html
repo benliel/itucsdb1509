@@ -18,23 +18,23 @@
         </form>
 
         {% for news_id, news_header, news_description, date, team_id, name, chair, curler_id, curler_name, curler_surname in news %}
-        <tr id=news>
-            <td id=news_header >{{news_header}}</td>
-            <td id=news_header align="right">{{date}}</td>
-            <td id=news_header align="right">
-                <a href="{{ url_for('news_edit_page',news_id = news_id) }}">Edit</a>
-            </td>
-        </tr>
-        <tr id=news>
-            <td id=news_body >{{news_description}}</td>
-        </tr>
-        <tr id=news>
-            <td id=news_footer >{{curler_name}}</td>
-            <td id=news_footer >{{curler_surname}}</td>
-            <td id=news_footer >{{name}}</td>
-            <td id=news_footer >{{chair}}</td>
-        </tr>
+            <tr id=news>
+                <td id=news_header >{{news_header}}</td>
+                <td id=news_header align="right">{{date}}</td>
+                <td id=news_header align="right">
+                    <a href="{{ url_for('news_edit_page',news_id = news_id) }}">Edit</a>
+                </td>
+            </tr>
+            <tr id=news>
+                <td id=news_body >{{news_description}}</td>
+            </tr>
+            <tr id=news>
+                <td id=news_footer >{{curler_name}}</td>
+                <td id=news_footer >{{curler_surname}}</td>
+                <td id=news_footer >{{name}}</td>
+                <td id=news_footer >{{chair}}</td>
+            </tr>
+        {% endfor %}
     </table>
-    {% endfor %}
 {% endblock %}
 </html>

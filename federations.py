@@ -1,11 +1,11 @@
 class Federation:
-    def __init__(self,federation_name, president_name,president_surname , founding_year, country_id):
+    def __init__(self, federation_name,president_name,president_surname, founding_year, country_id):
         self.federation_name = federation_name
         self.president_name = president_name
         self.president_surname = president_surname
         self.founding_year = founding_year
         self.country_id = country_id
-        
+      
 def init_federations_db(cursor):
     query = """CREATE TABLE IF NOT EXISTS FEDERATIONS (
             FEDERATION_ID SERIAL,

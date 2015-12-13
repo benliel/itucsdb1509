@@ -1,4 +1,5 @@
 import datetime
+import time
 import os
 import json
 import re
@@ -284,13 +285,12 @@ def federations_page():
         _countries = cursor.fetchall()
         return render_template('federations.html', federations = federation, countries = _countries, current_time=now.ctime())
     elif "add" in request.form:
-        federation = Federation(
-                     request.form['federation_name'],
-                     request.form['president_name'],
-                     request.form['president_surname'],
-                     request.form['founding_year'],
-                     request.form['country_id'])
-
+        federation = Federation(request.form['federation_name'],
+                                request.form['president_name'],
+                                request.form['president_surname'],
+                                request.form['founding_year'],
+                                request.form['country_id'])
+                     
         add_federation(cursor, request, federation)
 
         connection.commit()
@@ -344,13 +344,41 @@ def news_page():
         cursor.execute(query)
         news = cursor.fetchall()
         return render_template('news.html', news = news, current_time = now.ctime())
-
-@app.route('/news/<news_id>')
-def news_edit_page(news_id):
+    elif "search" in request.form:
+        now = datetime.datetime.now()
+        query = """SELECT NEWS_ID, NEWS_HEADER, NEWS_DESCRIPTION,DATE, CLUBS.ID, CLUBS.NAME, CLUBS.CHAIR, CURLERS.CURLERID, CURLERS.CURLER_NAME, CURLERS.CURLER_SURNAME FROM NEWS n LEFT JOIN CLUBS ON (CLUBS.ID = n.TEAM_ID) LEFT JOIN CURLERS ON (CURLERS.CURLERID = n.CURLER_ID) WHERE (NEWS_HEADER LIKE  '%%' || %s || '%%')"""
+        search = request.form['search_name']
+        cursor.execute(query, ('%' + search + '%',))
+        news = cursor.fetchall()
+        return render_template('news.html', news = news, current_time = now.ctime())
+@app.route('/addnews',methods=['GET','POSt'])
+def news_add_page():
+    connection=dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     if request.method == 'GET':
         now = datetime.datetime.now()
-        connection=dbapi2.connect(app.config['dsn'])
-        cursor = connection.cursor()
+        query = "SELECt CURLERID, CURLER_NAME FROM CURLERS"
+        cursor.execute(query)
+        curlers = cursor.fetchall()
+        query2 = "SELECT ID, NAME FROM CLUBS"
+        cursor.execute(query2)
+        return render_template('news_add_page.html', curlers = curlers, clubs = cursor , current_time = now.ctime())
+    elif request.method == 'POST':
+        news = News(request.form['news_header'],
+            request.form['news_description'],
+            time.strftime("%Y-%m-%d"),
+            request.form['team_id'],
+            request.form['curler_id'])
+        add_news(cursor, request, news)
+        connection.commit()
+        return redirect(url_for('news_page'))
+    
+@app.route('/news/<news_id>')
+def news_edit_page(news_id):
+    now = datetime.datetime.now()
+    connection=dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
         query = "SELECT * FROM NEWS WHERE (NEWS_ID = %s)"
         cursor.execute(query, news_id)
         news = cursor.fetchall()
@@ -360,8 +388,14 @@ def news_edit_page(news_id):
         query3 = "SELECT ID, NAME FROM CLUBS"
         cursor.execute(query3)
         return render_template('news_edit_page.html', news = news, curlers = curlers, clubs = cursor, current_time = now.ctime())
-
-            
+    elif "update" in request.form:
+        news = News(request.form['news_header'],
+                    request.form['news_description'],
+                    time.strftime("%Y-%m-%d"),
+                    request.form['curler'],
+                    request.form['club'])
+        add_news(cursor,request, news)
+        return redirect(url_for('news_page'))
 #end region ilkan engin 150120137
 
 ##Sema's Part - Curling Clubs

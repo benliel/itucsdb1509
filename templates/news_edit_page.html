@@ -10,7 +10,7 @@
 {% block content %}
     <table id=news_update>
         {% for news_id, news_header, news_description, date, team_id ,curler_id in news %}
-            <form id=news_update action="{{ url_for('federations_update_page',federation_id='0') }}" method = "post">
+            <form id=update action="{{ url_for('news_edit_page',news_id='0') }}" method = "post">
                 <tr id=news_update>
                     <td id=news_update><input value="{{news_header}}" form ="update" id="news_update" type="text" placeholder="Header" name="news_header" required="required"></td>
                 </tr>
@@ -19,15 +19,15 @@
                 </tr>
                 <tr>
                     <td id=news_update>
-                        <select form="update" id=federations name="country">
+                        <select form="update" id=federations name="curler">
                             <option value="">Related Curler</option>
                             {% for curlerid, curler_name in curlers %}
-                                <option id=federations type="text" value="{{country_id}}">{{country_name}}</option>
+                                <option id=federations type="text" value="{{curlerid}}">{{curler_name}}</option>
                             {% endfor %}
                         </select>
                     </td>
                     <td id=news_update>
-                        <select form="update" id=federations name="country">
+                        <select form="update" id=federations name="club">
                             <option value="">Related Club</option>
                             {% for id, name in clubs %}
                                 <option id=federations type="text" value="{{id}}">{{name}}</option>

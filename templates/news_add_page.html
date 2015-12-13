@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='news.css') }}" />
+	{% extends "layout.html"%}
+	{% block title %}News - Edit{% endblock %}
+</head>
+{% block content %}
+    <table id=news_update>
+        <form id=add action="{{ url_for('news_add_page') }}" method = "post">
+            <tr id=news_add>
+                <td id=news_add><input value="{{news_header}}" form ="add" id="news_add" type="text" placeholder="Header" name="news_header" required="required"></td>
+            </tr>
+            <tr>
+                <td id=news_add><input value="{{news_description}}" form ="add" id="news_add" type="text" placeholder="Description" name="news_description"></td>
+            </tr>
+            <tr>
+                <td id=news_add>
+                    <select form="add" id=news name="curler_id">
+                        <option value="">Related Curler</option>
+                        {% for curlerid, curler_name in curlers %}
+                            <option id=news type="text" value="{{curlerid}}">{{curler_name}}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td id=news_update>
+                    <select form="add" id=news name="team_id">
+                        <option value="">Related Club</option>
+                        {% for id, name in clubs %}
+                            <option id=news type="text" value="{{id}}">{{name}}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr id=update>
+                <td colspan="7" id=news_form_add>
+                    <input form="add" id="news_form_add" value="Add News" name="add" type="submit">
+                </td>
+            </tr>
+        </form>
+    </table>
+{% endblock %}
+</html>

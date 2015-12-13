@@ -35,6 +35,20 @@ def init_money_balances_db(cursor):
         PROFIT INTEGER NOT NULL,
         PRIMARY KEY (ID)
         )""")
+        add_test_data(cursor)
+
+
+def add_test_data(cursor):
+     cursor.execute(
+                       """
+            INSERT INTO MONEY_BALANCE
+            (CLUB, INCOMES, EXPENSES, PROFIT) VALUES (
+            1,
+            '35000',
+            '20000',
+            '15000'
+            )"""
+                       )
 
 def add_money_balance(app, request, money_balance):
     connection = dbapi2.connect(app.config['dsn'])

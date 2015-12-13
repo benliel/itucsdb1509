@@ -31,6 +31,7 @@ def init_penalty_db(cursor):
         TYPE  VARCHAR(20) NOT NULL,
         PRIMARY KEY (ID)
         )""")
+        fill_table(cursor)
 
 def add_penalty(app, request, penalty):
     connection = dbapi2.connect(app.config['dsn'])
@@ -84,7 +85,6 @@ def get_penalty_page(app):
         return render_template('penalty.html', penalties = penalties,
                                curlers=curlers, current_time=now.ctime())
     elif "add" in request.form:
-        print(request.form)
         penalty = Penalty(request.form['personname'],
                      request.form['startdate'],
                      request.form['enddate'],
@@ -236,3 +236,36 @@ def search_penalty(app, name):
     finally:
         connection.close()
         return penalties
+def fill_table(cursor):
+    cursor.execute("""
+            INSERT INTO CURLERS
+    (CURLER_NAME, CURLER_SURNAME, BIRTH_DATE, TEAMID, BIRTH_PLACE_ID) VALUES (
+    'Necati',
+    'Şaşmaz',
+    to_date('05 Dec 2000', 'DD Mon YYYY'),
+    1,
+    1
+    );
+
+    INSERT INTO PENALTY
+            (PERSONNAME, STARTDATE, ENDDATE, TYPE) VALUES (
+            1,
+            to_date('12 Dec 2003', 'DD Mon YYYY'),
+            to_date('01 Dec 2004', 'DD Mon YYYY'),
+            'Fairplaynessless'
+            );
+    INSERT INTO PENALTY
+            (PERSONNAME, STARTDATE, ENDDATE, TYPE) VALUES (
+            1,
+            to_date('12 Oct 2010', 'DD Mon YYYY'),
+            to_date('01 Nov 2010', 'DD Mon YYYY'),
+            'Fast Goal'
+            );
+    INSERT INTO PENALTY
+            (PERSONNAME, STARTDATE, ENDDATE, TYPE) VALUES (
+            1,
+            to_date('12 Apr 2012', 'DD Mon YYYY'),
+            to_date('01 Dec 2016', 'DD Mon YYYY'),
+            'Bad Language'
+            );
+            """)

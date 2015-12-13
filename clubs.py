@@ -39,6 +39,47 @@ def init_clubs_db(cursor):
             REWARDNUMBER INTEGER,
             PRIMARY KEY(ID)
             )""")
+    add_test_data(cursor)
+
+def add_test_data(cursor):
+    cursor.execute("""
+    INSERT INTO CLUBS
+        (NAME, PLACES, YEAR, CHAIR, NUMBER_OF_MEMBERS, REWARDNUMBER) VALUES (
+        'Orlando Curling Club',
+         1,
+         2014,
+        'Bryan Pittard',
+        '7865',
+        '0');
+        INSERT INTO CLUBS
+        (NAME, PLACES, YEAR, CHAIR, NUMBER_OF_MEMBERS, REWARDNUMBER) VALUES (
+        'Wausau Curling Club',
+         1,
+         1896,
+        'Jennie Moran',
+        '54403',
+        '11');
+
+    INSERT INTO CLUBS
+        (NAME, PLACES, YEAR, CHAIR, NUMBER_OF_MEMBERS, REWARDNUMBER) VALUES (
+        'Fenerbahçe',
+         3,
+         2011,
+        'Aziz Yıldırım',
+        '9002',
+        '1');
+
+    INSERT INTO CLUBS
+        (NAME, PLACES, YEAR, CHAIR, NUMBER_OF_MEMBERS, REWARDNUMBER) VALUES (
+        'Galatasaray',
+        3,
+        2000,
+        'Dursun Aydın Ozbek',
+        '17864',
+        '5'
+        )""")
+
+
 
 
 def add_club(app, request, club):
@@ -204,8 +245,8 @@ def update_club(app, id, club):
         connection.commit()
         connection.close()
 
+
 def get_all_clubs(app):
-    clubs=None
     connection = dbapi2.connect(app.config['dsn'])
     try:
         cursor=connection.cursor()
@@ -215,12 +256,14 @@ def get_all_clubs(app):
             FROM CLUBS AS C, COUNTRIES AS K
             WHERE C.PLACES=K.COUNTRY_ID
             ''')
+            print(1)
             clubs = cursor.fetchall()
         except:
             cursor.rollback()
         finally:
             cursor.close()
-    except:
+    except dbapi2.Error as e:
+        print(e.pgerror)
         connection.rollback()
     finally:
         connection.close()

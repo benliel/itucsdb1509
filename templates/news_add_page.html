@@ -11,10 +11,10 @@
     <table id=news_update>
         <form id=add action="{{ url_for('news_add_page') }}" method = "post">
             <tr id=news_add>
-                <td id=news_add><input value="{{news_header}}" form ="add" id="news_add" type="text" placeholder="Header" name="news_header" required="required"></td>
+                <td><input value="{{news_header}}" form ="add" type="text" placeholder="Header" name="news_header" required="required"></td>
             </tr>
             <tr>
-                <td id=news_add><input value="{{news_description}}" form ="add" id="news_add" type="text" placeholder="Description" name="news_description"></td>
+                <td><input value="{{news_description}}" form ="add" type="text" placeholder="Description" name="news_description"></td>
             </tr>
             <tr>
                 <td id=news_add>

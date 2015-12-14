@@ -2,6 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='federations.css') }}" />
 	{% extends "layout.html"%}
 	{% block title %}Federations{% endblock %}
 </head>
@@ -16,48 +17,49 @@
     </form>
     <form id="delete_form" action="{{ url_for('federations_page') }} " method = "post">
 	<tr id=federations>
-		<td id=checkbox><input form ="delete_form" type="checkbox" name="select_all"></td>
-		<td id=federations>Federation Name</td>
-		<td id=federations>President Name</td>
-		<td id=federations>President Surname</td>
-		<td id=federations>Founding Year</td>
-		<td id=federations>Country</td>
+            <td></td>
+		<td id=federations_header align=center>Federation Name</td>
+		<td id=federations_header align=center>President Name</td>
+		<td id=federations_header align=center>President Surname</td>
+		<td id=federations_header align=center>Founding Year</td>
+		<td id=federations_header align=center>Country</td>
 	</tr>
 	{% for federation_id, federation_name, president_name ,president_surname, founding_year, country, country_name in federations %}
-	<tr id=federations>
-            <td id=checkbox><input form ="delete_form" type="checkbox" name="checkbox_{{federation_id}}"></td>
-            <td id=federations>{{federation_name}}</td>
-            <td id=federations>{{president_name}}</td>
-            <td id=federations>{{president_surname}}</td>
-            <td id=federations>{{founding_year}}</td>
-            <td id=federations>{{country_name}}</td>
-            <td>
-                <a href="{{ url_for('federations_update_page',federation_id = federation_id) }}">Update</a>
+	<tr>
+            <td><input form ="delete_form" type="checkbox" name="checkbox_{{federation_id}}"></td>
+            <td id=federations align=center>{{federation_name}}</td>
+            <td id=federations align=center>{{president_name}}</td>
+            <td id=federations align=center>{{president_surname}}</td>
+            <td id=federations align=center>{{founding_year}}</td>
+            <td id=federations align=center>{{country_name}}</td>
+            <td align=center>
+                <a align=center href="{{ url_for('federations_update_page',federation_id = federation_id) }}">Update</a>
             </td>
 	</tr>
 	{% endfor %}
-
+        <tr>
+            <td><input Value="Delete" name="delete" type="submit" form="delete_form"></td>
+        </tr>
+    </form>
+    <form id=add action="{{ url_for('federations_page') }} " method = "post">
         <tr id=federations>
-            <td><input Value="Delete" name="delete" type="submit" form="delete_form"></td></form>
-            <form id=add action="{{ url_for('federations_page') }} " method = "post">
-            <td id=federations_form><input form ="add" id=federations type="text" placeholder="Federation Name" name="federation_name" required="required"></td>
-            <td id=federations_form><input form ="add" id=federations type="text" placeholder="President Name" name="president_name" required="required"></td>
-            <td id=federations_form><input form ="add" id=federations type="text" placeholder="President Surname" name="president_surname" required="required"></td>
-            <td id=federations_form><input form ="add" id=federations type="number" min="1800" max="2100" placeholder="Founding Year" name="founding_year"></td>
-            <td id="federations_form">
+            <td></td>
+            <td id=federations_form align=center><input form ="add" id=federations type="text" placeholder="Federation Name" name="federation_name" required="required"></td>
+            <td id=federations_form align=center><input form ="add" id=federations type="text" placeholder="President Name" name="president_name" required="required"></td>
+            <td id=federations_form align=center><input form ="add" id=federations type="text" placeholder="President Surname" name="president_surname" required="required"></td>
+            <td id=federations_form align=center><input form ="add" id=federations type="number" min="1800" max="2100" placeholder="Founding Year" name="founding_year"></td>
+            <td id="federations_form" align=center>
                 <select form="add" id=federations name="country_id">
                     {% for country_id, country_name in countries %}
                         <option id=federations type="text" placeholder = "Team" value="{{country_id}}">{{country_name}}</option>
                     {% endfor %}
                 </select>
             </td>
-        </tr>
-        <tr id=federations>
             <td colspan="7" id=federation_form_add>
-                <input form="add" id="federation_form_add" value="Add Federation" name="add" type="submit"></form>
+                <input form="add" id=federations_add value="Add Federation" name="add" type="submit">
             </td>
         </tr>
-
+    </form>
 
     </table>
     {% endblock %}

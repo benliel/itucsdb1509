@@ -16,7 +16,7 @@ nav li {
 display: inline; margin-right: 1em; font-size: 80%;
 }
 
-table#news {
+table#federations {
 	width: 100%;
 	background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.7));
 	border-style: ridge;
@@ -36,34 +36,40 @@ tr#newstag {
     width: 32%;
 }
 
-td#news_header {
-	width: 33%;
+td#federations_header {
+	width: 20%;
 	border-style: inset;
 	border-width: 1px;
 	border-color: white;
         color: black;
+        align: center;
 }
 
-td#news_date {
-	width: 33%;
+td#federations {
+	width: 20%;
 	border-style: inset;
 	border-width: 1px;
 	border-color: white;
-        color: blue
+        alignment-adjust: central;
 }
 
-td#news_body {
+td#federations_update {
 	width: 100%;
 	border-style: inset;
 	border-width: 1px;
 	border-color: white;
 }
 
-td#news_update {
-	width: 100%;
-	border-style: inset;
-	border-width: 1px;
-	border-color: white;
+td#federations_form {
+    
+}
+
+input#federations {
+    width: 90%;
+}
+
+select#federations {
+    width: 90%;
 }
 
 td#news_footer {
@@ -73,7 +79,7 @@ td#news_footer {
 	border-color: white;
         color: captiontext;
 }
-input#news_add {
+    input#federations_add {
     background-color: #0fa3ff;
     color: #101010;
 }

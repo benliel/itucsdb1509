@@ -8,10 +8,11 @@ Parts Implemented by M. Aziz ULAK
    The main page of Sponsors Table
 
 In this Interface Following Features Are Possible To Perform
-   1) Add New Sponsor
+   *1) Add New Sponsor*
       The form inputs , Sponsor Name , Supported Team and Budget fills then press "Add Sponsor" button to add operation.
 
    2) Edit Sponsor
+      Edit
 
    3) Delete Sponsor
 

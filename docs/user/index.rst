@@ -1,8 +1,7 @@
-User Guide
-==========
+CURLINGOMATIC User Guide
+========================
 
-**explain how your application works from the user perspective, use
-screenshots whereever appropriate**
+**Curlingomatic is the best way of managing curling teams , stadiums , fixtures etc. In this User Guide you can find how to use this tool for your work**
 
 **to add a picture, use the following example**::
 

@@ -43,23 +43,23 @@ Stadiums Table
       UNIQUE(name,location)
 
 
-"Stadium" and "Match" classes are owned by me.
+"Stadium" and "Match" classes are owned by me.::
 
-.. code-block:: Pyhton
-   class Match:
-      def __init__(self, team1, team2, date, time, location):
-         self.team1 = team1
-         self.team2 = team2
-         self.date = date
-         self.time = time
-         self.location = location
+   .. code-block:: Pyhton
+      class Match:
+         def __init__(self, team1, team2, date, time, location):
+            self.team1 = team1
+            self.team2 = team2
+            self.date = date
+            self.time = time
+            self.location = location
 
-   class Stadium:
-      def __init__(self,name,location,capacity,ticket_cost):
-         self.name=name
-         self.location=location
-         self.capacity=capacity
-         self.ticket_cost=ticket_cost
+      class Stadium:
+         def __init__(self,name,location,capacity,ticket_cost):
+            self.name=name
+            self.location=location
+            self.capacity=capacity
+            self.ticket_cost=ticket_cost
 
 
 I have worked in "fixture.py" and "stadiums.py" sources

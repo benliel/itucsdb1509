@@ -7,7 +7,7 @@ Welcome to itucsdb's documentation!
 
    * Sercan Bayındır
    * Member 2
-   * Member 3
+   * Sema Karakaş
    * Member 4
    * Member 5
 

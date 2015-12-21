@@ -110,6 +110,27 @@ stadium.py
       get_stadiums_edit_page
          Handles stadiums_edit_page requests
 
+points.py
+   Functions:
+      add_points_data
+         Used for adding points data in the points table
+      delete_points_data
+         Used to delete points data with given id
+      update_points_data
+         Used to change data of the points data with given id
+      get_filtered_points_data
+         Returns the points that matches the given search line
+      get_points_data
+         Returns the data of single points data to be editted.
+      get_all_championships
+         Returns all of the championship id and names to be listed.
+      get_all_points_data
+         Returns all of the points data to be viewed in the main points page
+      get_points_page
+         Handles points_page requests
+      get_points_edit_page
+         Handles points_edit_page requests
+
 Common:
    Functions:
       get_club_names

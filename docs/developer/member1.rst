@@ -4,17 +4,17 @@ Parts Implemented by Sercan Bayındır
 
 Fixture Table
    Columns:
-      id serial,
+      ID serial,
 
-      team1 integer not null references clubs(id) on delete cascade on update cascade,
+      TEAM1 integer not null references clubs(id) on delete cascade on update cascade,
 
-      team2 integer not null references clubs(id) on delete cascade on update cascade,
+      TEAM2 integer not null references clubs(id) on delete cascade on update cascade,
 
-      date date not null,
+      DATE date not null,
 
-      time time not null,
+      TIME time not null,
 
-      location integer not null references stadiums(id) on delete cascade on update cascade,
+      LOCATION integer not null references stadiums(id) on delete cascade on update cascade,
 
    Constraints:
      PRIMARY KEY (id),
@@ -23,15 +23,15 @@ Fixture Table
 
 Stadiums Table
    Columns:
-      id serial not null,
+      ID serial not null,
 
-      name vachar(80) not null,
+      NAME vachar(80) not null,
 
-      location integer not null references countries(country_id) on delete cascade on update cascade,
+      LOCATION integer not null references countries(country_id) on delete cascade on update cascade,
 
-      capacity integer default -1,
+      CAPACITY integer default -1,
 
-      cost integer default -1,
+      COST integer default -1,
 
    Constraints:
       PRIMARY KEY(id),
@@ -41,6 +41,27 @@ Stadiums Table
       CHECK(capacity>=-1),
 
       UNIQUE(name,location)
+
+Points Table
+   Columns:
+      ID serial not null,
+
+      CHAMPIONSHIP integer not null references championship(id) on update cascade on delete cascade,
+
+      CLUB integer not null references clubs(id) on update cascade on delete cascade,
+
+      POINTS integer default 0,
+
+      WINS integer default 0,
+
+   Constraints:
+      PRIMARY KEY(ID),
+
+      CHECK(points>=0),
+
+      CHECK(wins>=0),
+
+      UNIQUE(championship, club)
 
 
 "Stadium" and "Match" classes are owned by me.::

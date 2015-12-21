@@ -103,7 +103,7 @@ stadium.py
          Returns the stadiums that matches the given search line
       get_match
          Returns the data of single stadium to be editted.
-      get_all_matches
+      get_all_stadiums
          Returns all of the stadiums to be viewed in the main stadiums page
       get_stadiums_page
          Handles stadiums_page requests

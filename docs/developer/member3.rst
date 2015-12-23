@@ -2,7 +2,7 @@ Parts Implemented by Sema KARAKAŞ
 =================================
 "Money Balance Table" and "Clubs Table" are written by me.
 
-Clubs Table
+*Clubs Table*
 
    Columns:
       id serial,
@@ -24,7 +24,7 @@ Clubs Table
      PRIMARY KEY (id)
 
 
-Money Balance Table
+*Money Balance Table*
 
    Columns:
       id serial,
@@ -67,64 +67,64 @@ clubs.py,
 
    Functions:
       add_club
-         Used for adding club in the clubs table
+         add_club function is used for adding club in the clubs table
 
       delete_club
-         Used to delete club with given id
+         delete_club function is used to delete club with given id
 
       update_club
-         Used to change data of the club with given id
+         update_club function is used to change data of the club with given id
 
       search_club
-         Returns the clubs that matches club name which given in search line
+         search_club function returns the clubs that matches club name which given in search line
 
       get_club
-         Returns the data of single club to be editted.
+         get_club function returns the data of single club to be editted.
 
       get_all_clubs
-         Returns all of the clubs to be viewed in the main clubs page
+         get_all_clubs function returns all of the clubs to be viewed in the main clubs page
 
       get_country_names
-         Gets all country names to be listed for user interface
+         get_country_names function gets all country names to be listed for user interface
 
       get_clubs_page
-         Handles clubs_page requests
+         get_clubs_page function handles clubs_page requests
 
       get_clubs_edit_page
-         Handles clubs_edit_page requests
+         get_clubs_edit_page function handles clubs_edit_page requests
 
 money_balance.py
 
    Functions:
       add_money_balance
-         Used for adding money balance row in the money balance table
+         add_money_balance function is used for adding money balance row in the money balance table
 
       delete_money_balance
-         Used to delete money balance row with given id
+         delete_money_balance function is used to delete money balance row with given id
 
       update_money_balance
-         Used to change data of the money balance row with given id
+         update_money_balance function is used to change data of the money balance row with given id
 
       search_money_balance
-         Returns the money balance row that matches clubs name which given in search line
+         search_money_balance function returns the money balance row that matches clubs name which given in search line
 
       get_money_balance
-         Returns the data of single money balance row to be editted.
+         get_money_balance function returns the data of single money balance row to be editted.
 
       get_all_money_balances
-         Returns all of the money balance row to be viewed in the main money balance page
+         get_all_money_balances function returns all of the money balance row to be viewed in the main money balance page
 
       get_clubs_names
-         Gets all clubs names to be listed for user interface
+         get_clubs_names function gets all clubs names to be listed for user interface
 
       get_money_balances_page
-         Handles get_money_balances_page requests
+         get_money_balances_page function handles get_money_balances_page requests
 
       get_money_balances_edit_page
-         Handles get_money_balances_edit_page requests
+         get_money_balances_edit_page function handles get_money_balances_edit_page requests
 
 Common:
 
    Functions:
       add_test_data
-         Used to add sample data in database
+         add_test_data function is used to add sample data in database

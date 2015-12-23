@@ -242,7 +242,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'curlingomatic', 'Curlingomatic Documentation',
-   'ITUCSDB1509', 'itucsdb', 'One line description of project.',
+   'ITUCSDB1509', 'curlingomatic', 'One line description of project.',
    'Miscellaneous'),
 ]
 

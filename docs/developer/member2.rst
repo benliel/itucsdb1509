@@ -73,7 +73,7 @@ Equipments Table
 
 I have worked in "sponsors.py" , "penalty.py" and "equipments.py" sources
 
-***sponsors.py***
+**sponsors.py**
    Functions:
       add_sponsor
          Used for adding sponsors in the Sponsors Table
@@ -94,7 +94,7 @@ I have worked in "sponsors.py" , "penalty.py" and "equipments.py" sources
       fill_table
          Fills the table for initialization of database
 
-***penalty.py***
+**penalty.py**
    Functions:
       add_penalty
          Used for adding penalties in the Penalty Table
@@ -115,7 +115,7 @@ I have worked in "sponsors.py" , "penalty.py" and "equipments.py" sources
       fill_table
          Fills the table for initialization of database
 
-***equipments.py***
+**equipments.py**
    Functions:
       add_equipment
          Used for adding equipments data in the Equipments Table

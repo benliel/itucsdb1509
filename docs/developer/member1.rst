@@ -4,17 +4,17 @@ Parts Implemented by Sercan Bayındır
 
 Fixture Table
    Columns:
-      id serial,
+      ID serial,
 
-      team1 integer not null references clubs(id) on delete cascade on update cascade,
+      TEAM1 integer not null references clubs(id) on delete cascade on update cascade,
 
-      team2 integer not null references clubs(id) on delete cascade on update cascade,
+      TEAM2 integer not null references clubs(id) on delete cascade on update cascade,
 
-      date date not null,
+      DATE date not null,
 
-      time time not null,
+      TIME time not null,
 
-      location integer not null references stadiums(id) on delete cascade on update cascade,
+      LOCATION integer not null references stadiums(id) on delete cascade on update cascade,
 
    Constraints:
      PRIMARY KEY (id),
@@ -23,15 +23,15 @@ Fixture Table
 
 Stadiums Table
    Columns:
-      id serial not null,
+      ID serial not null,
 
-      name vachar(80) not null,
+      NAME vachar(80) not null,
 
-      location integer not null references countries(country_id) on delete cascade on update cascade,
+      LOCATION integer not null references countries(country_id) on delete cascade on update cascade,
 
-      capacity integer default -1,
+      CAPACITY integer default -1,
 
-      cost integer default -1,
+      COST integer default -1,
 
    Constraints:
       PRIMARY KEY(id),
@@ -41,6 +41,27 @@ Stadiums Table
       CHECK(capacity>=-1),
 
       UNIQUE(name,location)
+
+Points Table
+   Columns:
+      ID serial not null,
+
+      CHAMPIONSHIP integer not null references championship(id) on update cascade on delete cascade,
+
+      CLUB integer not null references clubs(id) on update cascade on delete cascade,
+
+      POINTS integer default 0,
+
+      WINS integer default 0,
+
+   Constraints:
+      PRIMARY KEY(ID),
+
+      CHECK(points>=0),
+
+      CHECK(wins>=0),
+
+      UNIQUE(championship, club)
 
 
 "Stadium" and "Match" classes are owned by me.::
@@ -103,12 +124,33 @@ stadium.py
          Returns the stadiums that matches the given search line
       get_match
          Returns the data of single stadium to be editted.
-      get_all_matches
+      get_all_stadiums
          Returns all of the stadiums to be viewed in the main stadiums page
       get_stadiums_page
          Handles stadiums_page requests
       get_stadiums_edit_page
          Handles stadiums_edit_page requests
+
+points.py
+   Functions:
+      add_points_data
+         Used for adding points data in the points table
+      delete_points_data
+         Used to delete points data with given id
+      update_points_data
+         Used to change data of the points data with given id
+      get_filtered_points_data
+         Returns the points that matches the given search line
+      get_points_data
+         Returns the data of single points data to be editted.
+      get_all_championships
+         Returns all of the championship id and names to be listed.
+      get_all_points_data
+         Returns all of the points data to be viewed in the main points page
+      get_points_page
+         Handles points_page requests
+      get_points_edit_page
+         Handles points_edit_page requests
 
 Common:
    Functions:

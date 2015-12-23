@@ -32,6 +32,21 @@ Users can easily
 
    4) Search for existing match by name writing initial letter is enough
 
+.. figure:: static/points_table.png
+   :scale: 50%
+   :alt: points table screenshot
+
+   Here wee see a screenshot of the points table
+
+Users can easily
+   1) Add new points data for teams in a certain championship by add section below
+
+   2) Edit existing points data by clicking on edit button
+
+   3) Delete existing points data with selecting multiple checkboxes and clicking on delete button
+
+   4) Search for existing points data by club name or championship name writing initial letter is enough
+
 .. figure:: static/stadium_edit.png
    :scale: 50%
    :alt: edit section of stadium table screenshot
@@ -51,3 +66,13 @@ Update Stadium button.
 Here users edit the properties of the match
 as they liked and save the changed data by clicking on the
 Update Match button.
+
+.. figure:: static/points_edit.png
+   :scale: 50%
+   :alt: edit section of points table screenshot
+
+   Here we see edit section of the points table
+
+Here users edit the properties of the points data
+as they liked and save the changed data by clicking on the
+Update Points button.

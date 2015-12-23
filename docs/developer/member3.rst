@@ -2,7 +2,7 @@ Parts Implemented by Sema KARAKAŞ
 =================================
 "Money Balance Table" and "Clubs Table" are written by me.
 
-*Clubs Table*
+**Clubs Table**
 
    Columns:
       id serial,
@@ -20,11 +20,10 @@ Parts Implemented by Sema KARAKAŞ
       rewardnumber integer,
 
    Constraints:
-
      PRIMARY KEY (id)
 
 
-*Money Balance Table*
+**Money Balance Table**
 
    Columns:
       id serial,
@@ -63,7 +62,7 @@ Parts Implemented by Sema KARAKAŞ
 
 I have worked in "clubs.py" and "money_balance.py" sources
 
-clubs.py,
+*clubs.py*
 
    Functions:
       add_club
@@ -93,7 +92,7 @@ clubs.py,
       get_clubs_edit_page
          get_clubs_edit_page function handles clubs_edit_page requests
 
-money_balance.py
+*money_balance.py*
 
    Functions:
       add_money_balance

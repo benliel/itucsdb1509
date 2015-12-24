@@ -1,5 +1,5 @@
-Parts Implemented by Ilkan Engin (150120137)
-======================================================
+Parts Implemented by Ilkan Engin
+================================
 .. figure:: static/Curlers_mainpage.png
    :scale: 50%
    :alt: Curlers page screenshot

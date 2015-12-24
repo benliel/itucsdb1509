@@ -6,10 +6,10 @@ Welcome to itucsdb's documentation!
 :Members:
 
    * Sercan Bayındır
-   * Muhammed Aziz ULAK
+   * Muhammed Aziz Ulak
    * Sema Karakaş
-   * Member 4
-   * Member 5
+   * Hüseyin Yusuf
+   * İlkan Engin
 
 **project description goes here (a few paragraphs)**
 

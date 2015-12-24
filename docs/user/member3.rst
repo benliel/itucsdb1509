@@ -1,7 +1,7 @@
 Parts Implemented by Sema KARAKAŞ
 =================================
 .. figure:: static/clubs_mainpage.png
-   :scale: 50%
+   :scale: 100%
    :alt: clubs table screenshot
 
    Here we see a screenshot of the clubs table
@@ -16,7 +16,7 @@ Users can easily
    4) Search for existing clubs by name
 
 .. figure:: static/money_balance_mainpage.png
-   :scale: 50%
+   :scale: 100%
    :alt: money balance table screenshot
 
    Here wee see a screenshot of the money balance table
@@ -32,7 +32,7 @@ Users can easily
 
 
 .. figure:: static/club_editpage.png
-   :scale: 50%
+   :scale: 100%
    :alt: edit section of clubs table screenshot
 
    Here we see edit section of the clubs table
@@ -42,7 +42,7 @@ as they liked and save the changed data by clicking on the
 Update Club button.
 
 .. figure:: static/money_balance_editpage.png
-   :scale: 50%
+   :scale: 100%
    :alt: edit section of money balance table screenshot
 
    Here we see edit section of the money balance table

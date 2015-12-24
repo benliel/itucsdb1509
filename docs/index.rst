@@ -11,8 +11,6 @@ Welcome to itucsdb's documentation!
    * Hüseyin Yusuf
    * İlkan Engin
 
-**project description goes here (a few paragraphs)**
-
 Contents:
 
 .. toctree::

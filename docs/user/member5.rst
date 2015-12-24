@@ -1,7 +1,7 @@
 Parts Implemented by Ilkan Engin
 ================================
 .. figure:: static/Curlers_mainpage.png
-   :scale: 50%
+   :scale: 100%
    :alt: Curlers page screenshot
 
    Here we see a screenshot of the Curlers Page
@@ -17,7 +17,7 @@ Users can easily
 
 
 .. figure:: static/Federations_mainpage.png
-   :scale: 50%
+   :scale: 100%
    :alt: Federations page screenshot
 
    Here wee see a screenshot of the Federations Page
@@ -32,7 +32,7 @@ Users can easily
    4) Search for existing Federation by name of the federation or president writing any letter in the name of federation or president
 
 .. figure:: static/News_mainpage.png
-   :scale: 50%
+   :scale: 100%
    :alt: News Page screenshot
 
    Here wee see a screenshot of the News Page
@@ -45,7 +45,7 @@ Users can easily
    4) Search for existing News by writing any letter of the news header or description
 
 .. figure:: static/Curlers_update.png
-   :scale: 50%
+   :scale: 100%
    :alt: update section of Curlers Page screenshot
 
    Here we see edit section of the Curlers Page
@@ -55,7 +55,7 @@ as they want them to be and save the changed data by clicking on the
 Update button.
 
 .. figure:: static/Federations_update.png
-   :scale: 50%
+   :scale: 100%
    :alt: update section of Federations Page screenshot
 
    Here we see edit section of the Countries table
@@ -65,7 +65,7 @@ as they want them to be and save the changed data by clicking on the
 Update button.
 
 .. figure:: static/News_update.png
-   :scale: 50%
+   :scale: 100%
    :alt: update section of News Page screenshot
 
    Here we see edit section of the News table
@@ -76,7 +76,7 @@ Update button.
 
 
 .. figure:: static/Curlers_search.png
-   :scale: 50%
+   :scale: 100%
    :alt: Search section of Curlers Page screenshot
 
    Here we see search section of the Curlers table
@@ -87,7 +87,7 @@ Search button.
 
 
 .. figure:: static/Federations_search.png
-   :scale: 50%
+   :scale: 100%
    :alt: search section of Federations table screenshot
 
    Here we see search section of the Federations table
@@ -97,7 +97,7 @@ and observe the results according their search by clicking on the
 Search button.
 
 .. figure:: static/News_search.png
-   :scale: 50%
+   :scale: 100%
    :alt: search section of News table screenshot
 
    Here we see search section of the News table

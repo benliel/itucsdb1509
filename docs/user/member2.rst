@@ -6,7 +6,7 @@ SPONSORS
 
 
 .. figure:: static/sponsorsmain.png
-   :scale: 50%
+   :scale: 100%
    :alt: sponsors table screenshot
 
    The main page of Sponsors Table
@@ -26,7 +26,7 @@ In this Interface Following Features Are Possible To Perform
 
 
 .. figure:: static/sponsorsupdate.png
-   :scale: 50%
+   :scale: 100%
    :alt: sponsors edit screenshot
 
    The edit page of Sponsors Table
@@ -37,7 +37,7 @@ PENALTY
 -------
 
 .. figure:: static/penaltymain.png
-   :scale: 50%
+   :scale: 100%
    :alt: penalty table screenshot
 
    The main page of Penalty Table
@@ -57,7 +57,7 @@ In this Interface Following Features Are Possible To Perform
 
 
 .. figure:: static/penaltyupdate.png
-   :scale: 50%
+   :scale: 100%
    :alt: penalty edit screenshot
 
    The edit page of Penalty Table
@@ -68,7 +68,7 @@ EQUIPMENTS
 ----------
 
 .. figure:: static/equipmentsmain.png
-   :scale: 50%
+   :scale: 100%
    :alt: equipments table screenshot
 
    The main page of Equipments Table
@@ -88,7 +88,7 @@ In this Interface Following Features Are Possible To Perform
 
 
 .. figure:: static/equipmentsupdate.png
-   :scale: 50%
+   :scale: 100%
    :alt: equipment edit screenshot
 
    The edit page of Equipments Table

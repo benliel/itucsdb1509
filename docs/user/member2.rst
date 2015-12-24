@@ -2,7 +2,8 @@ Parts Implemented by M. Aziz ULAK
 =================================
 
 SPONSORS
-========
+--------
+
 
 .. figure:: static/sponsorsmain.png
    :scale: 50%
@@ -33,7 +34,7 @@ In this Interface Following Features Are Possible To Perform
 In the image above , the user can easily update the values of attributes that selected sponsor. Then Press "Update Sponsor" button to save changes.
 
 PENALTY
-=======
+-------
 
 .. figure:: static/penaltymain.png
    :scale: 50%
@@ -64,7 +65,7 @@ In this Interface Following Features Are Possible To Perform
 In the image above , the user can easily update the values of attributes that selected Penalty. Then Press "Update Penalty" button to save changes.
 
 EQUIPMENTS
-==========
+----------
 
 .. figure:: static/equipmentsmain.png
    :scale: 50%

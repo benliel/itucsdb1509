@@ -1,6 +1,6 @@
 Parts Implemented by Sercan Bayındır
 ====================================
-"Fixture Table" and "Stadiums Table" are owned by me.
+"Fixture Table", "Stadiums Table" and "Points Table" are created by me.
 
 Fixture Table
    Columns:
@@ -64,7 +64,7 @@ Points Table
       UNIQUE(championship, club)
 
 
-"Stadium" and "Match" classes are owned by me.::
+"Stadium" and "Match" classes are created by me.::
 
    .. code-block:: Pyhton
       class Match:
@@ -83,7 +83,7 @@ Points Table
             self.ticket_cost=ticket_cost
 
 
-I have worked in "fixture.py" and "stadiums.py" sources
+I have worked in "fixture.py", "stadiums.py" and "points.py" sources
 
 fixture.py
    Functions:

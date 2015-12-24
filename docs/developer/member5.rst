@@ -1,5 +1,5 @@
-Parts Implemented by Ilkan Engin (150120137)
-======================================================
+Parts Implemented by Ilkan Engin
+================================
 "Curlers Table","Federations Table" and "News Table" are owned by me.
 
 Curlers Table
@@ -7,14 +7,14 @@ Curlers Table
         CURLERID SERIAL,
 
         CURLER_NAME VARCHAR(80) NOT NULL,
-    
+
         CURLER_SURNAME VARCHAR(80) NOT NULL,
-    
+
         BIRTH_DATE VARCHAR(20),
-    
+
         TEAMID INTEGER REFERENCES CLUBS(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
-    
-        BIRTH_PLACE_ID INTEGER REFERENCES COUNTRIES ON UPDATE CASCADE ON DELETE RESTRICT, 
+
+        BIRTH_PLACE_ID INTEGER REFERENCES COUNTRIES ON UPDATE CASCADE ON DELETE RESTRICT,
 
     Constraints:
         PRIMARY KEY (CURLERID)
@@ -22,15 +22,15 @@ Curlers Table
 Federations Table
     Columns:
         FEDERATION_ID SERIAL,
-        
+
         FEDERATION_NAME VARCHAR(80) NOT NULL,
-        
+
         PRESIDENT_NAME VARCHAR(80),
-        
+
         PRESIDENT_SURNAME VARCHAR(80),
-        
+
         FOUNDING_YEAR INTEGER,
-        
+
         COUNTRY INTEGER REFERENCES COUNTRIES ON UPDATE CASCADE ON DELETE RESTRICT
 
     Constraints:
@@ -39,15 +39,15 @@ Federations Table
 News Table
     Columns:
         NEWS_ID SERIAL,
-        
+
         NEWS_HEADER varchar(80) NOT NULL,
-        
+
         NEWS_DESCRIPTION varchar(80),
-        
+
         DATE DATE,
-        
+
         TEAM_ID INTEGER REFERENCES CLUBS ON UPDATE CASCADE ON DELETE CASCADE,
-        
+
         CURLER_ID INTEGER REFERENCES CURLERS ON UPDATE CASCADE ON DELETE CASCADE
 
     Constraints:
@@ -63,7 +63,7 @@ News Table
             self.birthdate = birthdate
             self.teamid = teamid
             self.birth_place_id = birthplaceId
- 
+
     class Federation:
         def __init__(self, federation_name,president_name,president_surname, founding_year, country_id):
             self.federation_name = federation_name
@@ -119,7 +119,7 @@ news.py
    Functions:
       init_news_db
          Used for initialising Championships table
-         
+
       add_news
          Used for adding championships in the Championships Table
 

@@ -4,23 +4,11 @@ Developer Guide
 Database Design
 ---------------
 
-**explain the database design of your project**
+.. figure:: static/diagram.png
+   :scale: 100%
+   :alt: diagram
 
-**include the E/R diagram(s)**
-
-Code
-----
-
-**explain the technical structure of your code**
-
-**to include a code listing, use the following example**::
-
-   .. code-block:: python
-
-      class Foo:
-
-         def __init__(self, x):
-            self.x = x
+   Here we see the diagram of our database
 
 .. toctree::
 
